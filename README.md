@@ -69,23 +69,25 @@ vorhanden):
 
 Erstelle eine MySQL-Datenbank und importiere folgendes Schema:
 
+```
 --	Tabelle: users\
 create table users(\
-    id int AUTO_INCREMENT primary key,\
-    email varchar(255) unique not null,\
-    password varchar(255) not null,\
-    created_at timestamp default current_timestamp\
+	id int AUTO_INCREMENT primary key,\
+	email varchar(255) unique not null,\
+	password varchar(255) not null,\
+	created_at timestamp default current_timestamp\
 );
 
 --	Tabelle: todos\
 create table todos(\
-    id int auto_increment primary key,\
-    user_id int not null,\
-    title varchar(255) not null,\
-    is_done boolean default false,\
-    created_at timestamp default current_timestamp,\
-    foreign key (user_id) references users(id) on delete cascade\
+	id int auto_increment primary key,\
+	user_id int not null,\
+	title varchar(255) not null,\
+	is_done boolean default false,\
+	created_at timestamp default current_timestamp,\
+	foreign key (user_id) references users(id) on delete cascade\
 );
+```
 
 5.	Anwendung starten (XAMPP)
 
