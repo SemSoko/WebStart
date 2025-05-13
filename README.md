@@ -20,6 +20,7 @@ Damit werden folgende Abhängigkeiten installiert:\
 
 ## Projektstruktur
 
+```
 todolist/\
 | --- bootstrap/\
 |\
@@ -41,6 +42,7 @@ todolist/\
 | --- composer.json\
 | --- composer.lock\
 | --- README.md\
+```
 
 ## Einrichtung
 
@@ -55,10 +57,10 @@ composer install
 .env im Projektverzeichnis erstellen (oder kopieren aus .env.example, falls\
 vorhanden):
 
-- DB_HOST=...\
-- DB_NAME=...\
-- DB_USER=...\
-- DB_PASS=...\
+- DB_HOST=...
+- DB_NAME=...
+- DB_USER=...
+- DB_PASS=...
 
 - JWT_SECRET=...
 
