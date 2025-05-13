@@ -21,28 +21,28 @@ Damit werden folgende Abhängigkeiten installiert:\
 ## Projektstruktur
 
 ```
-todolist/\
-| --- bootstrap/\
-|\
-| --- js/\
-|\
-| --- public/\
-|\
-| --- src/\
-|	| --- Auth/\
-|	| --- Core/\
-|	| --- Todo/\
-|\
-| --- tests/\
-|	| --- Auth/\
-|	| --- Todo/\
-|\
-| --- .env\
-| --- .env-example\
-| --- .gitignore\
-| --- composer.json\
-| --- composer.lock\
-| --- README.md\
+todolist/
+| --- bootstrap/
+|
+| --- js/
+|
+| --- public/
+|
+| --- src/
+|	| --- Auth/
+|	| --- Core/
+|	| --- Todo/
+|
+| --- tests/
+|	| --- Auth/
+|	| --- Todo/
+|
+| --- .env
+| --- .env-example
+| --- .gitignore
+| --- composer.json
+| --- composer.lock
+| --- README.md
 ```
 
 ## Einrichtung
