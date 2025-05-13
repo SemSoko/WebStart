@@ -4,8 +4,8 @@ Dies ist eine einfache PHP-basierte To-Do-Listen-Anwendung mit\
 JWT-Authentifizierung.
 
 ## Voraussetzungen
-- PHP (über XAMPP enthalten): 8.2.12\
-- Composer: 2.8.8\
+- PHP (über XAMPP enthalten): 8.2.12
+- Composer: 2.8.8
 - XAMPP: 8.2.12 (Apache + MySQL)
 
 Abhängigkeiten (via Composer)
