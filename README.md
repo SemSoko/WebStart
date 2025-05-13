@@ -29,13 +29,14 @@ todolist/\
 | --- public/\
 |\
 | --- src/\
-|		| --- Auth/\
-|		| --- Core/\
-|		| --- Todo/\
+|	| --- Auth/\
+|	| --- Core/\
+|	| --- Todo/\
 |\
 | --- tests/\
-|		| --- Auth/\
-|		| --- Todo/\
+|	| --- Auth/\
+|	| --- Todo/\
+|\
 | --- .env\
 | --- .env-example\
 | --- .gitignore\
