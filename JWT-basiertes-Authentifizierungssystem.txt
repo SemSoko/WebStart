@@ -1,0 +1,284 @@
+JWT-basiertes Authentifizierungssystem für eine PHP-API – Übersicht &
+Ablauf (PHP + JS Frontend)
+
+Uebersicht der zentralen Komponenten
+
+Das System besteht unter anderem aus folgenden Kernmodulen:
+-	/bootstrap/init.php
+-	JwtHandler.php (zentrale JWT-Verwaltung)
+
+1.	Bootstrap / Initialisierung: bootstrap/init.php
+
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . 'xxx';
+require_once __DIR__ . 'xxx';
+require_once __DIR__ . 'xxx';
+require_once __DIR__ . 'xxx';
+require_once __DIR__ . 'xxx';
+...
+alle weiteren eigens geschriebenen Module einbinden. Zentrale Datei, um
+Funktionalitaet in Module einzubinden.
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+Einbinden von Umgebungsvariablen aus der .env
+
+Zweck:
+-	Autoload aktivieren
+	Alle über Composer eingebundenen PHP-Pakete (z. B. firebase/php-jwt) werden
+	projektweit verfügbar.
+-	Umgebungsvariablen einbinden
+	.env-Datei wird geladen, um z. B. JWT_SECRET oder DB-Zugänge zentral zu
+	verwalten.
+-	Dient als einheitlicher Einstiegspunkt – alle anderen Dateien können
+	init.php einbinden, um Setup und Abhängigkeiten zu laden.
+
+2.	Die JwtHandler-Klasse
+
+Namespace: Core
+
+Zweck der Datei: JwtHandler.php
+Diese Klasse übernimmt die vollständige Verwaltung des JWT-Tokens:
+-	erzeugen
+-	validieren
+-	dekodieren
+-	und Daten extrahieren
+
+Attribute:
+private string $secret;
+private string $algo;
+private int $ttl;
+
+Attribut
+Beschreibung
+
+-	$secret
+Geheimschlüssel, aus .env geladen (JWT_SECRET). Wird verwendet, um Token zu
+signieren.
+
+-	$algo
+Signaturalgorithmus, z. B. HS256 (HMAC mit SHA-256)
+
+-	$ttl
+Lebensdauer des Tokens in Sekunden (Time To Live), hier: 86400 = 24 Stunden
+
+
+Konstruktor:
+
+public function __construct(){
+	if (!isset($_ENV['JWT_SECRET'])) {
+		throw new \RuntimeException('JWT_SECRET ist nicht gesetzt');
+	}
+	$this->secret = trim($_ENV['JWT_SECRET']);
+	$this->algo = 'HS256';
+	$this->ttl = 60 * 60 * 24;
+}
+
+-	Wirft Fehler, falls kein Secret definiert ist.
+-	Initialisiert die Werte für das spätere Signieren der Tokens.
+-	Der Algorithmus HS256 bedeutet: Der Token wird mit HMAC + SHA-256 signiert.
+		-	Das schützt vor Manipulation, aber der Inhalt bleibt nicht
+			verschlüsselt, sondern nur signiert.
+	
+Token erstellen: generateToken(array $payload): string
+
+public function generateToken(array $payload): string {
+	$issuedAt = time();
+	$payload = array_merge($payload, [
+		'iat' => $issuedAt,
+		'exp' => $issuedAt + $this->ttl
+	]);
+
+	return JWT::encode($payload, $this->secret, $this->algo);
+}
+
+Teil
+Erklärung
+
+-	iat
+"issued at" – Zeitstempel der Token-Erstellung
+
+-	exp
+"expiration" – Ablaufzeitpunkt des Tokens
+
+-	JWT::encode(...)
+Funktion aus dem firebase/php-jwt Paket zum Signieren (nicht verschlüsseln!)
+des Tokens
+
+Token validieren: validateToken(string $token): ?array
+
+public function validateToken(string $token): ?array {
+	try {
+		$decoded = JWT::decode($token, new Key($this->secret, $this->algo));
+		return (array)$decoded;
+	} catch (ExpiredException $e) {
+		http_response_code(401);
+		echo json_encode(['error' => 'Token abgelaufen']);
+		return null;
+	} catch (\Exception $e) {
+		http_response_code(401);
+		echo json_encode(['error' => 'Ungültiges Token']);
+		return null;
+	}
+}
+
+Catch-Block
+Beschreibung
+
+-	ExpiredException
+Wird geworfen, wenn der exp-Zeitpunkt überschritten ist.
+Teil des firebase/php-jwt Pakets
+
+-	\Exception
+Alle anderen Fehler (z. B. ungültige Signatur, manipuliertes Token)
+
+-	Ausgabe
+API-konforme Fehlerantwort im JSON-Format, mit 401 Unauthorized
+
+Kurzer Exkurs zu: JWT::decode()
+
+Was macht JWT::decode() wirklich?
+
+JWT::decode($token, new Key($this->secret, $this->algo));
+
+Das passiert dabei intern:
+
+1.	Der übergebene Token wird aufgeteilt in:
+Header.Payload.Signatur
+
+2.	Der JWT-Decoder:
+	-	liest den Header (z. B. alg: HS256)
+	-	liest die Payload
+	-	berechnet selbst erneut die Signatur mit:
+		-	deinem übergebenen Secret ($this->secret)
+		-	dem angegebenen Algorithmus (HS256)
+
+3.	Dann vergleicht er:
+	-	Signatur im Token und neu berechnete Signatur
+
+4.	Wenn beide identisch sind => Token ist integer (nicht manipuliert)
+
+Was bedeutet das in der Praxis?
+Du vertraust nicht dem Token selbst, sondern du verifizierst aktiv, ob es
+unverändert ist und mit deinem geheimen Schlüssel erzeugt wurde.
+
+Wenn jemand den Payload ändert …
+
+Stell dir vor, jemand manipuliert die Payload:
+{
+  "user_id": 1,
+  "role": "admin"
+}
+
+…aber kennt dein Secret nicht.
+
+Die neue Signatur kann nicht korrekt erzeugt werden
+JWT::decode() wirft eine Exception: Signatur ungültig
+
+Fazit
+
+Aktion
+Was passiert
+
+-	JWT::decode($token, Key)
+Zerlegt Token, berechnet Signatur neu
+Vergleicht mit originaler Signatur
+
+-	Wenn beide Signaturen gleich
+Token ist integer und gültig
+
+-	Wenn unterschiedlich
+Token wurde manipuliert => Exception wird geworfen
+
+User-ID extrahieren: getUserIdFromToken(string $token): ?int
+
+public function getUserIdFromToken(string $token): ?int {
+	$payload = $this->validateToken($token);
+	return $payload['user_id'] ?? null;
+}
+
+-	Nutzt validateToken(), um ein valides Payload zu erhalten
+-	Extrahiert die user_id aus dem Token (sofern vorhanden)
+-	Gibt null zurück, wenn der Token ungültig oder abgelaufen ist
+
+Hier extrahieren wir, sofern vorhanden, die user_id aus dem Token, welche im
+Payload verpackt ist.
+
+Weiteres zur JwtHandler-Klasse:
+
+Wird das Token verschlüsselt?
+-	Nein. JWTs sind nicht verschlüsselt, sondern signiert. Jeder mit Zugriff
+	auf das Token kann den Inhalt (Payload) lesen, aber nicht manipulieren,
+	ohne die Signatur zu zerstören.
+
+Was ist HS256?
+-	Ein symmetrisches Signaturverfahren
+	Der Server signiert das Token mit einem geheimen Schlüssel (secret) und
+	prüft später mit demselben Schlüssel die Gültigkeit.
+
+Was ist die Payload in einem JWT?
+Die Payload ist der Inhaltsteil eines JWT-Tokens – also die Daten, die der
+Server im Token speichert, um sie später ohne Datenbankabfrage
+wiederzuverwenden.
+
+JWT besteht aus drei Teilen (alle Base64-kodiert):
+HEADER  .  PAYLOAD  .  SIGNATURE
+
+Beispiel:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+.
+eyJ1c2VyX2lkIjo0MiwiaWF0IjoxNzE2MDI4MzYyLCJleHAiOjE3MTYxMTQ3NjJ9
+.
+SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+Inhalt der Payload (mittlerer Teil)
+
+Das ist ein JSON-Objekt, z. B.:
+{
+  "user_id": 42,
+  "email": "test@example.com",
+  "iat": 1716028362,
+  "exp": 1716114762
+}
+
+Bedeutung:
+
+Schlüssel
+Bedeutung
+
+-	user_id
+Die ID des eingeloggten Nutzers
+
+-	email
+(Optional) zur Anzeige oder Identifikation
+
+-	iat
+Issued At – Zeitstempel der Erstellung
+
+-	exp
+Expiration – Ablaufzeitpunkt
+
+Diese Daten werden vom Server signiert und dann im JWT gespeichert – und sind
+beim nächsten Request sofort wieder verfügbar, ohne dass du sie aus der
+Datenbank holen musst.
+
+Wichtig:
+-	Payload ≠ geheim: Sie ist nicht verschlüsselt, nur Base64-codiert
+-	Jeder mit dem Token kann sie lesen
+-	Manipulation fällt durch Signaturprüfung auf (→ Integritätsschutz)
+
+Merksatz
+Die Payload enthält die Behauptungen (Claims) über den Benutzer, die vom Server
+als gültig signiert wurden.
+
+Beispiel aus deinem Projekt:
+$payload = [
+    'user_id' => $user['id'],
+    'email' => $email,
+    'iat' => time(),
+    'exp' => time() + 86400 // gültig für 24h
+];
+
+Wird von generateToken() in ein Token verpackt und signiert.
