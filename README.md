@@ -22,26 +22,58 @@ Damit werden folgende Abhängigkeiten installiert:
 
 ```
 todolist/
-| --- bootstrap/
-|
-| --- js/
+| --- bootstrap/		# Initialisierung (DB, Autoloader, ... )
+|		| --- init.php
 |
 | --- public/
+|		| --- api/
+|				| --- addUserTodo.php
+|				| --- deleteUserTodo.php
+|				| --- get_user_todos.php
+|				| --- login.php
+|				| --- register.php
+|				| --- toggleUserTodoStatus.php
+|				| --- user_info.php
+|		| --- css/
+|		| --- html/
+|				| --- dashboard.php
+|				| --- login.php
+|				| --- register.php
+|		| --- js/
+|				| --- dashboard.php
+|				| --- login.php
+|				| --- logout.php
+|				| --- register.php
 |
 | --- src/
-|	| --- Auth/
-|	| --- Core/
-|	| --- Todo/
+|		| --- auth/
+|			| --- auth.php
+|		| --- core/
+|			| --- db.php
+|			| --- funktionen.php
+|			| --- JwtHandler.php
+|		| --- todo/
+|			| --- todo.php
 |
 | --- tests/
-|	| --- Auth/
-|	| --- Todo/
+|		| --- auth/
+|				| --- CreateUserTest.php
+|				| --- IsEmailRegisteredTest.php
+|				| --- IsValidPasswordTest.php
+|				| --- LoginUserTest.php
+|				| --- ProcessLoginFormTest.php
+|		| --- todo/
+|				| --- AddTodoTest.php
+|				| --- DeleteTodoTest.php
+|				| --- GetTodosByUserTest.php
+|				| --- ToggleTodoTest.php
 |
 | --- .env
 | --- .env-example
 | --- .gitignore
 | --- composer.json
 | --- composer.lock
+| --- JWT-basiertes-Authentifizierungssystem.txt
 | --- README.md
 ```
 
@@ -75,6 +107,8 @@ create table users(
 	id int AUTO_INCREMENT primary key,
 	email varchar(255) unique not null,
 	password varchar(255) not null,
+	surname varchar(255) not null,
+	first_name varchar(255) not null,
 	created_at timestamp default current_timestamp
 );
 
