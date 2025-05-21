@@ -27,46 +27,45 @@ todolist/
 |
 | --- public/
 |		| --- api/
-|				| --- addUserTodo.php
-|				| --- deleteUserTodo.php
-|				| --- get_user_todos.php
-|				| --- login.php
-|				| --- register.php
-|				| --- toggleUserTodoStatus.php
-|				| --- user_info.php
+|			| --- addUserTodo.php
+|			| --- deleteUserTodo.php
+|			| --- get_user_todos.php
+|			| --- login.php
+|			| --- register.php
+|			| --- toggleUserTodoStatus.php
+|			| --- user_info.php
 |		| --- css/
 |		| --- html/
-|				| --- dashboard.php
-|				| --- login.php
-|				| --- register.php
+|			| --- dashboard.php
+|			| --- login.php
+|			| --- register.php
 |		| --- js/
-|				| --- dashboard.php
-|				| --- login.php
-|				| --- logout.php
-|				| --- register.php
+|			| --- dashboard.php
+|			| --- login.php
+|			| --- logout.php
+|			| --- register.php
 |
 | --- src/
+|	| --- auth/
+|		| --- auth.php
+|	| --- core/
+|		| --- db.php
+|		| --- funktionen.php
+|		| --- JwtHandler.php
+|	| --- todo/
+|		| --- todo.php
+|	| --- tests/
 |		| --- auth/
-|			| --- auth.php
-|		| --- core/
-|			| --- db.php
-|			| --- funktionen.php
-|			| --- JwtHandler.php
+|			| --- CreateUserTest.php
+|			| --- IsEmailRegisteredTest.php
+|			| --- IsValidPasswordTest.php
+|			| --- LoginUserTest.php
+|			| --- ProcessLoginFormTest.php
 |		| --- todo/
-|			| --- todo.php
-|
-| --- tests/
-|		| --- auth/
-|				| --- CreateUserTest.php
-|				| --- IsEmailRegisteredTest.php
-|				| --- IsValidPasswordTest.php
-|				| --- LoginUserTest.php
-|				| --- ProcessLoginFormTest.php
-|		| --- todo/
-|				| --- AddTodoTest.php
-|				| --- DeleteTodoTest.php
-|				| --- GetTodosByUserTest.php
-|				| --- ToggleTodoTest.php
+|			| --- AddTodoTest.php
+|			| --- DeleteTodoTest.php
+|			| --- GetTodosByUserTest.php
+|			| --- ToggleTodoTest.php
 |
 | --- .env
 | --- .env-example
