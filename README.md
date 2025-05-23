@@ -36,120 +36,66 @@ Aktuell basiert **WebStart** auf folgenden Komponenten:\
 ## 2. Projektstruktur
 
 ```
-<<<<<<< HEAD
-todolist/
-| --- bootstrap/		# Initialisierung (DB, Autoloader, ... )
-|		| --- init.php
-|
-| --- public/
-|		| --- api/
-|			| --- addUserTodo.php
-|			| --- deleteUserTodo.php
-|			| --- get_user_todos.php
-|			| --- login.php
-|			| --- register.php
-|			| --- toggleUserTodoStatus.php
-|			| --- user_info.php
-|		| --- css/
-|		| --- html/
-|			| --- dashboard.php
-|			| --- login.php
-|			| --- register.php
-|		| --- js/
-|			| --- dashboard.php
-|			| --- login.php
-|			| --- logout.php
-|			| --- register.php
-|
-| --- src/
-|	| --- auth/
-|		| --- auth.php
-|	| --- core/
-|		| --- db.php
-|		| --- funktionen.php
-|		| --- JwtHandler.php
-|	| --- todo/
-|		| --- todo.php
-|	| --- tests/
-|		| --- auth/
-|			| --- CreateUserTest.php
-|			| --- IsEmailRegisteredTest.php
-|			| --- IsValidPasswordTest.php
-|			| --- LoginUserTest.php
-|			| --- ProcessLoginFormTest.php
-|		| --- todo/
-|			| --- AddTodoTest.php
-|			| --- DeleteTodoTest.php
-|			| --- GetTodosByUserTest.php
-|			| --- ToggleTodoTest.php
-|
-| --- .env
-| --- .env-example
-| --- .gitignore
-| --- composer.json
-| --- composer.lock
-| --- JWT-basiertes-Authentifizierungssystem.txt
-| --- README.md
-=======
 WebStart/
 ├── init-sql/
-│		└─── 001-init.sql
+│	└─── 001-init.sql
 │
 ├── projekt/
-│		├─── bootstrap/									# Initialisierung (DB, Autoloader, ... )
-│ 		│		└─── init.php
-│		│
-│		├─── public/									# Oeffentlich zugaenglicher Bereich (Frontend + API)
-│		│		├─── api/								# API-Endpunkte
-│		│		│		├─── addUserTodo.php
-│		│		│		├─── deleteUserTodo.php
-│		│		│		├─── get_user_todos.php
-│		│		│		├─── login.php
-│		│		│		├─── register.php
-│		│		│		├─── toggleUserTodoStatus.php
-│		│		│		└─── user_info.php
-│		│		│
-│		│		├─── css/
-│		│		│
-│		│		├─── html/
-│		│		│		├─── dashboard.html
-│		│		│		├─── login.html
-│		│		│		└─── register.html
-│		│		├─── js/
-│		│		│		├─── dashboard.js
-│		│		│		├─── login.js
-│		│		│		├─── logout.js
-│		│		│		└─── register.js
-│		│		│
-│		│		└─── index.php
-│		│
-│ 		├─── src/
-│		│		├─── auth/
-│		│		│		└─── auth.php
-│		│		│
-│		│		├─── core/
-│		│		│		├─── db.php
-│		│		│		├─── funktionen.php
-│		│		│		└─── JwtHandler.php
-│		│		│
-│		│		└─── todo/
-│		│				└─── todo.php
-│		│
-│		├─── tests/										# Unit-Tests (PHPUnit)
-│		│		├─── auth/
-│		│		│		├─── CreateUserTest.php
-│		│		│		├─── IsEmailRegisteredTest.php
-│		│		│		├─── IsValidPasswordTest.php
-│		│		│		├─── LoginUserTest.php
-│		│		│		└─── ProcessLoginFormTest.php
-│		│		└─── todo/	
-│		│				├─── AddTodoTest.php
-│		│				├─── DeleteTodoTest.php
-│		│				├─── GetTodosByUserTest.php
-│		│				└─── ToggleTodoTest.php
-│		│				
-│		├─── composer.json
-│		└─── composer.lock
+│	├─── bootstrap/									# Initialisierung (DB, Autoloader, ... )
+│ 	│	└─── init.php
+│	│
+│	├─── public/									# Oeffentlich zugaenglicher Bereich (Frontend + API)
+│	│	├─── api/								# API-Endpunkte
+│	│	│	├─── addUserTodo.php
+│	│	│	├─── deleteUserTodo.php
+│	│	│	├─── get_user_todos.php
+│	│	│	├─── login.php
+│	│	│	├─── register.php
+│	│	│	├─── toggleUserTodoStatus.php
+│	│	│	└─── user_info.php
+│	│	│
+│	│	├─── css/
+│	│	│
+│	│	├─── html/
+│	│	│	├─── dashboard.html
+│	│	│	├─── login.html
+│	│	│	└─── register.html
+│	│	├─── js/
+│	│	│	├─── dashboard.js
+│	│	│	├─── login.js
+│	│	│	├─── logout.js
+│	│	│	└─── register.js
+│	│	│
+│	│	└─── index.php
+│	│
+│	├─── src/
+│	│	├─── auth/
+│	│	│	└─── auth.php
+│	│	│
+│	│	├─── core/
+│	│	│	├─── db.php
+│	│	│	├─── funktionen.php
+│	│	│	└─── JwtHandler.php
+│	│	│
+│	│	└─── todo/
+│	│		└─── todo.php
+│	│
+│	├─── tests/										# Unit-Tests (PHPUnit)
+│	│	├─── auth/
+│	│	│	├─── CreateUserTest.php
+│	│	│	├─── IsEmailRegisteredTest.php
+│	│	│	├─── IsValidPasswordTest.php
+│	│	│	├─── LoginUserTest.php
+│	│	│	└─── ProcessLoginFormTest.php
+│	│	│
+│	│	└─── todo/	
+│	│		├─── AddTodoTest.php
+│	│		├─── DeleteTodoTest.php
+│	│		├─── GetTodosByUserTest.php
+│	│		└─── ToggleTodoTest.php
+│	│				
+│	├─── composer.json
+│	└─── composer.lock
 │		
 ├─── sql-dumps/
 ├─── .env-example
@@ -159,7 +105,6 @@ WebStart/
 ├─── .gitignore
 ├─── JWT-basiertes-Authentifizierungssystem.txt
 └─── README.md
->>>>>>> f53c6e8 (Aktuelles: Anpassung der README.md: Ueberarbeitete README. Diese enthaelt nun die aktuelle Projektstruktur. Umstieg von XAMPP auf Docker wurde dokumentiert. Drittanbieter-Lizenzen werden aufgezeigt. Insgesamt spiegelt die README nun den aktuellen Projektstand wider.)
 ```
 
 ## 3. Composer ─ Abhaengigkeiten
@@ -366,4 +311,4 @@ Diese lassen sich unter Windows ueber die Zeichentabelle `charmap` einfuegen:
 - Schriftart: `Courier New`
 - In Suche: `Box`
 
-11. [Zueruck zum Anfang](#WebStart---Modularer-einstieg-in-moderne-webentwicklung)
+[Zueruck zum Anfang](#WebStart---Modularer-einstieg-in-moderne-webentwicklung)
