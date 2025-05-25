@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+    apache-php:
+        build: .
+        container_name: mini-php-apache-composer
+        # user: "1000:1000"
+        ports:
+            - "8080:80"
+        volumes:
+            - ./projekt:/var/www/app
+        #Führt bei jedem Containerstart Composer aus, damit der
+        #vendor/-Ordner im gemounteten Volume verfügbar ist
+        #apache2-foreground startet danach den Apache-Prozess wie üblich
+        command: sh -c "composer install && apache2-foreground"
+        #Sicherheitsfeature fuer Production
+        #cap_drop:
+            #- ALL
+        env_file:
+            - .env
+        depends_on:
+            - db
+
+    db:
+        image: mariadb:10.11
+        container_name: mariadb
+        env_file:
+            - .env
+        ports:
+            - "3306:3306"
+        volumes:
+            - db_data:/var/lib/mysql
+            - ./init-sql:/docker-entrypoint-initdb.d:ro
+            - ./sql-dumps:/dumps
+    
+    db-admin-tool:
+        image: phpmyadmin:5.2.1
+        container_name: php-my-admin
+        ports:
+            - "8082:80"
+        environment:
+            - PMA_HOST=db
+        env_file:
+            - .env
+        depends_on:
+            - db
+
+volumes:
+    db_data:
+    sql_dumps:
