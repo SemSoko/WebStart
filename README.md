@@ -23,7 +23,7 @@ lassen.
 
 ## 1. Technologie-Stack
 
-Aktuell basiert **WebStart** auf folgenden Komponenten:\
+Aktuell basiert **WebStart** auf folgenden Komponenten:
 
 - **Apache**: 8.2.12 ─ WebServer
 - **PHP**: 8.2.12
@@ -131,7 +131,7 @@ Die Anwendung wird im Container unter dem Pfad `/var/www/app` ausgefuehrt.\
 Als Basis-Image wird: `php:8.2-apache` eingesetzt. Dieses setzt auf einem Debian-System auf.\
 Neben dem Debian-System bringt es PHP und Apache vorinstalliert mit.
 
-Im PHP-Code wird der Projektstamm dynamisch ueber folgende Konstruktion ermittelt:\
+Im PHP-Code wird der Projektstamm dynamisch ueber folgende Konstruktion ermittelt:
 ```php
 //	Basis-Pfad zum Projektverzeichnis (/var/www/app)
 define('BASE_PATH', dirname(__DIR__));
@@ -204,7 +204,7 @@ Die .env-Datei **nicht versionieren** ─ sie sollte in der `.gitignore` eintrag
 ### Erstellen der .env-Datei
 
 Die Datei `.env` wird aus der Vorlage `.env-example` erzeugt:\
-`cp .env-example .env`\
+`cp .env-example .env`
 
 Anschliessend die `.env`-Datei mit den entsprechenden Werten befuellen.
 
@@ -214,7 +214,7 @@ In das Projektverzeichnis wechseln:\
 `cd <Pfad zum Projekt>/WebStart`
 
 Container bauen und starten:\
-`docker-compose up --build`\
+`docker-compose up --build`
 
 Fuer spaetere Starts genuegt:\
 `docker-compose up`
