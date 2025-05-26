@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta	charset="utf-8">
+		<title>Login</title>
+	</head>
+	
+	<body>
+		<h1>Login</h1>
+		
+		<form	id="loginForm">
+			<label	for="email">E-Mail:</label>
+			<input	type="email"	name="email"	id="email"	required
+					pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+					title="Bitte gib eine gültige E-Mail-Adresse ein."
+					placeholder="your@example.org">
+			<br><br>
+			
+			<label	for="password">Password:</label>
+			<input	type="password"	name="password"	id="password"	required
+					minlength="8"
+					pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}"
+					title="Mindestens 8 Zeichen, 1 Großbuchstabe, 1 Kleinbuchstabe und 1 Zahl"
+					placeholder="pasSword123-">
+			<br><br>
+			
+			<button	type="submit">Login</button>
+		</form>
+		
+		<p	id="messageLogin">
+			
+		</p>
+		
+		<script	src="/js/login.js"></script>
+	</body>
+</html>
