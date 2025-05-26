@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+		<meta	charset="utf-8">
+		<title>Dashboard</title>
+	</head>
+	
+	<body>
+		<!--
+			Wilkommensnachricht dynamisch per JS hinzufuegen
+		-->
+		<h1	id="userWelcome"></h1>
+		
+		<!--
+			Logout
+		-->
+		<button	id="logoutBtn">Logout</button>
+		
+		<!--
+			Alle Aufgaben dynamisch per JS einfuegen
+		-->
+		<h2	id="ulHeader"></h2>
+		
+		<!--
+			Wenn Eintraege vorhanden sind
+		-->
+		<ul	id="todoRecord">
+		</ul>
+		
+		<!--
+			Neue Aufagben per API hinzufuegen
+		-->
+		<h2>Add ToDo</h2>
+		<form	id="addTodoForm">
+			<label	for="title"></label>
+			<input	type="text"	id="title"	placeholder="Aufgabenname"	required>
+			
+			<button	type="submit">Aufgabe hinzufügen</button>
+		</form>
+		
+		<p	id="messageAddTodo">
+			
+		</p>
+		
+		<script	src="/js/dashboard.js"></script>
+		<script	src="/js/logout.js"></script>
+	</body>
+</html>
