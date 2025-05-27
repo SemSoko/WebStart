@@ -16,6 +16,7 @@ lassen.
 	- [4.3 docker-compose.yml ─ Container-Orchestrierung](#43-docker-composeyml--container-orchestrierung)
 5. [Umgebungsvariablen (.env)](#5-umgebungsvariablen-env)
 6. [Projektstart & Nutzung](#6-projektstart--nutzung)
+	- [Wichtiger Hinweis zur Erstinitialisierung](#61-wichtiger-hinweis-zur-erstinitialisierung)
 7. [Datenbankstruktur](#7-datenbankstruktur)
 8. [Tests](#8-tests)
 9. [Lizenzen der verwendeten Technologien](#9-lizenzen-der-verwendeten-technologien)
@@ -239,6 +240,24 @@ Beim ersten Start fuehrt der mariadb-Container automatisch das Skript `WebStart/
 Dabei werden die benoetigten Tabellen (users, todos) erstellt ─ sofern die Datenbank noch nicht existiert.
 
 Die Initialisierung erfolgt ueber den Standardpfad `/docker-entrypoint-initdb.d` im Container
+
+### 6.1 Wichtiger Hinweis zur Erstinitialisierung
+
+Die Einstellungen aus der `.env`-Datei (z. B. Benutzername, Passwort, Datenbankname) werden vom
+`mariadb`-Container **nur beim allerersten Start** übernommen.
+
+Docker speichert die Datenbankdaten in einem persistenten Volume (`db_data`). Das bedeutet:
+
+- Wurde der Container bereits einmal gestartet, greift MariaDB **nicht erneut** auf die `.env`-Werte oder `init-sql`-Skripte zu.
+- Änderungen an `.env` oder SQL-Skripten werden **ignoriert**, solange das Volume existiert.
+- Um eine saubere Neuinitialisierung zu erzwingen, muss das Volume **explizit gelöscht** werden.
+
+#### Datenbank vollständig zurücksetzen:
+
+`docker compose down -v        # Container und Volumes löschen`
+`docker compose up --build     # Projekt frisch starten + Initialisierung ausführen`
+
+Dadurch werden die Inhalte aus der `.env`-Datei sowie das `Skript init-sql/001-init.sql` zuverlässig verarbeitet.
 
 ## 7. Datenbankstruktur
 
