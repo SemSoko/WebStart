@@ -56,8 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
 					response.forEach(todo => {
 						//	Erstellt li-Tag je Todoeintrag
 						const li = createTodoListItem(todo, {
-							toggleUserTodoStatus,
-							deleteUserTodo
+							onToggle: toggleUserTodoStatus,
+							onDelete: deleteUserTodo
 						});
 						
 						//	Die per forEach erstellen Todos in todoRecordUl einhaengen
