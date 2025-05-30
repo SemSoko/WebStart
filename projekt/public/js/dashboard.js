@@ -1,11 +1,13 @@
+// Funktionale-Imports
+import {getTodos, addTodo, toggleTodoStatus, deleteTodo} from "./api/todo.js"
+import {getUserInfo} from "./api/user.js"
+
+// Import von Selektoren
+import {dashboardSelectors} from "./dom/dashboard/selectors.js"
+// Import Todolistengenerierung
+import {createTodoListItem, createEmptyTodoMessage} from "./dom/dashboard/create.js"
+
 document.addEventListener("DOMContentLoaded", () => {
-	const welcomeMessageH1 = document.getElementById("userWelcome");
-	const todoRecordUl = document.getElementById("todoRecord");
-	const todoRecordP = document.getElementById("todoRecordEmpty");
-	const addTodoForm = document.getElementById("addTodoForm");
-	const messageAddTodo = document.getElementById("messageAddTodo");
-	
-	const token = localStorage.getItem("jwt_token");
 	/*
 		Abrufen der User-ID, um die Ueberschrift zu erstellen => welcomeMessageH1
 		Diese Funktion in ein Modul auslagern, weil man so etwas noch an
@@ -17,237 +19,125 @@ document.addEventListener("DOMContentLoaded", () => {
 	//	async-Funktion innerhalb von anderer Funktion
 	async function loadUserData(){
 		try{
-			//	Diese Anfrage nutzt die Get-Methode, weil wir hier nichts eingeben
-			//	wollen in die API, sondern lediglich eine Information abrufen wollen?
+			const response = await getUserInfo();
 			
-			const response = await fetch("/api/user_info.php", {
-				method: "GET",
-				headers: {
-					"Authorization": `Bearer ${token}`,
-					"Content-Type": "application/json"
-				}
-			});
-		
-			const contentType = response.headers.get("Content-Type") || "";
-		
-			if(contentType.includes("application/json")){
-				const data = await response.json();
-				console.log("Antwort vom Server:", data);
-			
-				if(response.ok && data.surname && data.first_name){
-					welcomeMessageH1.textContent = `Welcome, ${data.first_name} ${data.surname}`;
-				}else{
-					welcomeMessageH1.textContent = data.error || "Name konnte nicht abgerufen werden, weil nicht gesetzt.";
-				}
+			if("error" in response){
+				console.error("Fehler: ", response?.responseText);
+				return;
 			}else{
-				const text = await response.text();
-				console.log("Fehlerantwort (kein JSON):", text);
-				welcomeMessageH1.textContent = "Serverfehler: Unerwartete Antwort";
+				console.log("Userinfo: ", response);
+				dashboardSelectors.welcomeMessageH1.textContent = `Welcome, ${response.first_name} ${response.surname}`;
 			}
 		}catch(err){
-			console.error("Fehler beim Login:", err);
-			welcomeMessageH1.textContent = "Netzwerkfehler oder Server nicht erreichbar.";
+			console.error("Error: loadUserData() - ", err.message);
+			dashboardSelectors.welcomeMessageH1.textContent = "Error: loadUserData()";
 		}
 	}
 	
 	async function loadUserTodos(){
 		try{
-			const response = await fetch("/api/get_user_todos.php", {
-				method: "GET",
-				headers: {
-					"Authorization":`Bearer ${token}`,
-					"Content-Type":"application/json"
-				}
-			});
+			const response = await getTodos();
 			
-			const contentType = response.headers.get("Content-Type") || "";
-			
-			if(contentType.includes("application/json")){
-				const data = await response.json();
-				console.log("Antwort vom Server:", data);
-				
-				if(response.ok){
-					console.log('hier die todo daten', data);
-					
-					//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
-					//	React/SPA-Frameworks standardmäßig genutzt.
-					//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
-					//	In Kombination mit toggleUserTodoStatus() (Statusaenderung) und addUserTodo() (neues Todo)
-					todoRecordUl.innerHTML = '';
-					
-					//	Setzen der Todo-Liste-Ueberschrift
-					const ulHeaderH2 = document.getElementById("ulHeader");
-					if(data.length > 0){
-						ulHeaderH2.textContent = "Your ToDos";
-							data.forEach(todo => {
-								//	Erstellt einen li-Tag pro Eintrag
-								const li = document.createElement("li");
-						
-								//	Erstellt einen Text-Container fuer Infos zum Todo
-								const textDiv = document.createElement("div");
-						
-								//	Title - Todo
-								const todoTitle = document.createElement("h3");
-								todoTitle.textContent = todo.todo_title;
-						
-								//	Checkbox - Todo - Input, das in Label gepackt wird
-								const todoCheckbox = document.createElement("input");
-								todoCheckbox.type = "checkbox";
-								todoCheckbox.dataset.id = todo.todo_id;
-								todoCheckbox.checked = todo.todo_status == 1;
-						
-								//	Status-Text fuer Checkbox
-								const checkboxStatusText = document.createTextNode(
-									todo.todo_status == 1 ? " Done" : " In Progress"
-								);
-						
-								//	Label fuer den Status-Text
-								const labelStatusText = document.createElement("label");
-								labelStatusText.appendChild(todoCheckbox);
-								labelStatusText.appendChild(checkboxStatusText);
-						
-								//	Created - Iat
-								const todoIat = document.createElement("h4");
-								todoIat.textContent = todo.todo_iat;
-						
-								//	Button zum Loeschen eines Todo-Eintrag
-								const deleteButton = document.createElement("button");
-								deleteButton.textContent = "Loeschen";
-								deleteButton.dataset.id = todo.todo_id;
-						
-								//	Daten in Div einhaengen
-								textDiv.appendChild(todoTitle);
-								textDiv.appendChild(labelStatusText);
-								textDiv.appendChild(todoIat);
-								textDiv.appendChild(deleteButton);
-						
-								//	textDiv jeweils in ein li einhaengen
-								li.appendChild(textDiv);
-						
-								//	lis in ul einhaengen
-								todoRecordUl.appendChild(li);
-						
-								todoCheckbox.addEventListener("change", (e) => {
-									const id = e.target.dataset.id;
-									const status = e.target.checked;
-									toggleUserTodoStatus(id);
-								});
-						
-								deleteButton.addEventListener("click", () => {
-									deleteUserTodo(todo.todo_id);
-								});
-							});
-						}else{
-							ulHeaderH2.textContent = "No todos available";
-							todoRecordUl.innerHTML = "<li>Nothing to do - Relax</li>";
-						}
-				}else{
-					console.error("Irgendein Fehler beim Abrufen von: get_user_todos.php");
-				}
+			if("error" in response){
+				console.error("Error: loadUserTodos() - ", response?.responseText);
+				return;
 			}else{
-				const text = await response.text();
-				console.log("Fehlerantwort (kein JSON):", text);
+				console.log('Todos: ', response);
+				
+				//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
+				//	React/SPA-Frameworks standardmäßig genutzt.
+				//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
+				//	In Kombination mit toggleUserTodoStatus() (Statusaenderung) und addUserTodo() (neues Todo)
+				dashboardSelectors.todoRecordUl.innerHTML = '';
+				
+				if(response.length > 0){
+					dashboardSelectors.ulHeaderH2.textContent = "Your ToDos";
+					
+					response.forEach(todo => {
+						//	Erstellt li-Tag je Todoeintrag
+						const li = createTodoListItem(todo, {
+							onToggle: toggleUserTodoStatus,
+							onDelete: deleteUserTodo
+						});
+						
+						//	Die per forEach erstellen Todos in todoRecordUl einhaengen
+						dashboardSelectors.todoRecordUl.appendChild(li);
+					});
+				}
+				
+				if(response.length === 0){
+					dashboardSelectors.ulHeaderH2.textContent = "No todos available";
+					dashboardSelectors.todoRecordUl.appendChild(createEmptyTodoMessage());
+				}
 			}
 		}catch(err){
-			console.error("Irgendein Fehler beim Abrufen von: get_user_todos.php:", err);
+			console.error("Error: loadUserTodos() - ", err.message);
 		}
 	}
 	
 	async function toggleUserTodoStatus(id){
 		try{
-			const response = await fetch("/api/toggleUserTodoStatus.php", {
-				method: "PATCH",
-				headers: {
-					"Authorization":`Bearer ${token}`,
-					"Content-Type":"application/json"
-				},
-				body: JSON.stringify({id})
-			});
+			const response = await toggleTodoStatus(id);
 			
-			const contentType = response.headers.get("Content-Type") || "";
-			
-			if(contentType.includes("application/json")){
-				const data = await response.json();
-				console.log("Antwort vom Server:", data);
-				
-				if(response.ok){
-					//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
-					//	React/SPA-Frameworks standardmäßig genutzt.
-					//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
-					//	In Kombination mit loadUserTodos()
-					loadUserTodos();
-					console.log('der neue Status des Todos:', data);
-				}else{
-					console.error("Irgendein Fehler beim Abrufen von: toggleUserTodoStatus.php");
-				}
+			if("error" in response){
+				console.error("Error: toggleUserTodoStatus() - ", response?.responseText);
+				return;
 			}else{
-				const text = await response.text();
-				console.log("Fehlerantwort (kein JSON):", text);
+				//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
+				//	React/SPA-Frameworks standardmäßig genutzt.
+				//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
+				//	In Kombination mit loadUserTodos()
+				loadUserTodos();
+				console.log('der neue Status des Todos:', response);
 			}
 		}catch(err){
-			console.error("Irgendein Fehler beim Abrufen von: toggleUserTodoStatus.php", err);
+			console.error("Error: toggleUserTodoStatus() - ", err.message);
 		}
 	}
+	
 	
 	//	addUserTodo - Anfang
 	async function addUserTodo(title){
 		try{
-			const response = await fetch("/api/addUserTodo.php", {
-				method: "POST",
-				headers: {
-					"Authorization":`Bearer ${token}`,
-					"Content-Type":"application/json"
-				},
-				body: JSON.stringify({title})
-			});
+			const response = await addTodo(title);
 			
-			const contentType = response.headers.get("Content-Type") || "";
-			
-			if(contentType.includes("application/json")){
-				const data = await response.json();
-				console.log("Antwort vom Server:", data);
-				
-				if(response.ok){
-					//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
-					//	React/SPA-Frameworks standardmäßig genutzt.
-					//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
-					//	In Kombination mit loadUserTodos()
-					loadUserTodos();
-					console.log("Die neue Todo-Liste:", data);
-					return data;
-				}else{
-					console.error("Irgendein Fehler beim Abrufen von: addUserTodo.php");
-				}
+			if("error" in response){
+				console.error("Error: addUserTodo() - ", response?.responseText);
+				return;
 			}else{
-				const text = await response.text();
-				console.log("Fehlerantwort (kein JSON):", text);
+				//	Das ist der sogenannte “State Reset”-Ansatz und er wird auch in vielen
+				//	React/SPA-Frameworks standardmäßig genutzt.
+				//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
+				//	In Kombination mit loadUserTodos()
+				loadUserTodos();
+				console.log("Updated todolist: ", response);
+				return response;
 			}
 		}catch(err){
-			console.error("Irgendein Fehler beim Abrufen von: addUserTodo.php");
+			console.error("Error: addUserTodo() - ", err.message);
 		}
 	}
 	
 	//	Was wenn ich auf einer Seite mehr als ein submit-Event habe,
 	//	wie muessen die Eventlistener angepasst werden?
-	addTodoForm.addEventListener("submit", async (e) => {
+	dashboardSelectors.addTodoForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
 		
-		const newTodoTitle = document.getElementById("title");
-		const title = newTodoTitle.value.trim();
+		const title = dashboardSelectors.newTodoTitle.value.trim();
 		
 		if(!title){
-			messageAddTodo.textContent = "Bitte einen Titel eingeben.";
+			dashboardSelectors.messageAddTodo.textContent = "Bitte einen Titel eingeben.";
 			return;
 		}
 		
 		const result = await addUserTodo(title);
 		
-		if(result.success){
-			messageAddTodo.textContent = "Successfully added new todo";
+		if(result?.success){
+			dashboardSelectors.messageAddTodo.textContent = "Successfully added new todo";
 			//	Eingabe zuruecksetzen
-			newTodoTitle.value = "";
+			dashboardSelectors.newTodoTitle.value = "";
 		}else{
-			messageAddTodo.textContent = result.message;
+			dashboardSelectors.messageAddTodo.textContent = result?.message || "Error: addUserTodo-Eventlistener";
 		}
 	});
 	
@@ -261,37 +151,21 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 	async function deleteUserTodo(id){
 		try{
-			const response = await fetch('/api/deleteUserTodo.php', {
-				method: "DELETE",
-				headers: {
-					"Authorization":`Bearer ${token}`,
-					"Content-Type":"application/json"
-				},
-				body: JSON.stringify({id})
-			});
+			const response = await deleteTodo(id);
 			
-			const contentType = response.headers.get("Content-Type") || "";
-			
-			if(contentType.includes("application/json")){
-				const data = await response.json();
-				console.log("Antwort vom Server:", data);
-				
-				if(response.ok){
-					//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
-					//	React/SPA-Frameworks standardmäßig genutzt.
-					//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
-					//	In Kombination mit loadUserTodos()
-					loadUserTodos();
-					console.log("Die neue Todo-Liste:", data);
-				}else{
-					console.error("Irgendein Fehler beim Abrufen von: deleteUserTodo.php");
-				}
+			if("error" in response){
+				console.error("Error: deleteUserTodo() - ", response?.responseText);
+				return;
 			}else{
-				const text = await response.text();
-				console.log("Fehlerantwort (kein JSON):", text);
+				//	Das ist der sogenannte “State Reset”-Ansatz und er wird auch in vielen
+				//	React/SPA-Frameworks standardmäßig genutzt.
+				//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
+				//	In Kombination mit loadUserTodos()
+				loadUserTodos();
+				console.log("Die neue Todo-Liste:", response);
 			}
 		}catch(err){
-			console.error("Irgendein Fehler beim Abrufen von: deleteUserTodo.php");
+			console.error("Error: deleteUserTodo() - ", err.message);
 		}
 	}
 	
