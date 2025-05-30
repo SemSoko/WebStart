@@ -1,12 +1,11 @@
+// Funktionale-Imports
 import {getTodos, addTodo, toggleTodoStatus, deleteTodo} from "./api/todo.js"
 import {getUserInfo} from "./api/user.js"
 
+// Import von Selektoren
+import {dashboardSelectors} from "./dom/selectors.js"
+
 document.addEventListener("DOMContentLoaded", () => {
-	const welcomeMessageH1 = document.getElementById("userWelcome");
-	const todoRecordUl = document.getElementById("todoRecord");
-	const todoRecordP = document.getElementById("todoRecordEmpty");
-	const addTodoForm = document.getElementById("addTodoForm");
-	const messageAddTodo = document.getElementById("messageAddTodo");
 	/*
 		Abrufen der User-ID, um die Ueberschrift zu erstellen => welcomeMessageH1
 		Diese Funktion in ein Modul auslagern, weil man so etwas noch an
@@ -24,11 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
 				console.error("Fehler: ", response?.responseText);
 			}else{
 				console.log("Userinfo: ", response);
-				welcomeMessageH1.textContent = `Welcome, ${response.first_name} ${response.surname}`;
+				dashboardSelectors.welcomeMessageH1.textContent = `Welcome, ${response.first_name} ${response.surname}`;
 			}
 		}catch(err){
 			console.error("Error: loadUserData() - ", err.message);
-			welcomeMessageH1.textContent = "Error: loadUserData()";
+			dashboardSelectors.welcomeMessageH1.textContent = "Error: loadUserData()";
 		}
 	}
 	
@@ -45,13 +44,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				//	React/SPA-Frameworks standardmäßig genutzt.
 				//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
 				//	In Kombination mit toggleUserTodoStatus() (Statusaenderung) und addUserTodo() (neues Todo)
-				todoRecordUl.innerHTML = '';
-				
-				//	Setzen der Todo-Liste-Ueberschrift
-				const ulHeaderH2 = document.getElementById("ulHeader");
+				dashboardSelectors.todoRecordUl.innerHTML = '';
 				
 				if(response.length > 0){
-					ulHeaderH2.textContent = "Your ToDos";
+					dashboardSelectors.ulHeaderH2.textContent = "Your ToDos";
 					
 					response.forEach(todo => {
 						//	Erstellt einen li-Tag pro Eintrag
@@ -99,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
 						li.appendChild(textDiv);
 						
 						//	lis in ul einhaengen
-						todoRecordUl.appendChild(li);
+						dashboardSelectors.todoRecordUl.appendChild(li);
 						
 						todoCheckbox.addEventListener("change", (e) => {
 							const id = e.target.dataset.id;
@@ -114,8 +110,8 @@ document.addEventListener("DOMContentLoaded", () => {
 				}
 				
 				if(response.length === 0){
-					ulHeaderH2.textContent = "No todos available";
-					todoRecordUl.innerHTML = "<li>Nothing to do - Relax</li>"
+					dashboardSelectors.ulHeaderH2.textContent = "No todos available";
+					dashboardSelectors.todoRecordUl.innerHTML = "<li>Nothing to do - Relax</li>"
 					
 					return;
 				}
@@ -168,25 +164,24 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 	//	Was wenn ich auf einer Seite mehr als ein submit-Event habe,
 	//	wie muessen die Eventlistener angepasst werden?
-	addTodoForm.addEventListener("submit", async (e) => {
+	dashboardSelectors.addTodoForm.addEventListener("submit", async (e) => {
 		e.preventDefault();
 		
-		const newTodoTitle = document.getElementById("title");
-		const title = newTodoTitle.value.trim();
+		const title = dashboardSelectors.newTodoTitle.value.trim();
 		
 		if(!title){
-			messageAddTodo.textContent = "Bitte einen Titel eingeben.";
+			dashboardSelectors.messageAddTodo.textContent = "Bitte einen Titel eingeben.";
 			return;
 		}
 		
 		const result = await addUserTodo(title);
 		
 		if(result?.success){
-			messageAddTodo.textContent = "Successfully added new todo";
+			dashboardSelectors.messageAddTodo.textContent = "Successfully added new todo";
 			//	Eingabe zuruecksetzen
-			newTodoTitle.value = "";
+			dashboardSelectors.newTodoTitle.value = "";
 		}else{
-			messageAddTodo.textContent = result?.message || "Error: addUserTodo-Eventlistener";
+			dashboardSelectors.messageAddTodo.textContent = result?.message || "Error: addUserTodo-Eventlistener";
 		}
 	});
 	
