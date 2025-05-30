@@ -1,10 +1,4 @@
-//	Erzeugt ein HTML-Element mit Textinhalt
-export function createTextElement(tagName, text){
-	const el = document.createElement(tagName);
-	el.textContent = text;
-	
-	return el;
-}
+import {createTextElement} from "../shared/elements.js"
 
 // Erzeugt die leere Todo-Nachricht (z.B. wenn keine Todos vorhanden sind)
 export function createEmptyTodoMessage(){

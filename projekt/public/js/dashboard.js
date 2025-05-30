@@ -3,7 +3,9 @@ import {getTodos, addTodo, toggleTodoStatus, deleteTodo} from "./api/todo.js"
 import {getUserInfo} from "./api/user.js"
 
 // Import von Selektoren
-import {dashboardSelectors} from "./dom/selectors.js"
+import {dashboardSelectors} from "./dom/dashboard/selectors.js"
+// Import Todolistengenerierung
+import {createTodoListItem} from "./dom/dashboard/create.js"
 
 document.addEventListener("DOMContentLoaded", () => {
 	/*
