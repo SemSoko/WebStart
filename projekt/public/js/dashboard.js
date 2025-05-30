@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const response = await getUserInfo();
 			
 			if("error" in response){
-				console.error("Fehler: ", response.responseText);
+				console.error("Fehler: ", response?.responseText);
 			}else{
 				console.log("Userinfo: ", response);
 				welcomeMessageH1.textContent = `Welcome, ${response.first_name} ${response.surname}`;
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const response = await getTodos();
 			
 			if("error" in response){
-				console.error("Error: loadUserTodos() - ", response.responseText);
+				console.error("Error: loadUserTodos() - ", response?.responseText);
 			}else{
 				console.log('Todos: ', response);
 				
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
 						
 						//	Status-Text fuer Checkbox
 						const checkboxStatusText = document.createTextNode(
-							todo.todo_status == 1 ? " Done" : " In Progress"
+							todo?.todo_status == 1 ? " Done" : " In Progress"
 						);
 						
 						//	Label fuer den Status-Text
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const response = await toggleTodoStatus(id);
 			
 			if("error" in response){
-				console.error("Error: toggleUserTodoStatus() - ", response.responseText);
+				console.error("Error: toggleUserTodoStatus() - ", response?.responseText);
 			}else{
 				//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
 				//	React/SPA-Frameworks standardmäßig genutzt.
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const response = await addTodo(title);
 			
 			if("error" in response){
-				console.error("Error: addUserTodo() - ", response.responseText);
+				console.error("Error: addUserTodo() - ", response?.responseText);
 			}else{
 				//	Das ist der sogenannte “State Reset”-Ansatz und er wird auch in vielen
 				//	React/SPA-Frameworks standardmäßig genutzt.
@@ -183,12 +183,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		
 		const result = await addUserTodo(title);
 		
-		if(result && result.success){
+		if(result?.success){
 			messageAddTodo.textContent = "Successfully added new todo";
 			//	Eingabe zuruecksetzen
 			newTodoTitle.value = "";
 		}else{
-			messageAddTodo.textContent = result.message;
+			messageAddTodo.textContent = result?.message || "Error: addUserTodo-Eventlistener";
 		}
 	});
 	
@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const response = await deleteTodo(id);
 			
 			if("error" in response){
-				console.error("Error: deleteUserTodo() - ", response.responseText);
+				console.error("Error: deleteUserTodo() - ", response?.responseText);
 			}else{
 				//	Das ist der sogenannte “State Reset”-Ansatz und er wird auch in vielen
 				//	React/SPA-Frameworks standardmäßig genutzt.
