@@ -45,3 +45,8 @@ was kommt danach? -->
 
 - [ ] ...
 - [ ] ...
+
+### Relevante Commits (optional)
+
+<!-- Liste relevante Commits (SHAs) und was sie beitragen.
+Das hilft bei der Nachvollziehbarkeit komplexer PRs. -->
