@@ -5,7 +5,7 @@ import {getUserInfo} from "./api/user.js"
 // Import von Selektoren
 import {dashboardSelectors} from "./dom/dashboard/selectors.js"
 // Import Todolistengenerierung
-import {createTodoListItem} from "./dom/dashboard/create.js"
+import {createTodoListItem, createEmptyTodoMessage} from "./dom/dashboard/create.js"
 
 document.addEventListener("DOMContentLoaded", () => {
 	/*
@@ -52,70 +52,20 @@ document.addEventListener("DOMContentLoaded", () => {
 					dashboardSelectors.ulHeaderH2.textContent = "Your ToDos";
 					
 					response.forEach(todo => {
-						//	Erstellt einen li-Tag pro Eintrag
-						const li = document.createElement("li");
+						//	Erstellt li-Tag je Todoeintrag
+						const li = createTodoListItem(todo, {
+							toggleUserTodoStatus,
+							deleteUserTodo
+						});
 						
-						//	Erstellt einen Text-Container fuer Infos zum Todo
-						const textDiv = document.createElement("div");
-						
-						//	Title - Todo
-						const todoTitle = document.createElement("h3");
-						todoTitle.textContent = todo.todo_title;
-						
-						//	Checkbox - Todo - Input, das in Label gepackt wird
-						const todoCheckbox = document.createElement("input");
-						todoCheckbox.type = "checkbox";
-						todoCheckbox.dataset.id = todo.todo_id;
-						todoCheckbox.checked = todo.todo_status == 1;
-						
-						//	Status-Text fuer Checkbox
-						const checkboxStatusText = document.createTextNode(
-							todo?.todo_status == 1 ? " Done" : " In Progress"
-						);
-						
-						//	Label fuer den Status-Text
-						const labelStatusText = document.createElement("label");
-						labelStatusText.appendChild(todoCheckbox);
-						labelStatusText.appendChild(checkboxStatusText);
-						
-						//	Created - Iat
-						const todoIat = document.createElement("h4");
-						todoIat.textContent = todo.todo_iat;
-						
-						//	Button zum Loeschen eines Todo-Eintrag
-						const deleteButton = document.createElement("button");
-						deleteButton.textContent = "Loeschen";
-						deleteButton.dataset.id = todo.todo_id;
-						
-						//	Daten in Div einhaengen
-						textDiv.appendChild(todoTitle);
-						textDiv.appendChild(labelStatusText);
-						textDiv.appendChild(todoIat);
-						textDiv.appendChild(deleteButton);
-						
-						//	textDiv jeweils in ein li einhaengen
-						li.appendChild(textDiv);
-						
-						//	lis in ul einhaengen
+						//	Die per forEach erstellen Todos in todoRecordUl einhaengen
 						dashboardSelectors.todoRecordUl.appendChild(li);
-						
-						todoCheckbox.addEventListener("change", (e) => {
-							const id = e.target.dataset.id;
-							const status = e.target.checked;
-							toggleUserTodoStatus(id);
-						});
-						
-						deleteButton.addEventListener("click", () => {
-							deleteUserTodo(todo.todo_id);
-						});
-					});	
+					});
 				}
 				
 				if(response.length === 0){
 					dashboardSelectors.ulHeaderH2.textContent = "No todos available";
-					dashboardSelectors.todoRecordUl.innerHTML = "<li>Nothing to do - Relax</li>"
-					
-					return;
+					dashboardSelectors.todoRecordUl.appendChild(createEmptyTodoMessage());
 				}
 			}
 		}catch(err){
