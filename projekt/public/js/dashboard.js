@@ -7,8 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	const todoRecordP = document.getElementById("todoRecordEmpty");
 	const addTodoForm = document.getElementById("addTodoForm");
 	const messageAddTodo = document.getElementById("messageAddTodo");
-	
-	const token = localStorage.getItem("jwt_token");
 	/*
 		Abrufen der User-ID, um die Ueberschrift zu erstellen => welcomeMessageH1
 		Diese Funktion in ein Modul auslagern, weil man so etwas noch an
