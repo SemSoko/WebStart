@@ -1,4 +1,4 @@
-export async apiRequest(endpoint, method='GET', body=null, token=null){
+export async function apiRequest(endpoint, method='GET', body=null, token=null){
 	// Das signalisiert dem Server: „Ich sende dir JSON-Daten“
 	// Header-Objekt initialisieren, standardmäßig mit JSON als Content-Type
 	const headers = {
