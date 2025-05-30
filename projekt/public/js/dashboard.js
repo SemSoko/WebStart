@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			
 			if("error" in response){
 				console.error("Fehler: ", response?.responseText);
+				return;
 			}else{
 				console.log("Userinfo: ", response);
 				dashboardSelectors.welcomeMessageH1.textContent = `Welcome, ${response.first_name} ${response.surname}`;
@@ -39,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			
 			if("error" in response){
 				console.error("Error: loadUserTodos() - ", response?.responseText);
+				return;
 			}else{
 				console.log('Todos: ', response);
 				
@@ -79,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			
 			if("error" in response){
 				console.error("Error: toggleUserTodoStatus() - ", response?.responseText);
+				return;
 			}else{
 				//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
 				//	React/SPA-Frameworks standardmäßig genutzt.
@@ -100,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			
 			if("error" in response){
 				console.error("Error: addUserTodo() - ", response?.responseText);
+				return;
 			}else{
 				//	Das ist der sogenannte “State Reset”-Ansatz und er wird auch in vielen
 				//	React/SPA-Frameworks standardmäßig genutzt.
@@ -151,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			
 			if("error" in response){
 				console.error("Error: deleteUserTodo() - ", response?.responseText);
+				return;
 			}else{
 				//	Das ist der sogenannte “State Reset”-Ansatz und er wird auch in vielen
 				//	React/SPA-Frameworks standardmäßig genutzt.
