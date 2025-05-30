@@ -4,6 +4,9 @@ import {apiRequest} from "./fetchWrapper.js"
 import {getToken} from "../utils/token.js"
 
 // Ruft alle Todos des aktuellen Users vom Server ab
+// Erweitern um folgendes:
+// prüfen, ob response.xxx, also ob eine gueltige Antwort von der API
+// geliefert wird
 export async function getTodos(){
 	const endpoint = "/api/get_user_todos.php";
 	const method = "GET";
@@ -14,6 +17,9 @@ export async function getTodos(){
 }
 
 // Erstellt ein neues Todo mit dem uebergebenen Titel
+// Erweitern um folgendes:
+// prüfen, ob response.xxx, also ob eine gueltige Antwort von der API
+// geliefert wird
 export async function addTodo(title){
 	const endpoint = "/api/addUserTodo.php";
 	const method = "POST";
@@ -24,6 +30,9 @@ export async function addTodo(title){
 }
 
 // Ändert den Status eines bestimmten Todos
+// Erweitern um folgendes:
+// prüfen, ob response.xxx, also ob eine gueltige Antwort von der API
+// geliefert wird
 export async function toggleTodoStatus(id){
 	const endpoint = "/api/toggleUserTodoStatus.php";
 	const method = "PATCH";
@@ -34,6 +43,9 @@ export async function toggleTodoStatus(id){
 }
 
 // Löscht ein Todo
+// Erweitern um folgendes:
+// prüfen, ob response.xxx, also ob eine gueltige Antwort von der API
+// geliefert wird
 export async function deleteTodo(id){
 	const endpoint = "/api/deleteUserTodo.php";
 	const method = "DELETE";
