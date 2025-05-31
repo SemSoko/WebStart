@@ -61,8 +61,32 @@ WebStart/
 │	│	│	├─── dashboard.html
 │	│	│	├─── login.html
 │	│	│	└─── register.html
-│	│	├─── js/
-│	│	│	├─── dashboard.js
+│	│	├─── js/								# JavaScript-Frontend-Logik (modular aufgebaut)
+│	│	│	│									# Feature-spezifische Module fuer das Dashboard
+│   │   │	├─── dashboard/						# Feature-Modul fuer dashboard.html
+│   │   │   │   ├─── index.js					# Einstiegpunkt des Dashboards
+│   │   │	│	├─── api/						# Fuer dashboard spezifische API-Funktionen
+│   │   │   │	├─── dom/						# Fuer Selektoren und DOM-Erzeugung fuer Dashboard
+│   │   │   │	│	├─── create.js
+│	│	│	│	│	└─── selectors.js
+│   │   │   │	├─── events/					# Alle Eventlistener, Eventhandler fuer Dashboard
+│   │   │   │	│	└─── dashboardEvents.js
+│   │   │   │	│
+│   │   │   │	└─── render/					# Darstellung und DOM-Aktualisierungen
+│   │   │   │		└─── todoRenderer.js
+│   │   │   │
+│   │   │   │									# Wiederverwendbare, globale Module
+│   │   │	├─── shared/						# Feature unabhaengige Module (projektweit nutzbar)
+│   │   │	│	├─── api/						# API-Funktionalitaet
+│   │   │   │	│	├─── fetchWrapper.js
+│   │   │   │	│	├─── todo.js
+│   │   │   │	│	└─── user.js
+│   │   │	│	├─── dom/						# Helferfunktionen fuer das DOM
+│	│	│	│	│	└─── elements.js
+│   │   │	│	└─── utils/						# Sonstige Hilfsfunktionen (z.B. Tokenverwaltung)
+│   │   │   │		└─── token.js
+│   │   │   │
+│   │   │   │									# Weitere Feature-Einstiegspunkte (noch nicht modularisiert)
 │	│	│	├─── login.js
 │	│	│	├─── logout.js
 │	│	│	└─── register.js
