@@ -39,90 +39,90 @@ Aktuell basiert **WebStart** auf folgenden Komponenten:
 ```
 WebStart/
 ├── init-sql/
-│	└─── 001-init.sql
+│    └─── 001-init.sql
 │
 ├── projekt/
-│	├─── bootstrap/									# Initialisierung (DB, Autoloader, ... )
-│ 	│	└─── init.php
-│	│
-│	├─── public/									# Oeffentlich zugaenglicher Bereich (Frontend + API)
-│	│	├─── api/									# API-Endpunkte
-│	│	│	├─── addUserTodo.php
-│	│	│	├─── deleteUserTodo.php
-│	│	│	├─── get_user_todos.php
-│	│	│	├─── login.php
-│	│	│	├─── register.php
-│	│	│	├─── toggleUserTodoStatus.php
-│	│	│	└─── user_info.php
-│	│	│
-│	│	├─── css/
-│	│	│
-│	│	├─── html/
-│	│	│	├─── dashboard.html
-│	│	│	├─── login.html
-│	│	│	└─── register.html
-│	│	│
-│	│	├─── js/								# JavaScript-Frontend-Logik (modular aufgebaut)
-│	│	│	│									# Feature-spezifische Module fuer das Dashboard
-│   │   │	├─── dashboard/						# Feature-Modul fuer dashboard.html
-│   │   │ 	│	├─── index.js					# Einstiegpunkt des Dashboards
-│   │   │	│	├─── api/						# Fuer dashboard spezifische API-Funktionen
-│   │   │  	│	├─── dom/						# Fuer Selektoren und DOM-Erzeugung fuer Dashboard
-│   │   │  	│	│		├─── create.js
-│	│	│	│	│		└─── selectors.js
-│	│	│	│	├─── events/					# Alle Eventlistener, Eventhandler fuer Dashboard
-│   │   │ 	│	│		└─── dashboardEvents.js
-│   │   │ 	│	│	
-│   │   │ 	│	└─── render/					# Darstellung und DOM-Aktualisierungen
-│   │   │ 	│			└─── todoRenderer.js
-│   │   │ 	│	
-│   │   │ 	│									# Wiederverwendbare, globale Module
-│   │   │	├─── shared/						# Feature unabhaengige Module (projektweit nutzbar)
-│   │   │	│	├─── api/						# API-Funktionalitaet
-│   │   │  	│	│		├─── fetchWrapper.js
-│   │   │  	│	│		├─── todo.js
-│   │   │  	│	│		└─── user.js
-│   │   │	│	├─── dom/						# Helferfunktionen fuer das DOM
-│	│	│	│	│		└─── elements.js
-│   │   │	│	└─── utils/						# Sonstige Hilfsfunktionen (z.B. Tokenverwaltung)
-│   │   │  	│			└─── token.js
-│   │   │  	│	
-│   │   │  	│									# Weitere Feature-Einstiegspunkte (noch nicht modularisiert)
-│	│	│	├─── login.js
-│	│	│	├─── logout.js
-│	│	│	└─── register.js
-│	│	│
-│	│	└─── index.php
-│	│
-│	├─── src/
-│	│	├─── auth/
-│	│	│	└─── auth.php
-│	│	│
-│	│	├─── core/
-│	│	│	├─── db.php
-│	│	│	├─── funktionen.php
-│	│	│	└─── JwtHandler.php
-│	│	│
-│	│	└─── todo/
-│	│		└─── todo.php
-│	│
-│	├─── tests/									# Unit-Tests (PHPUnit)
-│	│	├─── auth/
-│	│	│	├─── CreateUserTest.php
-│	│	│	├─── IsEmailRegisteredTest.php
-│	│	│	├─── IsValidPasswordTest.php
-│	│	│	├─── LoginUserTest.php
-│	│	│	└─── ProcessLoginFormTest.php
-│	│	│
-│	│	└─── todo/	
-│	│		├─── AddTodoTest.php
-│	│		├─── DeleteTodoTest.php
-│	│		├─── GetTodosByUserTest.php
-│	│		└─── ToggleTodoTest.php
-│	│				
-│	├─── composer.json
-│	└─── composer.lock
-│		
+│    ├─── bootstrap/                                # Initialisierung (DB, Autoloader, ... )
+│    │	└─── init.php
+│    │
+│    ├─── public/                                   # Oeffentlich zugaenglicher Bereich (Frontend + API)
+│    │    ├─── api/                                 # API-Endpunkte
+│    │    │    ├─── addUserTodo.php
+│    │    │    ├─── deleteUserTodo.php
+│    │    │    ├─── get_user_todos.php
+│    │    │    ├─── login.php
+│    │    │    ├─── register.php
+│    │    │    ├─── toggleUserTodoStatus.php
+│    │    │    └─── user_info.php
+│    │    │
+│    │    ├─── css/
+│    │    │
+│    │    ├─── html/
+│    │    │    ├─── dashboard.html
+│    │    │    ├─── login.html
+│    │    │    └─── register.html
+│    │    │
+│    │    ├─── js/                                  # JavaScript-Frontend-Logik (modular aufgebaut)
+│    │    │    │                                    # Feature-spezifische Module fuer das Dashboard
+│    │    │    ├─── dashboard/                      # Feature-Modul fuer dashboard.html
+│    │    │    │    ├─── index.js                   # Einstiegpunkt des Dashboards
+│    │    │    │    ├─── api/                       # Fuer dashboard spezifische API-Funktionen
+│    │    │    │    ├─── dom/                       # Fuer Selektoren und DOM-Erzeugung fuer Dashboard
+│    │    │    │    │    ├─── create.js
+│    │    │    │    │    └─── selectors.js
+│    │    │    │    ├─── events/                    # Alle Eventlistener, Eventhandler fuer Dashboard
+│    │    │    │    │    └─── dashboardEvents.js
+│    │    │    │    │
+│    │    │    │    └─── render/                    # Darstellung und DOM-Aktualisierungen
+│    │    │    │         └─── todoRenderer.js
+│    │    │    │
+│    │    │    │                                    # Wiederverwendbare, globale Module
+│    │    │    ├─── shared/                         # Feature unabhaengige Module (projektweit nutzbar)
+│    │    │    │    ├─── api/                       # API-Funktionalitaet
+│    │    │    │    │    ├─── fetchWrapper.js
+│    │    │    │    │    ├─── todo.js
+│    │    │    │    │    └─── user.js
+│    │    │    │    ├─── dom/                       # Helferfunktionen fuer das DOM
+│    │    │    │    │    └─── elements.js
+│    │    │    │    └─── utils/                     # Sonstige Hilfsfunktionen (z.B. Tokenverwaltung)
+│    │    │    │         └─── token.js
+│    │    │    │
+│    │    │    │                                    # Weitere Feature-Einstiegspunkte (noch nicht modularisiert)
+│    │    │    ├─── login.js
+│    │    │    ├─── logout.js
+│    │    │    └─── register.js
+│    │    │
+│    │    └─── index.php
+│    │
+│    ├─── src/
+│    │    ├─── auth/
+│    │    │	└─── auth.php
+│    │    │
+│    │    ├─── core/
+│    │    │ ├─── db.php
+│    │    │ ├─── funktionen.php
+│    │    │ └─── JwtHandler.php
+│    │    │
+│    │    └─── todo/
+│    │         └─── todo.php
+│    │
+│    ├─── tests/                                    # Unit-Tests (PHPUnit)
+│    │    ├─── auth/
+│    │    │    ├─── CreateUserTest.php
+│    │    │    ├─── IsEmailRegisteredTest.php
+│    │    │    ├─── IsValidPasswordTest.php
+│    │    │    ├─── LoginUserTest.php
+│    │    │    └─── ProcessLoginFormTest.php
+│    │    │
+│    │    └─── todo/	
+│    │         ├─── AddTodoTest.php
+│    │         ├─── DeleteTodoTest.php
+│    │         ├─── GetTodosByUserTest.php
+│    │         └─── ToggleTodoTest.php
+│    │
+│    ├─── composer.json
+│    └─── composer.lock
+│
 ├─── sql-dumps/
 ├─── .env-example
 ├─── .env
