@@ -14,7 +14,8 @@ import {createTodoListItem, createEmptyTodoMessage} from "./dom/create.js"
 // Import von Renderern
 
 // Imports zur Listen-Aktualisierung
-import {renderTodoList, appendTodoItem, removeTodoItem, updateTodoItem} from "./render/todoRenderer.js"
+import {renderTodoList, appendTodoItem} from "./render/todoRenderer.js"
+import {removeTodoItem, updateTodoItem} from "./render/todoRenderer.js"
 
 document.addEventListener("DOMContentLoaded", () => {
 	/*
