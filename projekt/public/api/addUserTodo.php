@@ -59,16 +59,31 @@
 	
 	if($userData === null){
 		http_response_code(401);
-		echo json_encode(['error' => $userData['message']]);
+		echo json_encode(['error' => 'Token nicht gueltig oder abgelaufen']);
 		exit();
 	}
 	
 	$todoId = addTodo($pdo, $userId, $titleTodo);
 	
 	if($todoId !== null){
+		//	Neues Todo aus DB lesen
+		//	Mit allen dazugehoerenden Spalten
+		$stmt = $pdo->prepare("select * from todos where id = ?");
+		$stmt->execute([$todoId]);
+		$newTodo = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+		//	Feldnamenanpassen fuer Rendering
+		$newTodo = [
+			'todo_id' => $newTodo['id'],
+			'todo_title' => $newTodo['title'],
+			'todo_status' => $newTodo['is_done'],
+			'todo_iat' => $newTodo['created_at']
+		];
+		
+		//	Vollstaendiges Todo als JSON senden
 		echo json_encode([
 			'success' => true,
-			'todoId' => $todoId
+			'completeTodo' => $newTodo
 		]);
 	}else{
 		echo json_encode([

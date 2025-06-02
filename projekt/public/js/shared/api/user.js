@@ -1,7 +1,7 @@
 // Importiert den zentralen fetch()-Wrapper für standardisierte HTTP-Anfragen
 import {apiRequest} from "./fetchWrapper.js"
 // Importiert Hilfsfunktion zur Token-Ermittlung aus dem localStorage
-import {getToken} from "../utils/token.js"
+import {getToken} from "./../utils/token.js"
 
 // Holt Benutzerinformationen des aktuell eingeloggten Users vom Server
 // Erweitern um folgendes:

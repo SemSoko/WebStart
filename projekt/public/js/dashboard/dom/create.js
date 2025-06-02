@@ -1,8 +1,11 @@
-import {createTextElement} from "../shared/elements.js"
+import {createTextElement} from "./../../shared/dom/elements.js"
 
 // Erzeugt die leere Todo-Nachricht (z.B. wenn keine Todos vorhanden sind)
 export function createEmptyTodoMessage(){
-	return createTextElement("li", "Nothing to do - Relax");
+	const li = createTextElement("li", "Nothing to do - Relax");
+	li.dataset.empty = "true";
+	
+	return li;
 }
 
 /*
@@ -15,6 +18,8 @@ export function createTodoListItem(todo, {onToggle, onDelete}){
 	// Container <li> und inneres <div>
 	const li = document.createElement("li");
 	const textDiv = document.createElement("div");
+	
+	li.dataset.id = todo?.todo_id;
 	
 	// Todo-Titel <h3>
 	const todoTitle = createTextElement("h3", (todo?.todo_title ?? "No title"));
