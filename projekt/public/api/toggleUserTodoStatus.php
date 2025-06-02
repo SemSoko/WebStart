@@ -66,10 +66,25 @@
 	//	Toggle-Funktion ruft Status zurueck
 	$todoStatus = toggleTodo($pdo, $userId, $todoId);
 	
-	if($todoStatus === 1){
-		echo json_encode(['todoStatus' => 'Done']);
-	}else if($todoStatus === 0){
-		echo json_encode(['todoStatus' => 'In Progress']);
+	if($todoStatus === 1 || $todoStatus === 0){
+		// Aktualisiertes vollstaendiges Todo
+		$stmt = $pdo->prepare("select * from todos where id = ?");
+		$stmt->execute([$todoId]);
+		$todoStatus = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+		// Feldnamenanpassen fuer Rendering
+		$todoStatus = [
+			'todo_id' => $todoStatus['id'],
+			'todo_title' => $todoStatus['title'],
+			'todo_status' => $todoStatus['is_done'],
+			'todo_iat' => $todoStatus['created_at'],
+		];
+		
+		// Vollstaendiges Todo senden
+		echo json_encode([
+			'succes' => true,
+			'completeTodo' => $todoStatus
+		]);
 	}else{
 		http_response_code(401);
 		echo json_encode(['error' => 'Status wurde nicht geaendert']);
