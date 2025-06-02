@@ -68,7 +68,7 @@
 	if($todoId !== null){
 		//	Neues Todo aus DB lesen
 		//	Mit allen dazugehoerenden Spalten
-		$stmt = $pdo->prepare("select * from todos where todo_id = ?");
+		$stmt = $pdo->prepare("select * from todos where id = ?");
 		$stmt->execute([$todoId]);
 		$newTodo = $stmt->fetch(PDO::FETCH_ASSOC);
 		
