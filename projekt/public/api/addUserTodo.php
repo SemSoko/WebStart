@@ -72,6 +72,14 @@
 		$stmt->execute([$todoId]);
 		$newTodo = $stmt->fetch(PDO::FETCH_ASSOC);
 		
+		//	Feldnamenanpassen fuer Rendering
+		$newTodo = [
+			'todo_id' => $newTodo['id'],
+			'todo_title' => $newTodo['title'],
+			'todo_status' => $newTodo['is_done'],
+			'todo_iat' => $newTodo['created_at']
+		];
+		
 		//	Vollstaendiges Todo als JSON senden
 		echo json_encode([
 			'success' => true,
