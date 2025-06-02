@@ -17,6 +17,10 @@ import {createTodoListItem, createEmptyTodoMessage} from "./dom/create.js"
 import {renderTodoList, appendTodoItem} from "./render/todoRenderer.js"
 import {removeTodoItem, updateTodoItem} from "./render/todoRenderer.js"
 
+// Import von Events
+
+import {registerDashboardEvents} from "./events/dashboardEvents.js"
+
 document.addEventListener("DOMContentLoaded", () => {
 	/*
 		Abrufen der User-ID, um die Ueberschrift zu erstellen => welcomeMessageH1
@@ -110,27 +114,10 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	}
 	
-	//	Was wenn ich auf einer Seite mehr als ein submit-Event habe,
-	//	wie muessen die Eventlistener angepasst werden?
-	dashboardSelectors.addTodoForm.addEventListener("submit", async (e) => {
-		e.preventDefault();
-		
-		const title = dashboardSelectors.newTodoTitle.value.trim();
-		
-		if(!title){
-			dashboardSelectors.messageAddTodo.textContent = "Bitte einen Titel eingeben.";
-			return;
-		}
-		
-		const result = await addUserTodo(title);
-		
-		if(result?.success){
-			dashboardSelectors.messageAddTodo.textContent = "Successfully added new todo";
-			//	Eingabe zuruecksetzen
-			dashboardSelectors.newTodoTitle.value = "";
-		}else{
-			dashboardSelectors.messageAddTodo.textContent = result?.message || "Error: addUserTodo-Eventlistener";
-		}
+	registerDashboardEvents({
+		onAddTodo: addUserTodo,
+		getInput: () => dashboardSelectors.newTodoTitle,
+		showMessage: (msg) => dashboardSelectors.messageAddTodo.textContent = msg
 	});
 	
 	//	addUserTodo - Ende
