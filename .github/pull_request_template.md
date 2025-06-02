@@ -31,7 +31,7 @@ Gibt es manuelle oder automatische Tests? -->
 
 ---
 
-### Hinweise für Reviewer:innen
+### Hinweise für Reviewer
 
 <!-- Gibt es etwas Besonderes zu beachten?
 Technische Schulden, Abhängigkeiten, bekannte Einschränkungen? -->
