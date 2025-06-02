@@ -66,9 +66,16 @@
 	$todoId = addTodo($pdo, $userId, $titleTodo);
 	
 	if($todoId !== null){
+		//	Neues Todo aus DB lesen
+		//	Mit allen dazugehoerenden Spalten
+		$stmt = $pdo->prepare("select * from todos where todo_id = ?");
+		$stmt->execute([$todoId]);
+		$newTodo = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+		//	Vollstaendiges Todo als JSON senden
 		echo json_encode([
 			'success' => true,
-			'todoId' => $todoId
+			'completeTodo' => $newTodo
 		]);
 	}else{
 		echo json_encode([
