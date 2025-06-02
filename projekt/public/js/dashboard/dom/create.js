@@ -2,7 +2,10 @@ import {createTextElement} from "./../../shared/dom/elements.js"
 
 // Erzeugt die leere Todo-Nachricht (z.B. wenn keine Todos vorhanden sind)
 export function createEmptyTodoMessage(){
-	return createTextElement("li", "Nothing to do - Relax");
+	const li = createTextElement("li", "Nothing to do - Relax");
+	li.dataset.empty = "true";
+	
+	return li;
 }
 
 /*
