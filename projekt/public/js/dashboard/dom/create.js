@@ -1,4 +1,4 @@
-import {createTextElement} from "../shared/elements.js"
+import {createTextElement} from "./../../shared/dom/elements.js"
 
 // Erzeugt die leere Todo-Nachricht (z.B. wenn keine Todos vorhanden sind)
 export function createEmptyTodoMessage(){
