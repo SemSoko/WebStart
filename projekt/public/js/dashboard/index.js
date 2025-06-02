@@ -14,7 +14,7 @@ import {createTodoListItem, createEmptyTodoMessage} from "./dom/create.js"
 // Import von Renderern
 
 // Imports zur Listen-Aktualisierung
-import {renderTodoList, appendTodoItem, removeTodoItem} from "./render/todoRenderer.js"
+import {renderTodoList, appendTodoItem, removeTodoItem, updateTodoItem} from "./render/todoRenderer.js"
 
 document.addEventListener("DOMContentLoaded", () => {
 	/*
@@ -70,11 +70,16 @@ document.addEventListener("DOMContentLoaded", () => {
 				console.error("Error: toggleUserTodoStatus() - ", response?.responseText);
 				return;
 			}else{
-				//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
-				//	React/SPA-Frameworks standardmäßig genutzt.
-				//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
-				//	In Kombination mit loadUserTodos()
-				loadUserTodos();
+				// Weil updateTodoItem() intern createTodoListItem() aufruft,
+				// und diese Funktion sowohl onToggle als auch onDelete braucht,
+				// um beide Eventhandler korrekt zu setzen, uebergibt man beides
+				// ...
+				// todoCheckbox.addEventListener("change", () => onToggle(todo.todo_id));
+				// deleteButton.addEventListener("click", () => onDelete(todo.todo_id));
+				updateTodoItem(response.completeTodo, {
+					onToggle: toggleUserTodoStatus,
+					onDelete: deleteUserTodo
+				});
 				console.log('der neue Status des Todos:', response);
 			}
 		}catch(err){
