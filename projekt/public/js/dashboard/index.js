@@ -1,11 +1,20 @@
+// shared/api/...
+
 // Funktionale-Imports
 import {getTodos, addTodo, toggleTodoStatus, deleteTodo} from "./../shared/api/todo.js"
 import {getUserInfo} from "./../shared/api/user.js"
 
+// dashboard/dom/...
+
 // Import von Selektoren
-import {dashboardSelectors} from "./dom/selectors.js"
 // Import Todolistengenerierung
+import {dashboardSelectors} from "./dom/selectors.js"
 import {createTodoListItem, createEmptyTodoMessage} from "./dom/create.js"
+
+// Import von Renderern
+
+// Imports zur Listen-Aktualisierung
+import {renderTodoList, appendTodoItem, removeTodoItem} from "./render/todoRenderer.js"
 
 document.addEventListener("DOMContentLoaded", () => {
 	/*
@@ -43,32 +52,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				return;
 			}else{
 				console.log('Todos: ', response);
-				
-				//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
-				//	React/SPA-Frameworks standardmäßig genutzt.
-				//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
-				//	In Kombination mit toggleUserTodoStatus() (Statusaenderung) und addUserTodo() (neues Todo)
-				dashboardSelectors.todoRecordUl.innerHTML = '';
-				
-				if(response.length > 0){
-					dashboardSelectors.ulHeaderH2.textContent = "Your ToDos";
-					
-					response.forEach(todo => {
-						//	Erstellt li-Tag je Todoeintrag
-						const li = createTodoListItem(todo, {
-							onToggle: toggleUserTodoStatus,
-							onDelete: deleteUserTodo
-						});
-						
-						//	Die per forEach erstellen Todos in todoRecordUl einhaengen
-						dashboardSelectors.todoRecordUl.appendChild(li);
-					});
-				}
-				
-				if(response.length === 0){
-					dashboardSelectors.ulHeaderH2.textContent = "No todos available";
-					dashboardSelectors.todoRecordUl.appendChild(createEmptyTodoMessage());
-				}
+				renderTodoList(response, {
+					onToggle: toggleUserTodoStatus,
+					onDelete: deleteUserTodo
+				});
 			}
 		}catch(err){
 			console.error("Error: loadUserTodos() - ", err.message);
@@ -105,11 +92,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				console.error("Error: addUserTodo() - ", response?.responseText);
 				return;
 			}else{
-				//	Das ist der sogenannte “State Reset”-Ansatz und er wird auch in vielen
-				//	React/SPA-Frameworks standardmäßig genutzt.
-				//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
-				//	In Kombination mit loadUserTodos()
-				loadUserTodos();
+				appendTodoItem(response.completeTodo, {
+					onToggle: toggleUserTodoStatus,
+					onDelete: deleteUserTodo
+				});
 				console.log("Updated todolist: ", response);
 				return response;
 			}
@@ -157,11 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				console.error("Error: deleteUserTodo() - ", response?.responseText);
 				return;
 			}else{
-				//	Das ist der sogenannte “State Reset”-Ansatz und er wird auch in vielen
-				//	React/SPA-Frameworks standardmäßig genutzt.
-				//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
-				//	In Kombination mit loadUserTodos()
-				loadUserTodos();
+				removeTodoItem(id);
 				console.log("Die neue Todo-Liste:", response);
 			}
 		}catch(err){
