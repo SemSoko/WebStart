@@ -19,6 +19,8 @@ export function createTodoListItem(todo, {onToggle, onDelete}){
 	const li = document.createElement("li");
 	const textDiv = document.createElement("div");
 	
+	li.dataset.id = todo?.todo_id;
+	
 	// Todo-Titel <h3>
 	const todoTitle = createTextElement("h3", (todo?.todo_title ?? "No title"));
 	
