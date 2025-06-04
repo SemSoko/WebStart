@@ -1,0 +1,49 @@
+name: Geplantes Issue (klassischer Workflow)
+description: Planung einer technischen Aufgabe oder Verbesserung vor Umsetzung
+title: "[Planung]: <Kurzbeschreibung der Aufgabe>"
+labels: ["planning", "todo"]
+body:
+  - type: textarea
+    id: ziel
+    attributes:
+      label: Ziel
+      description: Was soll erreicht werden? (fachlich/technisch)
+      placeholder: z.B. "Der Benutzer soll Todos nach Status filtern koennen."
+    validations:
+      required: true
+
+  - type: textarea
+    id: kontext
+    attributes:
+      label: Hintergrund / Kontext
+      description: Warum ist das relevant? Wo tritt das Problem oder der Bedarf auf?
+      placeholder: z.B. "Das Dashboard zeigt aktuell alle Todos ungefiltert. Nutzer wuenschen sich mehr Uebersicht."
+    validations:
+      required: true
+
+  - type: textarea
+    id: vorschlag
+    attributes:
+      label: Loesungsansatz / Umsetzungsidee
+      description: Wie koennte das technisch umgesetzt werden?
+      placeholder: z.B. "Frontend: Dropdown zur Auswahl des Status. API: optionaler Filter-Parameter ?status=..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: test
+    attributes:
+      label: Testhinweise (optional)
+      description: Wie kann spaeter ueberprueft werden, ob die Aufgabe erfuellt ist?
+      placeholder: z.B. "UI zeigt nach Auswahl im Dropdown nur Todos mit entsprechendem Status."
+    validations:
+      required: false
+
+  - type: textarea
+    id: sonstiges
+    attributes:
+      label: Weitere Hinweise (optional)
+      description: Abhaengigkeiten, bekannte Probleme, Refactoringbedarf etc.
+      placeholder: z.B. "API-Aenderungen koennten andere Module beeinflussen."
+    validations:
+      required: false
