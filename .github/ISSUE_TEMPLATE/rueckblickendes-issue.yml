@@ -1,0 +1,43 @@
+name: Rueckblickendes Issue (nach PR)
+description: Dokumentation einer abgeschlossenen Arbeitseinheit anhand eines PRs
+title: "[Dokumentation]: <Kurzbeschreibung der Arbeitseinheit>"
+labels: ["documentation", "retrospective"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Dieses Template dient der nachtraeglichen Dokumentation einer bereits abgeschlossenen Arbeitseinheit
+        Ziel ist die Strukturierung des Projekts durch nachvollziehbare, referenzierte Eintrage im Github-Projekt "Webstart".
+
+  - type: input
+    id: modul
+    attributes:
+      label: Modul / Bereich
+      description: Welcher Teil des Projekts war betroffen?
+      placeholder: z.B. Dashboard, API, Auth-Handling
+    validations:
+      required: true
+
+  - type: textarea
+    id: kurzbeschreibung
+    attributes:
+      label: Kurzbeschreibung
+      description: Was wurde umgesetzt? 1 bis 3 Saetze, keine technischen Details.
+      placeholder: z.B. "Eine Funktion fuer das Dashboard geschrieben ..."
+    validations:
+      required: true
+
+  - type: input
+    id: pr-link
+    attributes:
+      label: Verlinkter PR
+      description: PR-Nummer oder URL mit allen technischen Details
+      placeholder: z.B. https://github.com/SemSoko/WebStart/pull/xy
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        **Wichtig**: Keine Todos oder Folgeaufgaben in diesem Issue anlegen.
+        Diese gehoeren in neue, geplante Issues.
