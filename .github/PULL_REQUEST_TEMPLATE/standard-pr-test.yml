@@ -1,0 +1,66 @@
+name: Standard Pull Request
+description: Vorlage zur Beschreibung technischer Aenderungen (Feature, Fix, Refactoring etc.)
+title: "[PR]: <Kurzbeschreibung der Aenderung>"
+body:
+  - type: textarea
+    id: hintergrund
+    attributes:
+      label: Hintergrund
+      description: Warum ist dieser PR notwendig? Was ist der fachliche oder technische Kontext?
+      placeholder: z.B. "Modul war schwer wartbar, da Logik und UI vermischt waren."
+    validations:
+      required: true
+
+  - type: textarea
+    id: aenderungen
+    attributes:
+      label: Aenderungen im Detail
+      description: Was wurde konkret hinzugefuegt, geaendert oder entfernt?
+      placeholder: "- Modul X ausgelagert\n- API-Aufrufe refactored\n- Tests ergaenzt"
+    validations:
+      required: true
+
+  - type: textarea
+    id: ziel
+    attributes:
+      label: Ziel / Zweck des PRs
+      description: Was soll durch diese Aenderung erreicht werden?
+      placeholder: "Modularisierung des Dashboards zur besseren Testbarkeit."
+    validations:
+      required: true
+
+  - type: textarea
+    id: tests
+    attributes:
+      label: Testhinweise
+      description: Wie kann geprueft werden, dass alles funktioniert?
+      placeholder: "UI manuell testen, automatisierte Tests laufen lassen, kein Fehler in Konsole"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reviewer
+    attributes:
+      label: Hinweise fuer Reviewer
+      description: Gibt es Besonderheiten oder Stolperfallen?
+      placeholder: "Bitte besonders auf die Uebergabe von Callbacks achten."
+    validations:
+      required: false
+
+  - type: textarea
+    id: folgeaenderungen
+    attributes:
+      label: Folgeaenderungen (optional)
+      description: Falls noetig - was ist im Anschluss geplant?
+      placeholder: "- [] Tests schreiben\n- [] Refactoring in Modul Y"
+    validations:
+      required: false
+
+  - type: textarea
+    id: commits
+    attributes:
+      label: Relevante Commits (optional)
+      description: Welche Commits sind besonders wichtig in diesem Kontext und was tun sie?
+      placeholder: "- abc123: fetchWrapper hinzugefuegt\n- def456: Eventhandler ausgelagert"
+    validations:
+      required: false
