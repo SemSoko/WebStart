@@ -14,6 +14,7 @@ lassen.
 	- [4.1 Projektkontext & Basisverzeichnis](#41-projektkontext--basisverzeichnis)
 	- [4.2 Dockerfile](#42-dockerfile)
 	- [4.3 docker-compose.yml ─ Container-Orchestrierung](#43-docker-composeyml--container-orchestrierung)
+	- [4.4 JSDoc Docker-Setup](#44-jsdoc-dockerbasiertes-setup-fuer-die-javascript-dokumentation)
 5. [Umgebungsvariablen (.env)](#5-umgebungsvariablen-env)
 6. [Projektstart & Nutzung](#6-projektstart--nutzung)
 	- [6.1 Wichtiger Hinweis zur Erstinitialisierung](#61-wichtiger-hinweis-zur-erstinitialisierung)
@@ -219,6 +220,45 @@ Ueber diese koennen alle Services einfach verwaltet werden.
 	Diese Volumes sorgen dafuer, dass Datenbankinhalte und Dumps dauerhaft gespeichert werden.
 	- `db_data`
 	- `sql_dumps` (DB-Backups)
+
+### 4.4 JSDoc - Dockerbasiertes Setup fuer die JavaScript-Dokumentation
+
+Neben dem produktiven Docker-Setup existiert eine separate, containerisierte Umgebung zur\
+Erzeugung und Bereitstellung der JavaScript-Dokumentation (JSDoc).
+
+Es werden zwei Docker-Compose-Dateien verwendet:
+
+#### `docker-compose.tooling.yml`
+Initialisiert ein Node.js-Projekt im Verzeichnis `.jsdoc-tooling`, das als Basis\
+fuer das JSDoc-Setup dient.
+`docker compose -f docker-compose.tooling.yml up --build`
+
+- Fuehrt npm init -y und npm install --save-dev jsdoc aus
+- Legt package.json und package-lock.json in .jsdoc-tooling/ ab
+- Container wird nach der Initialisierung automatisch gestoppt
+- Muss beim allerersten Setup ausgeführt werden
+- Danach nur noch noetig, wenn sich die Tooling-Abhaengigkeiten aendern (z. B. Update von JSDoc)
+
+#### `docker-compose.yml`
+Erzeugt die Dokumentation und stellt sie im Browser bereit:\
+`docker compose -f docker-compose.yml up --build`
+
+- Startet `jsdoc-runner`, um Dokumentation aus `WebStart/projekt/public/js/` zu generieren
+- Speichert die generierte Ausgabe im Verzeichnis `WebStart/docker/documentation/jsdoc/out/`
+- Startet `jsdoc-docs-web`, einen Apache-Webserver zur Auslieferung der Doku
+
+Zugriff im Browser:\
+JSDoc-Viewer: [http://localhost:8081](http://localhost:8081)
+
+- JSDoc-Konfiguration:
+`WebStart/docker/documentation/jsdoc/.jsdoc-tooling/jsdoc.json`
+- Generierte Dokumentation:
+`WebStart/docker/documentation/jsdoc/out/`
+
+*Hinweis*\
+Das gesamte JSDoc-Setup ist vollständig vom produktiven Projekt entkoppelt und kann parallel\
+oder separat ausgeführt werden. Änderungen am JS-Code in `WebStart/projekt/public/js/` werden\
+bei jedem Build automatisch neu dokumentiert.
 
 ## 5. Umgebungsvariablen (.env)
 
