@@ -14,7 +14,7 @@ lassen.
 	- [4.1 Projektkontext & Basisverzeichnis](#41-projektkontext--basisverzeichnis)
 	- [4.2 Dockerfile](#42-dockerfile)
 	- [4.3 docker-compose.yml ─ Container-Orchestrierung](#43-docker-composeyml--container-orchestrierung)
-	- [4.4 JSDoc Docker-Setup](#44-jsdoc-dockerbasiertes-setup-fuer-die-javascript-dokumentation)
+	- [4.4 JSDoc Docker-Setup](#44-jsdoc---dockerbasiertes-setup-fuer-die-javascript-dokumentation)
 5. [Umgebungsvariablen (.env)](#5-umgebungsvariablen-env)
 6. [Projektstart & Nutzung](#6-projektstart--nutzung)
 	- [6.1 Wichtiger Hinweis zur Erstinitialisierung](#61-wichtiger-hinweis-zur-erstinitialisierung)
