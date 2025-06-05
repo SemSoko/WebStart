@@ -123,6 +123,16 @@ WebStart/
 │    ├─── composer.json
 │    └─── composer.lock
 │
+├── docker/
+│    └─── documentation/
+│         └─── jsdoc/
+│              ├─── docker-compose.yml
+│              ├─── jsdoc-builder.dockerfile
+│              ├─── jsdoc-runner.dockerfile
+│              ├─── jsdoc-web.dockerfile
+│              ├─── out/
+│              └─── .jsdoc-tooling/
+│
 ├─── sql-dumps/
 ├─── .env-example
 ├─── .env
