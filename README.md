@@ -31,8 +31,8 @@ Aktuell basiert **WebStart** auf folgenden Komponenten:
 - **Composer**: 2.8.8 ─ zur Verwaltung von PHP-Abhaengigkeiten
 - **MariaDB**: 10.11 ─ relationale Datenbank
 - **phpMyAdmin**: 5.2.1
-- **Docker Engine**: 27.2.0 (Docker ueber Docker Desktop unter Windows)
-- **Docker Compose**: 2.29.2-desktop.2 - zur Container-Orchestrierung
+- **Docker**: 27.5.1 (getestet unter Ubuntu 24.04)
+- **Docker Compose**: 2.36.2 (CLI integriert, `docker compose`)
 
 ## 2. Projektstruktur
 
