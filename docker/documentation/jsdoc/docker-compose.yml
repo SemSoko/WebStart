@@ -1,3 +1,5 @@
+# JSdoc Doku generieren und im Browser unter http://localhost:8081 anschauen
+# docker compose -f docker-compose.yml up --build
 version: "3.9"
 
 services:
@@ -22,7 +24,7 @@ services:
       context: .
       dockerfile: jsdoc-web.dockerfile
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes:
       - ./out:/usr/local/apache2/htdocs/:ro
     restart: unless-stopped
