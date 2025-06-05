@@ -18,6 +18,7 @@ lassen.
 5. [Umgebungsvariablen (.env)](#5-umgebungsvariablen-env)
 6. [Projektstart & Nutzung](#6-projektstart--nutzung)
 	- [6.1 Wichtiger Hinweis zur Erstinitialisierung](#61-wichtiger-hinweis-zur-erstinitialisierung)
+	- [6.2 JavaScript-Dokumentation (JSDoc) erzeugen und anzeigen](#62-62-javascript-dokumentation-jsdoc-erzeugen-und-anzeigen)
 7. [Datenbankstruktur](#7-datenbankstruktur)
 8. [Tests](#8-tests)
 9. [Lizenzen der verwendeten Technologien](#9-lizenzen-der-verwendeten-technologien)
@@ -128,7 +129,7 @@ WebStart/
 │    └─── documentation/
 │         └─── jsdoc/
 │              ├─── docker-compose.yml
-│              ├─── docker-compose.tooling
+│              ├─── docker-compose.tooling.yml
 │              ├─── jsdoc-runner.dockerfile
 │              ├─── jsdoc-web.dockerfile
 │              ├─── out/
@@ -327,6 +328,25 @@ Docker speichert die Datenbankdaten in einem persistenten Volume (`db_data`). Da
 - Wurde der Container bereits einmal gestartet, greift MariaDB **nicht erneut** auf die `.env`-Werte oder `init-sql`-Skripte zu.
 - Änderungen an `.env` oder SQL-Skripten werden **ignoriert**, solange das Volume existiert.
 - Um eine saubere Neuinitialisierung zu erzwingen, muss das Volume **explizit gelöscht** werden.
+
+### 6.2 JavaScript-Dokumentation (JSDoc) erzeugen und anzeigen
+
+Die JavaScript-Dokumentation wird in einem separaten, dockerbasierten Setup erzeugt.\
+Dies ist **unabhängig von der Hauptanwendung**.
+
+1. Tooling initialisieren (nur beim ersten Mal oder bei Änderungen an Abhängigkeiten)
+`docker compose -f docker-compose.tooling.yml up --build`\
+Dies erzeugt im Verzeichnis .jsdoc-tooling/ die Dateien package.json und package-lock.json.
+
+2. JSDoc-Dokumentation generieren und anzeigen\
+`docker compose -f docker-compose.yml up --build`
+
+- Generiert automatisch die Dokumentation aus dem Verzeichnis `projekt/public/js/`
+- Speichert die Ausgabe im Ordner `out/`
+- Stellt die Dokumentation über einen Apache-Server im Browser zur Verfügung
+
+Aufruf im Browser:\
+[http://localhost:8081](http://localhost:8081)
 
 #### Datenbank vollständig zurücksetzen:
 
