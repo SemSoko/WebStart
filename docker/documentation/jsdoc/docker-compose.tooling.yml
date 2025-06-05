@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+
+  jsdoc-tooling-init:
+    container_name: jsdoc-tooling-init
+    build:
+      context: .
+      dockerfile: jsdoc-builder.dockerfile
+    restart: "no"
