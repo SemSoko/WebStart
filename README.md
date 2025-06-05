@@ -18,7 +18,7 @@ lassen.
 5. [Umgebungsvariablen (.env)](#5-umgebungsvariablen-env)
 6. [Projektstart & Nutzung](#6-projektstart--nutzung)
 	- [6.1 Wichtiger Hinweis zur Erstinitialisierung](#61-wichtiger-hinweis-zur-erstinitialisierung)
-	- [6.2 JavaScript-Dokumentation (JSDoc) erzeugen und anzeigen](#62-62-javascript-dokumentation-jsdoc-erzeugen-und-anzeigen)
+	- [6.2 JavaScript-Dokumentation (JSDoc) erzeugen und anzeigen](#62-javascript-dokumentation-jsdoc-erzeugen-und-anzeigen)
 7. [Datenbankstruktur](#7-datenbankstruktur)
 8. [Tests](#8-tests)
 9. [Lizenzen der verwendeten Technologien](#9-lizenzen-der-verwendeten-technologien)
