@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+    
+  jsdoc-runner:
+    container_name: jsdoc-runner
+    build:
+      context: .
+      dockerfile: jsdoc-runner.dockerfile
+    volumes:
+      # Projekt-JS-Code (Frontend)
+      - ../../../projekt/public/js/:/app/src:ro
+      - ./out:/app/out
+      - .jsdoc-tooling:/app/tooling:ro
+    restart: "no"
+    networks:
+      - jsdoc-net
+
+  jsdoc-docs-web:
+    container_name: jsdoc-docs-web
+    build:
+      context: .
+      dockerfile: jsdoc-web.dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./out:/usr/local/apache2/htdocs/:ro
+    restart: unless-stopped
+    depends_on:
+      - jsdoc-runner
+    networks:
+      - jsdoc-net
+
+networks:
+  jsdoc-net: {}
