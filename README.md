@@ -127,11 +127,12 @@ WebStart/
 │    └─── documentation/
 │         └─── jsdoc/
 │              ├─── docker-compose.yml
-│              ├─── jsdoc-builder.dockerfile
+│              ├─── docker-compose.tooling
 │              ├─── jsdoc-runner.dockerfile
 │              ├─── jsdoc-web.dockerfile
 │              ├─── out/
 │              └─── .jsdoc-tooling/
+│                   └─── jsdoc.json
 │
 ├─── sql-dumps/
 ├─── .env-example
