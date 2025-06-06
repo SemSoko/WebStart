@@ -1,8 +1,10 @@
+# DEV - Version
+
 # Debian + Apache + PHP - Docker Hub
 FROM php:8.2-apache
 
 # Arbeitsverzeichnis setzen
-WORKDIR /var/www/app
+# WORKDIR /var/www/app
 
 # Projekt kopieren
 COPY ./projekt /var/www/app
@@ -39,4 +41,4 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 	mv composer.phar /usr/local/bin/composer
 
 # Composer-Abhaengigkeiten installieren
-RUN composer install
+# RUN composer install
