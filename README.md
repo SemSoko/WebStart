@@ -126,21 +126,23 @@ WebStart/
 │    └─── composer.lock
 │
 ├── docker/
-│    └─── documentation/
-│         └─── jsdoc/
-│              ├─── docker-compose.yml
-│              ├─── docker-compose.tooling.yml
-│              ├─── jsdoc-runner.dockerfile
-│              ├─── jsdoc-web.dockerfile
-│              ├─── out/
-│              └─── .jsdoc-tooling/
-│                   └─── jsdoc.json
+│    ├─── documentation/
+│    │    └─── jsdoc/
+│    │         ├─── docker-compose.yml
+│    │         ├─── docker-compose.tooling.yml
+│    │         ├─── jsdoc-runner.dockerfile
+│    │         ├─── jsdoc-web.dockerfile
+│    │         ├─── out/
+│    │         └─── .jsdoc-tooling/
+│    │              └─── jsdoc.json
+│    │
+│    └─── app/
+│         ├─── docker-compose.yml
+│         └─── Dockerfile
 │
 ├─── sql-dumps/
 ├─── .env-example
 ├─── .env
-├─── docker-compose.yml
-├─── Dockerfile
 ├─── .gitignore
 ├─── JWT-basiertes-Authentifizierungssystem.txt
 └─── README.md
