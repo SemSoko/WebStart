@@ -1,0 +1,24 @@
+# Ausfuehren
+# docker compose -f docker-compose.tooling.yml up --build
+# Zuruecksetzen
+# docker compose -f docker-compose.tooling.yml down -v
+version: "3.9"
+
+services:
+
+  jsdoc-tooling-init:
+    container_name: jsdoc-tooling-init
+    image: node:lts-alpine3.22
+    working_dir: /app
+    # Mounte das Host-Verzeichnis als Ziel fuer package*.json
+    volumes:
+      - ./.jsdoc-tooling:/output
+    
+    # Fuehrt npm-Befehle aus und beendet sich automatisch
+    command: >
+      sh -c "npm init -y &&
+             npm install --save-dev jsdoc &&
+             cp package*.json /output &&
+             ls -la /output"
+
+    restart: "no"

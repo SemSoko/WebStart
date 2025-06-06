@@ -14,9 +14,11 @@ lassen.
 	- [4.1 Projektkontext & Basisverzeichnis](#41-projektkontext--basisverzeichnis)
 	- [4.2 Dockerfile](#42-dockerfile)
 	- [4.3 docker-compose.yml ─ Container-Orchestrierung](#43-docker-composeyml--container-orchestrierung)
+	- [4.4 JSDoc Docker-Setup](#44-jsdoc---dockerbasiertes-setup-fuer-die-javascript-dokumentation)
 5. [Umgebungsvariablen (.env)](#5-umgebungsvariablen-env)
 6. [Projektstart & Nutzung](#6-projektstart--nutzung)
 	- [6.1 Wichtiger Hinweis zur Erstinitialisierung](#61-wichtiger-hinweis-zur-erstinitialisierung)
+	- [6.2 JavaScript-Dokumentation (JSDoc) erzeugen und anzeigen](#62-javascript-dokumentation-jsdoc-erzeugen-und-anzeigen)
 7. [Datenbankstruktur](#7-datenbankstruktur)
 8. [Tests](#8-tests)
 9. [Lizenzen der verwendeten Technologien](#9-lizenzen-der-verwendeten-technologien)
@@ -123,6 +125,17 @@ WebStart/
 │    ├─── composer.json
 │    └─── composer.lock
 │
+├── docker/
+│    └─── documentation/
+│         └─── jsdoc/
+│              ├─── docker-compose.yml
+│              ├─── docker-compose.tooling.yml
+│              ├─── jsdoc-runner.dockerfile
+│              ├─── jsdoc-web.dockerfile
+│              ├─── out/
+│              └─── .jsdoc-tooling/
+│                   └─── jsdoc.json
+│
 ├─── sql-dumps/
 ├─── .env-example
 ├─── .env
@@ -209,6 +222,45 @@ Ueber diese koennen alle Services einfach verwaltet werden.
 	- `db_data`
 	- `sql_dumps` (DB-Backups)
 
+### 4.4 JSDoc - Dockerbasiertes Setup fuer die JavaScript-Dokumentation
+
+Neben dem produktiven Docker-Setup existiert eine separate, containerisierte Umgebung zur\
+Erzeugung und Bereitstellung der JavaScript-Dokumentation (JSDoc).
+
+Es werden zwei Docker-Compose-Dateien verwendet:
+
+#### `docker-compose.tooling.yml`
+Initialisiert ein Node.js-Projekt im Verzeichnis `.jsdoc-tooling`, das als Basis\
+fuer das JSDoc-Setup dient.
+`docker compose -f docker-compose.tooling.yml up --build`
+
+- Fuehrt npm init -y und npm install --save-dev jsdoc aus
+- Legt package.json und package-lock.json in .jsdoc-tooling/ ab
+- Container wird nach der Initialisierung automatisch gestoppt
+- Muss beim allerersten Setup ausgeführt werden
+- Danach nur noch noetig, wenn sich die Tooling-Abhaengigkeiten aendern (z. B. Update von JSDoc)
+
+#### `docker-compose.yml`
+Erzeugt die Dokumentation und stellt sie im Browser bereit:\
+`docker compose -f docker-compose.yml up --build`
+
+- Startet `jsdoc-runner`, um Dokumentation aus `WebStart/projekt/public/js/` zu generieren
+- Speichert die generierte Ausgabe im Verzeichnis `WebStart/docker/documentation/jsdoc/out/`
+- Startet `jsdoc-docs-web`, einen Apache-Webserver zur Auslieferung der Doku
+
+Zugriff im Browser:\
+JSDoc-Viewer: [http://localhost:8081](http://localhost:8081)
+
+- JSDoc-Konfiguration:
+`WebStart/docker/documentation/jsdoc/.jsdoc-tooling/jsdoc.json`
+- Generierte Dokumentation:
+`WebStart/docker/documentation/jsdoc/out/`
+
+*Hinweis*\
+Das gesamte JSDoc-Setup ist vollständig vom produktiven Projekt entkoppelt und kann parallel\
+oder separat ausgeführt werden. Änderungen am JS-Code in `WebStart/projekt/public/js/` werden\
+bei jedem Build automatisch neu dokumentiert.
+
 ## 5. Umgebungsvariablen (.env)
 
 Die Datei `.env` enthaelt alle konfigurierbaren Umgebungsvariablen fuer:
@@ -276,6 +328,25 @@ Docker speichert die Datenbankdaten in einem persistenten Volume (`db_data`). Da
 - Wurde der Container bereits einmal gestartet, greift MariaDB **nicht erneut** auf die `.env`-Werte oder `init-sql`-Skripte zu.
 - Änderungen an `.env` oder SQL-Skripten werden **ignoriert**, solange das Volume existiert.
 - Um eine saubere Neuinitialisierung zu erzwingen, muss das Volume **explizit gelöscht** werden.
+
+### 6.2 JavaScript-Dokumentation (JSDoc) erzeugen und anzeigen
+
+Die JavaScript-Dokumentation wird in einem separaten, dockerbasierten Setup erzeugt.\
+Dies ist **unabhängig von der Hauptanwendung**.
+
+1. Tooling initialisieren (nur beim ersten Mal oder bei Änderungen an Abhängigkeiten)
+`docker compose -f docker-compose.tooling.yml up --build`\
+Dies erzeugt im Verzeichnis .jsdoc-tooling/ die Dateien package.json und package-lock.json.
+
+2. JSDoc-Dokumentation generieren und anzeigen\
+`docker compose -f docker-compose.yml up --build`
+
+- Generiert automatisch die Dokumentation aus dem Verzeichnis `projekt/public/js/`
+- Speichert die Ausgabe im Ordner `out/`
+- Stellt die Dokumentation über einen Apache-Server im Browser zur Verfügung
+
+Aufruf im Browser:\
+[http://localhost:8081](http://localhost:8081)
 
 #### Datenbank vollständig zurücksetzen:
 
