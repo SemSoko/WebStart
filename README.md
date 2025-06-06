@@ -290,25 +290,26 @@ Anschliessend die `.env`-Datei mit den entsprechenden Werten befuellen.
 
 ### Anwendung starten mit Docker
 
-In das Projektverzeichnis wechseln:\
-`cd <Pfad zum Projekt>/WebStart`
+Das docker-compose.yml fuer den produktiven Anwendungscode befindet sich unter:\
+`WebStart/docker/app/docker-compose.yml`
 
-Container bauen und starten:\
-`docker-compose up --build`
+Im Projekt-Root (WebStart/) folgenden Befehl ausfuehren:\
+`cd <Pfad zum Projekt>/WebStart`\
+`docker compose -f docker/app/docker-compose.yml up --build`
 
 Fuer spaetere Starts genuegt:\
-`docker-compose up`
+`docker compose -f docker/app/docker-compose.yml up`
 
-Zum Stoppen aller Container:\
-`docker-compose down`
+Container stoppen:\
+`docker compose -f docker/app/docker-compose.yml down`
 
-Zum Stoppen und entfernen aller Container:\
-`docker-compose down -v`
+Zum Stoppen und entfernen aller Container (z.B. Datenbank-Volume-loeschen):\
+`docker compose -f docker/app/docker-compose.yml down -v`
 
 ### Zugriff ueber den Browser
 
-Nachdem die Anwendung erfolgreich per Docker gestartet wurde, kann auf folgendes per\
-Browser zugegriffen werden:
+Nachdem die Anwendung erfolgreich per Docker Compose gestartet wurde, kann wie folgt\
+per Browser auf das Projekt zugegriffen werden:
 
 - Webanwendung (Frontend & API): `http://localhost:8080`
 - phpMyAdmin (Datenbankverwaltung): `http://localhost:8082`
