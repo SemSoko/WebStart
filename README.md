@@ -127,14 +127,19 @@ WebStart/
 │
 ├── docker/
 │    ├─── documentation/
-│    │    └─── jsdoc/
+│    │    ├─── jsdoc/
+│    │    │    ├─── docker-compose.yml
+│    │    │    ├─── docker-compose.tooling.yml
+│    │    │    ├─── jsdoc-runner.dockerfile
+│    │    │    ├─── jsdoc-web.dockerfile
+│    │    │    ├─── out/
+│    │    │    └─── .jsdoc-tooling/
+│    │    │         └─── jsdoc.json
+│    │    │
+│    │    └─── phpdoc/
 │    │         ├─── docker-compose.yml
-│    │         ├─── docker-compose.tooling.yml
-│    │         ├─── jsdoc-runner.dockerfile
-│    │         ├─── jsdoc-web.dockerfile
-│    │         ├─── out/
-│    │         └─── .jsdoc-tooling/
-│    │              └─── jsdoc.json
+│    │         ├─── phpdoc.dist.xml
+│    │         └─── out/
 │    │
 │    └─── app/
 │         ├─── docker-compose.yml
