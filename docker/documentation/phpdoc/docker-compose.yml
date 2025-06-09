@@ -1,0 +1,21 @@
+# Gezielt die einzelnen Services starten:
+# 1. sicherstellen, dass die gesamte Doku geladen ist: docker compose run --rm phpdoc
+# 2. Webserver starten, sobald Doku generiert in out vorliegt: docker compose up apache
+version: "3.9"
+
+services:
+  phpdoc:
+    image: phpdoc/phpdoc:3
+    volumes:
+      - .:/data
+      - ../../../projekt:/projekt
+    command: -c /data/phpdoc.dist.xml
+
+  apache:
+    image: httpd:2.4
+    ports:
+      - "8080:80"
+    volumes:
+      - ./out:/usr/local/apache2/htdocs:ro
+    depends_on:
+      - phpdoc
