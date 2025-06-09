@@ -15,7 +15,7 @@ services:
         #Führt bei jedem Containerstart Composer aus, damit der
         #vendor/-Ordner im gemounteten Volume verfügbar ist
         #apache2-foreground startet danach den Apache-Prozess wie üblich
-        command: sh -c "composer install && apache2-foreground"
+        command: sh -c "cd /var/www/app && composer install && apache2-foreground"
         #Sicherheitsfeature fuer Production
         #cap_drop:
             #- ALL
