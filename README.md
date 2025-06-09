@@ -19,6 +19,7 @@ lassen.
 6. [Projektstart & Nutzung](#6-projektstart--nutzung)
 	- [6.1 Wichtiger Hinweis zur Erstinitialisierung](#61-wichtiger-hinweis-zur-erstinitialisierung)
 	- [6.2 JavaScript-Dokumentation (JSDoc) erzeugen und anzeigen](#62-javascript-dokumentation-jsdoc-erzeugen-und-anzeigen)
+	- [6.3 PHP-Dokumentation (PHPDoc) erzeugen und anzeigen](#63-php-dokumentation-phpdoc-erzeugen-und-anzeigen)
 7. [Datenbankstruktur](#7-datenbankstruktur)
 8. [Tests](#8-tests)
 9. [Lizenzen der verwendeten Technologien](#9-lizenzen-der-verwendeten-technologien)
@@ -127,14 +128,19 @@ WebStart/
 │
 ├── docker/
 │    ├─── documentation/
-│    │    └─── jsdoc/
+│    │    ├─── jsdoc/
+│    │    │    ├─── docker-compose.yml
+│    │    │    ├─── docker-compose.tooling.yml
+│    │    │    ├─── jsdoc-runner.dockerfile
+│    │    │    ├─── jsdoc-web.dockerfile
+│    │    │    ├─── out/
+│    │    │    └─── .jsdoc-tooling/
+│    │    │         └─── jsdoc.json
+│    │    │
+│    │    └─── phpdoc/
 │    │         ├─── docker-compose.yml
-│    │         ├─── docker-compose.tooling.yml
-│    │         ├─── jsdoc-runner.dockerfile
-│    │         ├─── jsdoc-web.dockerfile
-│    │         ├─── out/
-│    │         └─── .jsdoc-tooling/
-│    │              └─── jsdoc.json
+│    │         ├─── phpdoc.dist.xml
+│    │         └─── out/
 │    │
 │    └─── app/
 │         ├─── docker-compose.yml
@@ -350,6 +356,50 @@ Dies erzeugt im Verzeichnis .jsdoc-tooling/ die Dateien package.json und package
 
 Aufruf im Browser:\
 [http://localhost:8081](http://localhost:8081)
+
+### 6.3 PHP-Dokumentation (PHPDoc) erzeugen und anzeigen
+
+Zur Dokumentation des PHP-Codes wird [phpDocumentor](https://www.phpdoc.org/) verwendet.\
+Die Generierung erfolgt über ein separates Docker-Setup, das unabhängig von der Hauptanwendung\
+betrieben wird.
+
+#### Dokumentation generieren
+
+In folgendes Verzeichnis wechseln:\
+`WebStart/docker/documentation/phpdoc/`
+
+Anschliessend zuerst den PHPDoc-Service der `docker-compose.yml` aufrufen:\
+`docker compose run --rm phpdoc`
+
+Dies analysiert den PHP-Code gemäß Konfiguration und erzeugt die HTML-Dokumentation im\
+Unterordner out/.
+
+#### Dokumentation im Browser anzeigen
+
+In einem zweiten Schritt kann die nun vorhandene Dokumentation, per Apache-Container
+gestartet werden:\
+`docker compose up apache`
+
+Aufruf im Browser:\
+[http://localhost:8080](http://localhost:8080)
+
+**Hinweis**\
+Der Ordner `out/` wird per Volume in den Apache-Container eingebunden und dient dort als\
+Webroot.
+
+#### PHPDoc - Konfigurationsdatei
+
+Die Konfigurationsdatei `phpdoc.dist.xml` befindet sich im Verzeichnis:\
+`WebStart/docker/documentation/phpdoc/phpdoc.dist.xml`
+
+Diese enthält u.a.:
+- Ausgabeordner: `out/`
+- Cache-Verzeichnis: `cache/`
+- Eingelesene Quellverzeichnisse:
+ 1. `projekt/src/auth`
+ 2. `projekt/src/core`
+ 3. `projekt/src/todo`
+ 4. `projekt/public/api`
 
 #### Datenbank vollständig zurücksetzen:
 
