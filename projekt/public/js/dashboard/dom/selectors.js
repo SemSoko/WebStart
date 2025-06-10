@@ -1,14 +1,36 @@
+/**
+ * Enthaelt alle DOM-Elemente fuer das Dashboard.
+ * @type {Object.<string, HTMLElement>}
+ */ 
 export const dashboardSelectors = {
-	// Wilkommensnachricht
+	/**
+	 * Eine Wilkommensnachricht als Ueberschrift.
+	 * @type {HTMLHeadingElement}
+	 */
 	welcomeMessageH1: document.getElementById("userWelcome"),
-	// Todoeintraege der Todoliste, wenn Eintraege vorhanden
+	/**
+	 * Eintraege der Todoliste, wenn vorhanden.
+	 * @type {HTMLUListElement}
+	 */
 	todoRecordUl: document.getElementById("todoRecord"),
-	// Formular - Hinzufuegen von Todos
+	/**
+	 * Formular zum Hinzufuegen von Todos.
+	 * @type {HTMLFormElement}
+	 */
 	addTodoForm: document.getElementById("addTodoForm"),
-	// Infobox - Statusausgabe nachdem ein Todo hinzugefuegt wurde
+	/**
+	 * Infobox, Statusausgabe nach Todohinzufuegen.
+	 * @type {HTMLParagraphElement}
+	 */
 	messageAddTodo: document.getElementById("messageAddTodo"),
-	// Ueberschrift zu den Todos
+	/**
+	 * Ueberschrift der Todos.
+	 * @type {HTMLHeadingElement}
+	 */
 	ulHeaderH2: document.getElementById("ulHeader"),
-	// Input - Eingabefeld, in welches der Todotitel eingegeben wird
+	/**
+	 * Eingabefeld fuer den Titel neuer Todos.
+	 * @type {HTMLInputElement}
+	 */
 	newTodoTitle: document.getElementById("title")
 };
