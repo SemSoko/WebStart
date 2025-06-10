@@ -1,114 +1,167 @@
 import {createTodoListItem, createEmptyTodoMessage} from "./../dom/create.js"
 import {dashboardSelectors} from "./../dom/selectors.js"
 
-// vorher loadUserTodos
 /**
- * Rendert die gesamte Todo-Liste neu (State-Reset)
+ * @typedef {Object} TodoItem
+ * @property {number} todo_id - Die eindeutige ID des Todos.
+ * @property {string} todo_title - Der Titel des Todos.
+ * @property {number} todo_status - 1 fuer erledigt, 0 fuer offen.
+ * @property {string} todo_iat - Zeitstempel der Erstellung (ISO-Format).
+ */
+ 
+/**
+ * @typedef {Object} Handlers
+ *
+ * @property {function} onToggle - Umschalten des Todo-Status.
+ * @property {number} todo_id - ID des Todos, zur Differenzierung.
+ * @param {number} todo_status - Der aktuelle Todo-Status.
+ *
+ * @property {function} onDelete - Loeschen eines Todos.
+ * @param {number} todo_id - Die ID des Todos, das geloescht werden soll.
+ */
+
+/**
+ * Rendert die gesamte Todo-Liste (State-Reset)
+ * 
+ * @param {TodoItem[]} todos - Array von Todo-Objekten aus der API.
+ * @param {Handlers} handlers - Objekt mit Callback-Funktionen zum Umschalten und Loeschen von Todos.
  */
 export function renderTodoList(todos, handlers){
-	//	Das ist der sogenannte “State Reset”-Ansatz, und er wird auch in vielen
-	//	React/SPA-Frameworks standardmäßig genutzt.
-	//	Nach erfolgreichem Abruf des API-Endpunkts wird die Anzeige der Todos refresht
-	//	In Kombination mit toggleUserTodoStatus() (Statusaenderung) und addUserTodo() (neues Todo)
-	//	Das <ul>-Element wird vollständig geleert, bevor neue Einträge eingefügt werden.
+	/**
+	 * Bedient sich des sogenannten "State Reset"-Ansatzes.
+	 * Wenn API-Endpuntk erfolgreich abgerufen wird, die Todo-Listen-Anzeige vollständig refresht.
+	 */
+
+	/**
+	 * Das UL-Element wird vollständig geleert, bevor neue Einträge eingefügt werden.
+	 */
 	dashboardSelectors.todoRecordUl.innerHTML = '';
 	
+	/**
+	 * Der Benutzer hat Todos
+	 */
 	if(todos.length > 0){
-		//	Der <h2>-Titel wird je nach Zustand („Your ToDos“ oder „No todos available“) gesetzt.
 		dashboardSelectors.ulHeaderH2.textContent = "Your ToDos";
-					
-		//	Jeder Eintrag wird mit createTodoListItem() erzeugt und ins DOM gehängt.
+
+		/**
+		 * Erstelle die Todo-Eintraege und haenge die Todos in das DOM.
+		 */
 		todos.forEach(todo => {
-			//	Erstellt li-Tag je Todoeintrag
 			const li = createTodoListItem(todo, handlers);
-				
-			//	Die per forEach erstellen Todos in todoRecordUl einhaengen
 			dashboardSelectors.todoRecordUl.appendChild(li);
 		});
 	}
 	
-	//	Wenn keine Todos vorhanden sind, wird eine entsprechende leere Nachricht angezeigt.
+	/**
+	 * Der Benutzer hat keine Todos.
+	 */
 	if(todos.length === 0){
 		renderEmptyMessage();
 	}
 }
 
-// vorher loadUserTodos()
 /**
- * Haengt ein neues Todo-Element unten an die Liste an
+ * Haengt ein einzelnes Todo-Element an die Todo-Liste an.
+ *
+ * @param {TodoItem} todo - Ein Todo-Objekt aus der API.
+ * @param {Handlers} handlers - Objekt mit Callback-Funktionen.
  */
 export function appendTodoItem(todo, handlers){
-	//	Wenn vorher "No todos available" stand -> leeren
+	/**
+	 * Loeschen des Default-Todo-Titels.
+	 */
 	if(dashboardSelectors.todoRecordUl.firstChild?.dataset?.empty === "true"){
 		dashboardSelectors.todoRecordUl.innerHTML = "";
 	}
 	
-	//	Ueberschrift ggf. aktualisieren
+	/**
+	 * Ueberschrift der Todo-Liste aktualisieren.
+	 */
 	dashboardSelectors.ulHeaderH2.textContent = "Your ToDos";
 	
-	//	Neuen Eintrag erzeugen und anhaengen
+	/**
+	 * Todo erstellen und unten in der Liste einhaengen.
+	 */
 	const li = createTodoListItem(todo, handlers);
 	dashboardSelectors.todoRecordUl.appendChild(li);
 }
 
-// vorher loadUserTodos
 /**
- * Entfernt ein Todo-Element anhand der ID
+ * Entfernt ein Todo-Element aus der Liste anhand seiner ID.
  *
- *
+ * @param {number} todoId - ID des Todos.
  */
 export function removeTodoItem(todoId){
-	// Finde das passende li-Element anhand der ID
+	/**
+	 * Todo anhand der ID ermitteln.
+	 */
 	const liToRemove = dashboardSelectors.todoRecordUl.querySelector(`li[data-id="${todoId}"]`);
 	
+	/*
+	 * Loeschen des ermittelten Todos
+	 */
 	if(liToRemove){
 		liToRemove.remove();
 	}
 	
+	/*
+	 * Wenn Liste nach dem Loeschen leer ist, zeige default Nachricht an.
+	 */
 	if(!dashboardSelectors.todoRecordUl.querySelector("li")){
 		renderEmptyMessage();
 	}
 }
 
-// vorher loadUserTodos
 /**
  * Aktualisiert ein bestehendes Todo im DOM
  *
+ * @param {TodoItem} todo - Ein Todo-Objekt aus der API.
+ * @param {Handlers} handlers - Objekt mit Callback-Funktionen.
+ * @returns {void} bricht ab, wenn kein passendes Todo im DOM gefunden wird.
  */
 export function updateTodoItem(updatedTodo, handlers){
-	// li mit passender ID finden
+	/**
+	 * Todo anhand der ID ermitteln.
+	 */
 	const existingLi = dashboardSelectors.todoRecordUl.querySelector(`li[data-id="${updatedTodo.todo_id}"]`);
 	
+	/*
+	 * Todo konnte nicht ermittelt werden.
+	 */
 	if(!existingLi){
 		return;
 	}
 	
-	// Neues li mit neuem Inhalt erzeugen
+	/**
+	 * Todo-Eintrag mit neuen Daten erzeugen.
+	 */
 	const updatedLi = createTodoListItem(updatedTodo, handlers);
 	
-	// Altes Element ersetzen
+	/**
+	 * Alten Todo-Eintrag durch neuen ersetzen.
+	 */
 	dashboardSelectors.todoRecordUl.replaceChild(updatedLi, existingLi);
 }
 
-/*if(response.length === 0){
-					dashboardSelectors.ulHeaderH2.textContent = "No todos available";
-					dashboardSelectors.todoRecordUl.appendChild(createEmptyTodoMessage());
-				}
-*/
-// vorher DOM direkt manipuliert
 /**
- * Zeigt eine leere Nachricht, wenn Todos nicht vorhanden
+ * Erzeugen einer Default-Nachricht fuer leere Todo-Liste.
  *
- *
+ * @returns {void}
  */
 export function renderEmptyMessage(){
-	// Container leeren
+	/**
+	 * Todo-Liste bereinigen.
+	 */
 	dashboardSelectors.todoRecordUl.innerHTML = "";
 	
-	// Ueberschrift anpassen
+	/**
+	 * Ueberschrift aktualisieren.
+	 */
 	dashboardSelectors.ulHeaderH2.textContent = "No todos available";
 	
-	// Nachricht einfuegen
+	/**
+	 * Default-Nachricht in Todo-Liste einfuegen.
+	 */
 	const emptyMessage = createEmptyTodoMessage();
 	dashboardSelectors.todoRecordUl.appendChild(emptyMessage);
 }
