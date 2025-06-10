@@ -11,7 +11,7 @@
  * @param {string} [method='GET'] - Die HTTP-Methode (z.B. 'GET', 'POST').
  * @param {Object|null} [body=null] - Der Request-Body, wird als JSON gesendet.
  * @param {string|null} [token=null] - Bearer-Token zur Authentifizierung (optional).
- * @returns {Promise<Object|ApiError> } API-Antwort im JSON-Format oder ein Objekt mit Fehlertext
+ * @returns {Promise<Object|ApiError>} API-Antwort im JSON-Format oder ein Objekt mit Fehlertext
  */
 export async function apiRequest(endpoint, method='GET', body=null, token=null){
 	/**
