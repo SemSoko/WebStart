@@ -1,8 +1,8 @@
-	/**
-	 * @typedef {Object} ApiError
-	 * @property {boolean} error - Zeigt an, dass ein Fehler aufgetreten ist.
-	 * @property {string} responseText - Die Antwort des Servers als Text.
-	 */
+/**
+ * @typedef {Object} ApiError
+ * @property {boolean} error - Zeigt an, dass ein Fehler aufgetreten ist.
+ * @property {string} responseText - Die Antwort des Servers als Text.
+ */
 
 /**
  * Fuehrt eine HTTP-Anfrage an eine beliebige API aus.
