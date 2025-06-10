@@ -1,3 +1,9 @@
+	/**
+	 * @typedef {Object} ApiError
+	 * @property {boolean} error - Zeigt an, dass ein Fehler aufgetreten ist.
+	 * @property {string} responseText - Die Antwort des Servers als Text.
+	 */
+
 /**
  * Fuehrt eine HTTP-Anfrage an eine beliebige API aus.
  *
@@ -5,7 +11,7 @@
  * @param {string} [method='GET'] - Die HTTP-Methode (z.B. 'GET', 'POST').
  * @param {Object|null} [body=null] - Der Request-Body, wird als JSON gesendet.
  * @param {string|null} [token=null] - Bearer-Token zur Authentifizierung (optional).
- * @returns {Promise<Object>} API-Antwort im JSON-Format oder ein Objekt mit Fehlertext
+ * @returns {Promise<Object|ApiError> } API-Antwort im JSON-Format oder ein Objekt mit Fehlertext
  */
 export async function apiRequest(endpoint, method='GET', body=null, token=null){
 	/**
@@ -52,8 +58,10 @@ export async function apiRequest(endpoint, method='GET', body=null, token=null){
 	if(contentType.includes("application/json")){
 		const data = await response.json();
 		return data;
+	
 	/**
-	 * Fehlerfall, wenn Antworttyp nicht JSON
+	 * 
+	 * @returns {Promise<Object|}
 	 */
 	}else{
 		const text = await response.text();
