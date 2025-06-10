@@ -53,16 +53,13 @@ export async function apiRequest(endpoint, method='GET', body=null, token=null){
 	const contentType = response.headers.get('Content-Type') || "";
 	
 	/**
-	 * Erfolgsfall, wenn Antworttyp JSON
+	 * HINWEIS:
+     * Die Rückgabe erfolgreicher API-Antworten ist derzeit als {Object} typisiert.
+     * Passendes @typedef-Objekt erstellen und die @returns-Typen entsprechend konkretisieren.
 	 */
 	if(contentType.includes("application/json")){
 		const data = await response.json();
 		return data;
-	
-	/**
-	 * 
-	 * @returns {Promise<Object|}
-	 */
 	}else{
 		const text = await response.text();
 		return{
