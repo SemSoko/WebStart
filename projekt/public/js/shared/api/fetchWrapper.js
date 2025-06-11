@@ -1,38 +1,66 @@
+/**
+ * @typedef {Object} ApiError
+ * @property {boolean} error - Zeigt an, dass ein Fehler aufgetreten ist.
+ * @property {string} responseText - Die Antwort des Servers als Text.
+ */
+
+/**
+ * Fuehrt eine HTTP-Anfrage an eine beliebige API aus.
+ *
+ * @param {string} endpoint - Die URL der API.
+ * @param {string} [method='GET'] - Die HTTP-Methode (z.B. 'GET', 'POST').
+ * @param {Object|null} [body=null] - Der Request-Body, wird als JSON gesendet.
+ * @param {string|null} [token=null] - Bearer-Token zur Authentifizierung (optional).
+ * @returns {Promise<Object|ApiError>} API-Antwort im JSON-Format oder ein Objekt mit Fehlertext
+ */
 export async function apiRequest(endpoint, method='GET', body=null, token=null){
-	// Das signalisiert dem Server: „Ich sende dir JSON-Daten“
-	// Header-Objekt initialisieren, standardmäßig mit JSON als Content-Type
+	/**
+	 * Der header enthaelt JSON-Daten.
+	 */
 	const headers = {
 		"Content-Type": "application/json"
 	};
-	// Optionaler Header hinzufügen, wenn token gesetzt ist
-	// Bearer ist das standardisierte Schema für den Authorization-Header
+	/**
+	 * Wenn Token gesetzt, wird der Header um diesen erweitert.
+	 */
 	if(token){
 		headers["Authorization"] = `Bearer ${token}`;
 	}
 	
-	// Optionen für fetch() vorbereiten (HTTP-Methode + Header)
+	/**
+	 * Vorbereitungsarbeiten fuer API-Abfrage per fetch()
+	 */
 	const options = {
 		method,
 		headers
 	};
 	
-	// Falls ein Body vorhanden ist, als JSON-String anhängen
+	/**
+	 * Einhaengen des Bodys, wenn vorhanden
+	 */
 	if(body){
 		options.body = JSON.stringify(body);
 	}
 	
-	// fetch()-Aufruf mit vorbereitetem Endpoint und Optionen
+	/**
+	 * Anfrage an Server senden und auf Antwort warten
+	 */
 	const response = await fetch(endpoint, options);
 	
-	// Content-Type prüfen, um zu entscheiden, ob wir JSON oder Text erwarten
+	/**
+	 * Pruefen des Typs der API-Antwort
+	 */
 	const contentType = response.headers.get('Content-Type') || "";
 	
+	/**
+	 * HINWEIS:
+     * Die Rückgabe erfolgreicher API-Antworten ist derzeit als {Object} typisiert.
+     * Passendes @typedef-Objekt erstellen und die @returns-Typen entsprechend konkretisieren.
+	 */
 	if(contentType.includes("application/json")){
-		// Wenn JSON-Antwort -> als Objekt zurückgeben
 		const data = await response.json();
 		return data;
 	}else{
-		// Wenn kein JSON -> Text extrahieren und in Objekt verpackt zurückgeben
 		const text = await response.text();
 		return{
 			error: true,
