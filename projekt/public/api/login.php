@@ -1,8 +1,19 @@
 <?php
 	require_once __DIR__ . '/../../bootstrap/init.php';
 
+	/*
+	 * Holt eine bestehende oder erstellt eine neue PDO-Datenbankverbindung ueber die Database-Klasse.
+	 */
 	header('Content-Type: application/json');
 	
+	/**
+	 * Prueft, ob die korrekte Anfrage-Methode verwendet wurde.
+	 * Beendet die Anfrage bei falscher Methode mit einem Fehlercode.
+	 *
+	 * @todo
+     * Auslagern in eine generische Hilfsfunktion zur Wiederverwendung in anderen Endpunkten.
+	 * Parameter sollten sein: erwartete HTTP-Methode, Fehlernachricht, Fehlercode.
+	 */
 	if($_SERVER['REQUEST_METHOD'] !== 'POST'){
 		//	Methode nicht erlaubt
 		http_response_code(405);
@@ -10,11 +21,19 @@
 		exit();
 	}
 	
-	//	JSON-Daten auslesen
+	/*
+	 * Liest die JSON-Daten aus der Anfrage und extrahiert:
+	 * - E-Mail,
+	 * - Passwort
+	 */
 	$input = json_decode(file_get_contents('php://input'), true);
 	$email = $input['email'] ?? '';
 	$password = $input['password'] ?? '';
 	
+	/*
+	 * Prueft, ob E-Mail und Passwort uebergeben wurden.
+	 * Gibt bei fehlender E-Mail oder Passwort einen Fehler zurueck.
+	 */
 	if(!$email || !$password){
 		//	Bad Request
 		http_response_code(400);
@@ -22,10 +41,19 @@
 		exit();
 	}
 	
-	//	Login durchfuehren
 	$loginMessage = processLoginForm();
+	
+	/*
+	 * Versendet entweder ein Token mit Nutzerdaten oder eine Fehlermeldung.
+	 *
+	 * @todo
+	 * Error-Code anpassen
+	 *
+	 * @remark
+	 * 400 Bad Request ist fuer fehlerhafte Struktur der Anfrage.
+	 * Stattdessen 401 (Login fehlgeschlagen) als Error-Code verwenden.
+	 */
 	if(isset($loginMessage['error'])){
-		//	oder 401 je nach Fehlerart
 		http_response_code(400);
 	}else{
 		http_response_code(200);
