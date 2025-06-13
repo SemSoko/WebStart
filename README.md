@@ -107,7 +107,7 @@ WebStart/
 │    │    └─── index.php                            # Weiterleitung zur Login-Seite des Frontends (kein Teil der API)
 │    │
 │    ├─── src/
-│    │    ├─── todo-new/                                # Modulares Backend-Modul
+│    │    ├─── todo-new/                            # Modulares Backend-Modul
 │    │    │    ├─── router.php                      # Leitet HTTP-Anfragen an Controller
 │    │    │    ├─── controller/                     # Verantwortlich fuer Anfragen und Antworten
 │    │    │    ├─── service/                        # Enthaelt Geschaeftslogik
@@ -123,7 +123,7 @@ WebStart/
 │    │    │    ├─── funktionen.php
 │    │    │    └─── JwtHandler.php
 │    │    │
-│    │    └─── todo/                           # Altes Feature-Modul (wird ersetzt)
+│    │    └─── todo/                                # Altes Feature-Modul (wird ersetzt)
 │    │         └─── todo.php
 │    │
 │    ├─── tests/                                    # Unit-Tests (PHPUnit)
