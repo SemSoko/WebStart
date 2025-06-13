@@ -77,7 +77,7 @@ WebStart/
 │    │    ├─── js/                                  # JavaScript-Frontend-Logik (modular aufgebaut)
 │    │    │    │                                    # Feature-spezifische Module fuer das Dashboard
 │    │    │    ├─── dashboard/                      # Feature-Modul fuer dashboard.html
-│    │    │    │    ├─── index.js                   # Einstiegpunkt des Dashboards (Router)
+│    │    │    │    ├─── index.js                   # Einstiegpunkt des Dashboards
 │    │    │    │    ├─── api/                       # Fuer dashboard spezifische API-Funktionen (temporaer noch vorhanden)
 │    │    │    │    ├─── dom/                       # Fuer Selektoren und DOM-Erzeugung fuer Dashboard
 │    │    │    │    │    ├─── create.js
