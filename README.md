@@ -8,7 +8,7 @@ lassen.
 ## Inhaltsverzeichnis
 
 1. [Technologie-Stack](#1-technologie-stack)
-2. [Projektstruktur](#2-projektstruktur)
+2. [Projektstruktur (Uebergangsstruktur)](#2-projektstruktur-uebergangsstruktur)
 3. [Composer ─ Abhaengigkeiten](#3-Composer--abhaengigkeiten)
 4. [Docker-Konfiguration](#4-docker-konfiguration)
 	- [4.1 Projektkontext & Basisverzeichnis](#41-projektkontext--basisverzeichnis)
@@ -37,7 +37,16 @@ Aktuell basiert **WebStart** auf folgenden Komponenten:
 - **Docker**: 27.5.1 (getestet unter Ubuntu 24.04)
 - **Docker Compose**: 2.36.2 (CLI integriert, `docker compose`)
 
-## 2. Projektstruktur
+## 2. Projektstruktur (Uebergangsstruktur)
+
+**Hinweis**\
+Aktuell wird die Codebasis von einer **feature-orientierten Struktur**\
+(z.B. `src/todo/`) schrittweise in eine **modulare, schichtenbasierte Architektur**\
+überführt (`src/<modulname>/{router, controller, service, repository}/...`).
+
+Während des Refactorings **bestehen beide Strukturen parallel**.\
+Die vollstaendige Umstellung erfolgt **erst**, wenn alle Module im neuen Aufbau\
+erfolgreich getestet wurden.
 
 ```
 WebStart/
@@ -48,8 +57,8 @@ WebStart/
 │    ├─── bootstrap/                                # Initialisierung (DB, Autoloader, ... )
 │    │	└─── init.php
 │    │
-│    ├─── public/                                   # Oeffentlich zugaenglicher Bereich (Frontend + API)
-│    │    ├─── api/                                 # API-Endpunkte
+│    ├─── public/                                   # Oeffentlich zugaenglicher Bereich (Frontend + API) (wird spaeter aufgeteilt)
+│    │    ├─── api/                                 # Temporaere API-Endpunkte (Werden ersetzt)
 │    │    │    ├─── addUserTodo.php
 │    │    │    ├─── deleteUserTodo.php
 │    │    │    ├─── get_user_todos.php
@@ -68,8 +77,8 @@ WebStart/
 │    │    ├─── js/                                  # JavaScript-Frontend-Logik (modular aufgebaut)
 │    │    │    │                                    # Feature-spezifische Module fuer das Dashboard
 │    │    │    ├─── dashboard/                      # Feature-Modul fuer dashboard.html
-│    │    │    │    ├─── index.js                   # Einstiegpunkt des Dashboards
-│    │    │    │    ├─── api/                       # Fuer dashboard spezifische API-Funktionen
+│    │    │    │    ├─── index.js                   # Einstiegpunkt des Dashboards (Router)
+│    │    │    │    ├─── api/                       # Fuer dashboard spezifische API-Funktionen (temporaer noch vorhanden)
 │    │    │    │    ├─── dom/                       # Fuer Selektoren und DOM-Erzeugung fuer Dashboard
 │    │    │    │    │    ├─── create.js
 │    │    │    │    │    └─── selectors.js
@@ -95,18 +104,26 @@ WebStart/
 │    │    │    ├─── logout.js
 │    │    │    └─── register.js
 │    │    │
-│    │    └─── index.php
+│    │    └─── index.php                            # Weiterleitung zur Login-Seite des Frontends (kein Teil der API)
 │    │
 │    ├─── src/
+│    │    ├─── todo/                                # Modulares Backend-Modul
+│    │    │    ├─── router.php                      # Leitet HTTP-Anfragen an Controller
+│    │    │    ├─── controller/                     # Verantwortlich fuer Anfragen und Antworten
+│    │    │    ├─── service/                        # Enthaelt Geschaeftslogik
+│    │    │    └─── repository/                     # Datenzugriff, fachlich gebunden
+│    │    │
+│    │    ├─── shared/                              # Technische, modulunabhaengige Hilfen
+│    │    │
 │    │    ├─── auth/
-│    │    │	└─── auth.php
+│    │    │	   └─── auth.php
 │    │    │
 │    │    ├─── core/
-│    │    │ ├─── db.php
-│    │    │ ├─── funktionen.php
-│    │    │ └─── JwtHandler.php
+│    │    │    ├─── db.php
+│    │    │    ├─── funktionen.php
+│    │    │    └─── JwtHandler.php
 │    │    │
-│    │    └─── todo/
+│    │    └─── todo/                                # Altes Feature-Modul (wird ersetzt)
 │    │         └─── todo.php
 │    │
 │    ├─── tests/                                    # Unit-Tests (PHPUnit)
@@ -117,7 +134,10 @@ WebStart/
 │    │    │    ├─── LoginUserTest.php
 │    │    │    └─── ProcessLoginFormTest.php
 │    │    │
-│    │    └─── todo/	
+│    │    └─── todo/
+│    │         ├─── TodoControllerTest.php          # Testet, ob Controller korrekt reagieren
+│    │         ├─── TodoServiceTest.php             # Testet, ob die Geschaeftslogik korrekt funktioniert
+│    │         ├─── TodoRepositoryTest.php          # Testet, ob Service-Helfer korrekt funktionieren
 │    │         ├─── AddTodoTest.php
 │    │         ├─── DeleteTodoTest.php
 │    │         ├─── GetTodosByUserTest.php
