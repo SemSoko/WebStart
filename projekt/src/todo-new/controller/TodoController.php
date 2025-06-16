@@ -32,11 +32,7 @@
 			 * Gibt bei fehlendem Titel einen Fehler zurueck.
 			 */
 			if(!isset($input['title']) || empty(trim($input['title']))){
-				http_response_code(400);
-				echo json_encode([
-					'error' => 'Todo-Titel muss angegeben werden'
-				]);
-				exit();
+				Response::error('Todo-Titel muss angegeben werden', 400);
 			}
 			
 			$titleTodo = trim($input['title']);
@@ -49,10 +45,7 @@
 			if($result['success']){
 				Response::success($result, 201);
 			}else{
-				http_response_code(500);
-				echo json_encode([
-					'error' => $result['error'] ?? 'Unbekannter Fehler'
-				]);
+				Response::error(($result['error'] ?? 'Unbekannter Fehler'), 500);
 			}
 		 }
 	}
