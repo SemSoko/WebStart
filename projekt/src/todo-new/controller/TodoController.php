@@ -61,7 +61,7 @@
 				Response::success($result, 201);
 			}elseif($result['success'] === false && ($result['source'] ?? '') === 'service'){
 				Response::debug('Service-Fehler', $result);
-			}elseif($result['success'] === false && ($result['source'] ?? '') === 'repository')){
+			}elseif($result['success'] === false && ($result['source'] ?? '') === 'repository'){
 				Response::debug('Repository-Fehler', $result);
 			}else{
 				Response::error(($result['error'] ?? 'Unbekannter Fehler'), 500);
