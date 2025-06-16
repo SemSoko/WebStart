@@ -80,9 +80,10 @@
 		 *
 		 * @return void
 		 */
-		public static function status(string $message='OK', int $statusCode = 200){
+		public static function status(string $message='OK', bool $success = true, int $statusCode = 200){
 			http_response_code($statusCode);
 			echo(json_encode([
+				'success' => '$success',
 				'status' => $message,
 				'timestamp' => gmdate('c')
 			]));
