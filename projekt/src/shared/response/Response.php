@@ -69,4 +69,23 @@
 			]);
 			exit();
 		 }
+		 
+		/**
+		 * Gibt eine einfache Statusantwort zur Pruefung der Erreichbarkeit zurueck.
+		 *
+		 * Kann z. B. fuer Health Checks oder Verfuegbarkeitspruefungen verwendet werden.
+		 *
+		 * @param string $message Statusinformation (Standard: "OK")
+		 * @param int $statusCode HTTP-Statuscode (Standard: 200)
+		 *
+		 * @return void
+		 */
+		public static function status(string $message='OK', int $statusCode = 200){
+			http_response_code($statusCode);
+			echo(json_encode([
+				'status' => $message,
+				'timestamp' => gmdate('c')
+			]));
+			exit();
+		}
 	}
