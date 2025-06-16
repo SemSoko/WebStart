@@ -23,13 +23,17 @@
 				// Weitergabe an Repository
 				$success = $repository->insertTodo($userId, $title);
 				
-				if($success){
+				if(is_array($success) && ($success['success'] ?? false) === false){
+					return $success;
+				}else{
 					return ['success' => true];
-				} else {
-					return ['success' => false, 'error' => 'Einfuegen fehlgeschlagen'];
 				}
 			}catch(Exception $e){
-				return ['success' => false, 'error' => $e->getMessage()];
+				return [
+					'success' => false,
+					'error' => $e->getMessage(),
+					'source' => 'service'
+				];
 			}
 		}
 	}
