@@ -76,6 +76,7 @@
 		 * Kann z. B. fuer Health Checks oder Verfuegbarkeitspruefungen verwendet werden.
 		 *
 		 * @param string $message Statusinformation (Standard: "OK")
+		 * @param bool $success Gibt an, ob der Status als Erfolg gewertet wird
 		 * @param int $statusCode HTTP-Statuscode (Standard: 200)
 		 *
 		 * @return void
