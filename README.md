@@ -114,7 +114,8 @@ WebStart/
 │    │    │    └─── repository/                     # Datenzugriff, fachlich gebunden
 │    │    │
 │    │    ├─── shared/                              # Technische, modulunabhaengige Hilfen
-│    │    │    └─── response/                       # Einheitliche API-Antwortstruktur(en)
+│    │    │    ├─── response/                       # Einheitliche API-Antwortstruktur(en)
+│    │    │    └─── auth/                           # Zentrale Authentifizierungsstelle
 │    │    │
 │    │    ├─── auth/
 │    │    │	   └─── auth.php
