@@ -25,7 +25,23 @@
 				throw new InvalidArgumentException('Title darf nicht länger als 255 Zeichen sein.');
 			}
 			
-			$stmt = $pdo->prepare("INSERT INTO todos (user_id, title) values (?, ?)");
-			return $stmt->execute([$userId, $title]);
+			try{
+				$stmt = $pdo->prepare("INSERT INTO todos (user_id, title) values (?, ?)");
+				return $stmt->execute([$userId, $title]);
+			}catch(PDOException $e){
+				/*
+				 * Gibt ein strukturiertes Fehler-Array mit Debug-Infos
+				 * zurueck (fuer Controller sichtbar)
+				 */
+				return [
+					'success' => false,
+					'error' => 'Fehler beim Hinzufuegen des Todos in die Datenbank.',
+					'debug' => [
+						'exception' => $e->getMessage(),
+						'trace' => $e->getTraceAsString()
+					],
+					'source' => 'repository'
+				];
+			}
 		}
 	}

@@ -15,7 +15,22 @@
 		 * Fuegt ein neues Todo hinzu.
 		 *
 		 * Erwartet im Body: {"title: "..."}
-		 * Gibt JSON-Antwort zurueck mit Erfolg oder Fehlermeldung.
+		 * Gibt eine strukturierte JSON-Antwort zurueck:
+		 * - Erfolg: Response::success([...])
+		 * - Fehler: Response::error(...) oder Response::debug(...)
+		 *
+		 * Hinweis zum Fehlerhandling:
+		 * Das zurueckgelieferte $result-Array kann je nach Quelle
+		 * folgende Form annehmen:
+		 *
+		 * - ['success' => true] -> Erfolgreich
+		 * - ['success' => false, 'error' => ...] -> Bekannte Fehler
+		 * - ['success' => false, 'error' => ..., 'source' => 'service']
+		 * - ['success' => false, 'error' => ..., 'debug' => [...], 'source' => 'repository']
+		 *
+		 * Bei debug-Faellen wird die gesamte $result-Struktur an
+		 * Response::debug uebergeben, um eine verschachtelte Darstellung
+		 * fuer die Analyse zu ermoeglichen.
 		 *
 		 * @return void
 		 */
@@ -42,8 +57,12 @@
 			$result = $service->addTodo($titleTodo);
 			
 			// Erfolg oder Fehler zurueckgeben
-			if($result['success']){
+			if($result['success'] === true){
 				Response::success($result, 201);
+			}elseif($result['success'] === false && ($result['source'] ?? '') === 'service'){
+				Response::debug('Service-Fehler', $result);
+			}elseif($result['success'] === false && ($result['source'] ?? '') === 'repository')){
+				Response::debug('Repository-Fehler', $result);
 			}else{
 				Response::error(($result['error'] ?? 'Unbekannter Fehler'), 500);
 			}
