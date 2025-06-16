@@ -1,5 +1,8 @@
 <?php
 	require_once __DIR__ . '/../service/TodoService.php';
+	require_once __DIR__ . '/../../shared/response/Response.php';
+	
+	use Shared\Response\Response;
 	
 	/**
 	 * Controller fuer Todo-Endpunkte.
@@ -44,10 +47,7 @@
 			
 			// Erfolg oder Fehler zurueckgeben
 			if($result['success']){
-				http_response_code(201);
-				echo json_encode([
-				
-				]);
+				Response::success($result, 201);
 			}else{
 				http_response_code(500);
 				echo json_encode([
