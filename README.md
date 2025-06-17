@@ -115,7 +115,10 @@ WebStart/
 │    │    │
 │    │    ├─── shared/                              # Technische, modulunabhaengige Hilfen
 │    │    │    ├─── response/                       # Einheitliche API-Antwortstruktur(en)
-│    │    │    └─── auth/                           # Zentrale Authentifizierungsstelle
+│    │    │    ├─── auth/                           # Zentrale Authentifizierungsstelle
+│    │    │    └─── middleware/                     # Prueft, Login oder Eingaben vor dem Controller
+│    │    │         ├─── AuthMiddleware.php         # Prueft Authentifizierung vor Zugriff auf geschuetzte Endpunkte
+│    │    │         └─── ValidationMiddleware.php   # Validiert Eingabedaten vor Weitergabe an Services oder Controller
 │    │    │
 │    │    ├─── auth/
 │    │    │	   └─── auth.php
