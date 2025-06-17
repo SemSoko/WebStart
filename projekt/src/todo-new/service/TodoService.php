@@ -8,10 +8,25 @@
 	 */
 	class TodoService{
 		/**
-		 * Fuegt ein neues Todo hinzu.
+		 * Fuegt ein neues Todo hinzu und verarbeitet das Ergebnis des
+		 * Repositories.
+		 *
+		 * Erfolgreicher Eintrag:
+		 * return [
+		 *    'success' => true
+		 * ]
+		 *
+		 * Fehler im Service selbst (z. B. unerwartete Exception):
+		 * return [
+		 *    'success' => false,
+		 *    'error' => 'Fehlermeldung aus Exception'
+		 *    'source' => 'service'
+		 * ]
+		 *
+		 * Fehlerstruktur des Repositories wird unveraendert durchgereicht.
 		 *
 		 * @param string $title Der Titel des Todos.
-		 * @return array ['success' => bool, 'error' => string|null]
+		 * @return array Strukturierte Erfolgs- und Fehlermeldung
 		 */
 		public function addTodo(string $title): array{
 			$repository = new TodoRepository();
