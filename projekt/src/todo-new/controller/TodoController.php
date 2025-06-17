@@ -14,25 +14,24 @@
 		/**
 		 * Fuegt ein neues Todo hinzu.
 		 *
-		 * Erwartet im Body: {"title: "..."}
-		 * Gibt eine strukturierte JSON-Antwort zurueck:
-		 * - Erfolg: Response::success([...])
-		 * - Fehler: Response::error(...) oder Response::debug(...)
+		 * Erwartet im HTTP-Body eine JSON-Struktur mit dem Feld "title".
+		 * Beispiel: { "title": "Einkaufen" }
 		 *
-		 * Hinweis zum Fehlerhandling:
-		 * Das zurueckgelieferte $result-Array kann je nach Quelle
-		 * folgende Form annehmen:
+		 * Die Methode verarbeitet die Anfrage, validiert Eingabedaten,
+		 * uebergibt den Titel an den Service und leitet das Ergebnis
+		 * an die passende Response-Methode weiter.
 		 *
-		 * - ['success' => true] -> Erfolgreich
-		 * - ['success' => false, 'error' => ...] -> Bekannte Fehler
-		 * - ['success' => false, 'error' => ..., 'source' => 'service']
-		 * - ['success' => false, 'error' => ..., 'debug' => [...], 'source' => 'repository']
+		 * Fehlerhafte oder unvollstaendige Eingaben werden direkt mit
+		 * Response::error() beantwortet.
 		 *
-		 * Bei debug-Faellen wird die gesamte $result-Struktur an
-		 * Response::debug uebergeben, um eine verschachtelte Darstellung
-		 * fuer die Analyse zu ermoeglichen.
+		 * Abhaengig von der Quelle des Fehlers nutzt der Controller:
+		 * - Response::success() bei Erfolg
+		 * - Response::debug() bei Service-/Repository-Fehlern
+		 * - Response::error() bei sonstigen Fehler
 		 *
-		 * @return void
+		 * @return
+		 * void Gibt direkt eine JSON-Antwort an den Client aus und beendet
+		 * die Ausfuehrung.
 		 */
 		 public function add(){
 			/*
@@ -57,6 +56,9 @@
 			$result = $service->addTodo($titleTodo);
 			
 			// Erfolg oder Fehler zurueckgeben
+			/**
+			 * @todo Bezeichnungen fuer das Feld: source in $result anpassen!!!
+			 */
 			if($result['success'] === true){
 				Response::success($result, 201);
 			}elseif($result['success'] === false && ($result['source'] ?? '') === 'service'){
