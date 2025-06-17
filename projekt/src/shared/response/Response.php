@@ -7,12 +7,35 @@
 	namespace Shared\Response;
 	
 	/**
-	 * Stellt eine zentrale Antwortstruktur fuer API-Endpunkte bereit.
-	 * Ziel: Einheitliche JSON-Antworten im Erfolgs- und Fehlerfall.
+     * Standardisierte API-Antwortstruktur fuer alle HTTP-Responses im Projekt.
 	 *
-	 * @example
-	 *    Response::success(['todos' => $todos]);
-	 *    Response::error('Fehlende Eingabe', 400);
+	 * Erfolgreiche Antwort (Response::success()):
+	 * {
+	 *    "success" : true,
+	 *    "data": { ... }
+	 * }
+	 *
+	 * Validierungs- oder Clientfehler (Response::error()):
+	 * {
+	 *    "success": false,
+	 *    "message": "Fehlermeldung"
+	 * }
+	 *
+	 * Interner Fehler mit Debug-Daten (Response::debug()):
+	 * {
+	 *    "success": false,
+	 *    "message": "Fehlermeldung",
+	 *    "debug": { ... }
+	 * }
+	 *
+	 * Systemstatus (Response::status()):
+	 * {
+	 *    "success": true,
+	 *    "status": "OK",
+	 *    "timestamp": "yyyy-mm-dd-T-hh-mm-ss"
+	 * }
+	 *
+	 * @package Shared\Response
 	 */
 	Class Response{
 		/**
