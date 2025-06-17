@@ -27,7 +27,20 @@
 			
 			try{
 				$stmt = $pdo->prepare("INSERT INTO todos (user_id, title) values (?, ?)");
-				return $stmt->execute([$userId, $title]);
+				$dbResult = $stmt->execute([$userId, $title]);
+				if($dbResult){
+					return true;
+				}else{
+					return [
+						'success' => false,
+						'error' => 'INSERT fehlgeschlagen',
+						'debug' => [
+							'errorInfo' => $stmt->errorInfo()
+						],
+						'source' => 'todo-new/repository'
+					];
+				}
+				
 			}catch(PDOException $e){
 				/*
 				 * Gibt ein strukturiertes Fehler-Array mit Debug-Infos
