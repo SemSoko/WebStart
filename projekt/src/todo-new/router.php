@@ -1,6 +1,9 @@
 <?php
 	// Controller einbinden
 	require_once __DIR__ . '/controller/TodoController.php';
+	require_once __DIR__ . '/../shared/response/Response.php';
+	
+	use Shared\Response\Response;
 	
 	// HTTP-Methode (z. B. GET, POST, ...)
 	
@@ -40,6 +43,7 @@
 		'GET' => [
 			'/api/todo-new' => [TodoController::class, 'getAll'],
 			// Zukunft: 'api/todo-new/{id}' => [TodoController::class, 'getById']
+			'/api/todo.php/status' => '__status__'
 		],
 		'POST' => [
 			'/api/todo-new' => [TodoController::class, 'add'],
@@ -55,11 +59,27 @@
 	// Route suchen
 	$matchedRoute = $routes[$method][$requestUri] ?? null;
 	
-	// Kein Treffer
 	// 404 ist ein Internet-Standard für: Nicht gefunden
+	/**
+	 * Gibt eine standardisierte Fehlermeldung aus, wenn keine passende Route
+	 * gefunden wurde.
+	 *
+	 * Beispielantwort:
+	 * {
+	 *    'error': 'Route not found'
+	 * }
+	 *
+	 * HTTP-Status: 404 Not Found
+	 */
 	if(!$matchedRoute){
 		http_response_code(404);
 		echo json_encode(['error' => 'Route not found']);
+		exit();
+	}
+	
+	// Sonderfall: Status-Pruefung
+	if($matchedRoute === '__status__'){
+		Response::status('Todo-Modul erreichbar');
 		exit();
 	}
 	
