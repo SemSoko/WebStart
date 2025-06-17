@@ -2,9 +2,35 @@
 	require_once __DIR__ . '/../../../bootstrap/init.php';
 	
 	/**
-	 * Repository-Klasse
+	 * Fuegt ein neues Todo fuer den angegebenen Benutzer hinzu.
 	 *
-	 * Verantwortlich fuer den Datenbankzugriff.
+	 * Bei erfolgreichem INSERT:
+	 *   return true
+	 *
+	 * Bei SQL-Ausfuehrungsfehler ohne Exception:
+	 * return [
+	 *    'success' => false,
+	 *    'INSERT fehlgeschlagen',
+	 *    'debug' => [
+	 *       'errorInfo' => [...PDO Fehlerinfo...]
+	 *    ],
+	 *    'source' => 'todo-new/repository'
+	 * ]
+	 *
+	 * Bei PDO-Exception (z.B. Verbindungsfehler):
+	 * return [
+	 *    'success' => false,
+	 *    'error' => 'Fehler beim Hinzufuegen des Todos in die Datenbank.',
+	 *    'debug' => [
+	 *       'exception' => 'Fehlermeldung',
+	 *       'trace' => 'Stacktrace'
+	 *    ],
+	 *    'source' => 'repository'
+	 * ]
+	 *
+	 * @param int $userId Benutzer-ID
+	 * @param string $title Titel des Todos
+	 * @return bool|array true bei Erfolg, sonst strukturierter Fehler
 	 */
 	class TodoRepository{
 		/**
