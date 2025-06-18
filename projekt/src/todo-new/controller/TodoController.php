@@ -52,7 +52,7 @@
 			
 			// Weitergabe an Service
 			$service = new TodoService();
-			$result = $service->addTodo($titleTodo);
+			$result = $service->addTodo($titleTodo, $userId);
 			
 			// Erfolg oder Fehler zurueckgeben
 			/**
