@@ -1,9 +1,14 @@
 <?php
 	require_once __DIR__ . '/../service/TodoService.php';
 	require_once __DIR__ . '/../../shared/response/Response.php';
+
+	require_once __DIR__ . '/../../shared/middleware/ValidationMiddleware.php';
 	
 	use Shared\Response\Response;
 	
+	use Shared\Middleware\ValidationMiddleware;
+	use Shared\Middleware\AuthMiddleware;
+
 	/**
 	 * Controller fuer Todo-Endpunkte.
 	 *
@@ -35,21 +40,15 @@
 		 */
 		 public function add(){
 			/*
-			 * Liest die JSON-Daten aus der Anfrage und extrahiert den Todo-Titel.
-			 * Liest den Body der Anfrage (z. B. { "title": "Einkaufen" })
-			 * Macht daraus ein PHP-Array
+			 * Zugriffsschutz sofort pruefen.
+			 * handle() nur in Methoden aufrufen, die Schutz brauchen.
 			 */
-			$input = json_decode(file_get_contents('php://input'), true);
+			$userId = AuthMiddleware::handle();
 			
 			/*
-			 * Prueft, ob ein Todo-Titel uebergeben wurde.
-			 * Gibt bei fehlendem Titel einen Fehler zurueck.
+			 * Eingabefeld 'title' pruefen
 			 */
-			if(!isset($input['title']) || empty(trim($input['title']))){
-				Response::error('Todo-Titel muss angegeben werden', 400);
-			}
-			
-			$titleTodo = trim($input['title']);
+			$titleTodo = ValidationMiddleware::requireField('title');
 			
 			// Weitergabe an Service
 			$service = new TodoService();
