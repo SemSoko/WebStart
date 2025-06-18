@@ -2,9 +2,11 @@
 	namespace Shared\Middleware;
 	
 	require_once __DIR__ . '/../validation/JsonValidator.php';
+	require_once __DIR__ . '/../validation/InputHelper.php';
 	require_once __DIR__ . '/../response/Response.php';
 	
 	use Shared\Validation\JsonValidator;
+	use Shared\Validation\InputHelper;
 	use Shared\Response\Response;
 	
 	/**
@@ -23,7 +25,7 @@
 		 * @return string Gueltiger, bereinigter Wert (z. B. Titel)
 		 */
 		public static function requireField(string $fieldName): string{
-			$input = json_decode(file_get_contents('php://input'), true);
+			$input = InputHelper::getJsonBody();
 			
 			if(!is_array($input) || !JsonValidator::required($input, $fieldName)){
 				Response::error("Feld \"{$fieldName}\" muss angegeben werden", 400);
