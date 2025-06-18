@@ -8,8 +8,8 @@
 	 */
 	class TodoService{
 		/**
-		 * Fuegt ein neues Todo hinzu und verarbeitet das Ergebnis des
-		 * Repositories.
+		 * Fuegt ein neues Todo fuer einen bestimmten Benutzer hinzu
+		 * und verarbeitet das Ergebnis des Repositories.
 		 *
 		 * Erfolgreicher Eintrag:
 		 * return [
@@ -26,15 +26,13 @@
 		 * Fehlerstruktur des Repositories wird unveraendert durchgereicht.
 		 *
 		 * @param string $title Der Titel des Todos.
+		 * @param int $userId Die ID des angemeldeten Benutzers.
 		 * @return array Strukturierte Erfolgs- und Fehlermeldung
 		 */
-		public function addTodo(string $title): array{
+		public function addTodo(string $title, int $userId): array{
 			$repository = new TodoRepository();
 			
 			try{
-				// Beispiel-ID fuer Benutzer, spaeter durch echtes Auth-System ersetzen
-				$userId = 1;
-				
 				// Weitergabe an Repository
 				$success = $repository->insertTodo($userId, $title);
 				
