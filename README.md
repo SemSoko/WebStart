@@ -133,6 +133,10 @@ WebStart/
 │    │         └─── todo.php
 │    │
 │    ├─── tests/                                    # Unit-Tests (PHPUnit)
+│    │    ├─── todo-new/                            # Modul: todo-new Tests
+│    │    │    └─── repository/
+│    │    │         └─── TodoRepositoryTest.php
+│    │    │
 │    │    ├─── auth/
 │    │    │    ├─── CreateUserTest.php
 │    │    │    ├─── IsEmailRegisteredTest.php
