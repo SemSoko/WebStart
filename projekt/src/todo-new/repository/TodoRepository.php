@@ -3,6 +3,8 @@
 	
 	/**
 	 * Fuegt ein neues Todo fuer den angegebenen Benutzer hinzu.
+	 * Nutzt eine via Konstruktor injizierte PDO-Instanz (Dependency
+	 * Injection).
 	 *
 	 * Bei erfolgreichem INSERT:
 	 *   return true
@@ -33,6 +35,16 @@
 	 * @return bool|array true bei Erfolg, sonst strukturierter Fehler
 	 */
 	class TodoRepository{
+		protected PDO $pdo;
+		
+		/**
+		 * Initialisiert das Repository mit einer PDO-Verbindung.
+		 *
+		 * @param PDO $pdo Die zu verwendende PDO-Verbindung.
+		 */
+		public function __construct(PDO $pdo){
+			$this->pdo = $pdo;
+		}
 		/**
 		 * Fuegt ein neues Todo fuer den angegebenen Benutzer hinzu.
 		 *
@@ -41,8 +53,6 @@
 		 * @return bool Erfolg des INSERT-Vorgangs
 		 */
 		public function insertTodo(int $userId, string $title): bool{
-			$pdo = Database::getConnection();
-			
 			if(trim($title) === ''){
 				throw new InvalidArgumentException('Titel darf nicht leer sein.');
 			}
@@ -52,7 +62,7 @@
 			}
 			
 			try{
-				$stmt = $pdo->prepare("INSERT INTO todos (user_id, title) values (?, ?)");
+				$stmt = $this->pdo->prepare("INSERT INTO todos (user_id, title) values (?, ?)");
 				$dbResult = $stmt->execute([$userId, $title]);
 				if($dbResult){
 					return true;
