@@ -50,7 +50,7 @@
 			
 			$result = $repo->insertTodo($userId, $title);
 			
-			$this-assertTrue(
+			$this->assertTrue(
 				$result,
 				'insertTodo() gibt fuer gueltige Daten true zurueck.'
 			);
