@@ -7,6 +7,17 @@
 	 * Kapselt die Geschaeftslogik rund um Todos.
 	 */
 	class TodoService{
+		protected TodoRepository $repository;
+		
+		/**
+		 * Initialisiert den Service mit einem Repository.
+		 *
+		 * @param TodoRepository $repository Instanz des Repositories
+		 */
+		public function __construct(TodoRepository $repository){
+			$this->repository = $repository;
+		}
+		
 		/**
 		 * Fuegt ein neues Todo fuer einen bestimmten Benutzer hinzu
 		 * und verarbeitet das Ergebnis des Repositories.
@@ -30,8 +41,6 @@
 		 * @return array Strukturierte Erfolgs- und Fehlermeldung
 		 */
 		public function addTodo(string $title, int $userId): array{
-			$repository = new TodoRepository();
-			
 			try{
 				// Weitergabe an Repository
 				$success = $repository->insertTodo($userId, $title);
