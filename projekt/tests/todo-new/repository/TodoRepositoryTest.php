@@ -1,23 +1,10 @@
 <?php
-	use PHPUnit\Framework\TestCase;
-	
+	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
 	require_once __DIR__ . '/../../../src/todo-new/repository/TodoRepository.php';
 	
-	class TodoRepositoryTest extends TestCase{
-		/*
-		 * Sollte man nicht eine Testklasse erstellen, die nachfolgendes als
-		 * static Funktion kapselt, damit es wiederverwendet werden kann?
-		 *
-		 * Brauchen wir hier ueberhaupt eine inmemory loesung? geht es auch ohne?
-		 */
-		protected function setUp(): void{
-			$this->pdo = new PDO("sqlite::memory");
-			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$this->pdo->exec('pragma foreign_keys = on');
-			
-			/*
-			 * Benutzer- und Todos-Tabelle erstellen
-			 */
+	class TodoRepositoryTest extends DatabaseTestCase{
+		
+		protected function createSchema(): void{
 			$this->pdo->exec("
 				create table users(
 					id integer primary key autoincrement,
@@ -28,22 +15,25 @@
 			");
 			
 			$this->pdo->exec("
-				create table todos(
-					id integer primary key autoincrement,
-					user_id int not null,
-					title varchar(255) not null,
-					is_done boolean default false,
-					created_at timestamp default current_timestamp,
-					foreign key (user_id) references users(id) on delete cascade
+				CREATE TABLE todos(
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					user_id INT NOT NULL,
+					title VARCHAR(255) NOT NULL,
+					is_done BOOLEAN DEFAULT FALSE,
+					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+					FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 				);
 			");
-			
+		}
+		
+		protected function seedTestData(): void{
 			$stmt = $this->pdo->prepare("insert into users (email, password) values (?, ?)");
 			$stmt->execute(['test@test.de', password_hash('EinPasswort123-', PASSWORD_DEFAULT)]);
 		}
 		
 		public function testInsertTodoReturnsTrueOnSuccess(): void{
-			$repo = new TodoRepository();
+			// Wichtig, aktuell nimmt das Repository kein $pdo entgegen!
+			$repo = new TodoRepository($this->pdo);
 			
 			$userId = 1;
 			$title = 'Test-Todo ' . uniqid();
