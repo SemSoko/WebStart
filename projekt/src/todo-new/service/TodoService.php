@@ -43,7 +43,7 @@
 		public function addTodo(string $title, int $userId): array{
 			try{
 				// Weitergabe an Repository
-				$success = $repository->insertTodo($userId, $title);
+				$success = $this->repository->insertTodo($userId, $title);
 				
 				if(is_array($success) && ($success['success'] ?? false) === false){
 					return $success;
