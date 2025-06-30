@@ -21,7 +21,7 @@
 		protected function setUp(): void{
 			parent::setUp();
 			
-			$this->pdo = new PDO("sqlite::memory");
+			$this->pdo = new PDO("sqlite::memory:");
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$this->pdo->exec('PRAGMA foreign_keys = ON;');
 			
