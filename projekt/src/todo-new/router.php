@@ -1,6 +1,14 @@
 <?php
+	// Init einbinden
+	require_once __DIR__ . '/../../bootstrap/init.php';
+
 	// Controller einbinden
 	require_once __DIR__ . '/controller/TodoController.php';
+	// Service einbinden
+	require_once __DIR__ . '/service/TodoService.php';
+	// Repository einbinden
+	require_once __DIR__ . '/repository/TodoRepository.php';
+	
 	require_once __DIR__ . '/../shared/response/Response.php';
 	
 	use Shared\Response\Response;
@@ -87,13 +95,33 @@
 	// Stell dir $matchedRoute vor wie eine kleine Kiste mit zwei Dingen:
 	// Jetzt holst du das raus und sagst:
 	// $controllerClass = 'TodoController'; und $methodName = 'add';
-	[$controllerClass, $methodName] = $matchedRoute;
+	//[$controllerClass, $methodName] = $matchedRoute;
 	// $controller = new $controllerClass();
 	// Das heißt: $controller = new TodoController();
 	// Du erstellst eine Instanz der Klasse. So kannst du Funktionen der Klasse benutzen.
-	$controller = new $controllerClass();
+	// $controller = new $controllerClass();
 	// Das ist wie sagen: $controller->add();
 	// Du rufst die Methode auf, die du aus dem Routing bekommen hast.
-	$controller->$methodName();
+	// $controller->$methodName();
 	// Wenn das Routing sagt "POST /api/todo-new -> TodoController::add",
 	// dann wird genau diese Methode automatisch aufgerufen.
+	
+	[$controllerClass, $methodName] = $matchedRoute;
+	
+	switch($controllerClass){
+		case TodoController::class:
+			$pdo = Database::getConnection(); // kommt aus der init.php
+			$repository = new TodoRepository($pdo);
+			$service = new TodoService($repository);
+			$controller = new TodoController($service);
+			break;
+		
+		default:
+			http_response_code(500);
+			echo json_encode([
+				'error' => 'Unbekannter Controller'
+			]);
+			exit();
+	}
+	
+	$controller->$methodName();
