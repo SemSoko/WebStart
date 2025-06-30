@@ -16,6 +16,17 @@
 	 * Weitergabe an den Service.
 	 */
 	class TodoController{
+		protected TodoService $service;
+		
+		/**
+		 * Initialisiert den Controller mit einer Service-Instanz.
+		 *
+		 * @param TodoService $service Service-Schicht zur Verarbeitung
+		 */
+		public function __construct(TodoService $service){
+			$this->service = $service;
+		}
+		 
 		/**
 		 * Fuegt ein neues Todo hinzu.
 		 *
@@ -51,8 +62,7 @@
 			$titleTodo = ValidationMiddleware::requireField('title');
 			
 			// Weitergabe an Service
-			$service = new TodoService();
-			$result = $service->addTodo($titleTodo, $userId);
+			$result = $this->service->addTodo($titleTodo, $userId);
 			
 			// Erfolg oder Fehler zurueckgeben
 			/**
