@@ -133,6 +133,9 @@ WebStart/
 │    │         └─── todo.php
 │    │
 │    ├─── tests/                                    # Unit-Tests (PHPUnit)
+│    │    ├─── base/                                # Gemeinsame Testbasis und Wiederverwendbare Hilfsfunktionen fuer Tests
+│    │    │    └─── DatabaseTestCasePreparation.php # Setup-Klasse fuer In-Memory-SQLite-Tests
+│    │    │
 │    │    ├─── todo-new/                            # Modul: todo-new Tests
 │    │    │    └─── repository/
 │    │    │         └─── TodoRepositoryTest.php
