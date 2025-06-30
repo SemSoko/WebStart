@@ -2,7 +2,7 @@
 	use PHPUnit\Framework\TestCase;
 	
 	abstract class DatabaseTestCase extends TestCase{
-		protected PDO $pdo;
+		protected ?PDO $pdo = null;
 		
 		/*
 		 * Wird in konkreten Tests oder Subklassen ueberschrieben.
