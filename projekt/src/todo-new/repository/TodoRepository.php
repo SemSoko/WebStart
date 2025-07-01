@@ -52,7 +52,7 @@
 		 * @param string $title Titel des Todos
 		 * @return bool Erfolg des INSERT-Vorgangs
 		 */
-		public function insertTodo(int $userId, string $title): bool{
+		public function insertTodo(int $userId, string $title): bool|array{
 			if(trim($title) === ''){
 				throw new InvalidArgumentException('Titel darf nicht leer sein.');
 			}
