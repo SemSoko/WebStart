@@ -3,9 +3,10 @@
 	
 	interface AuthServiceInterface{
 		/**
-		 * Gibt die aktuell authentifizierte User-ID zurueck
+		 * Gibt die User-ID aus dem uebergebenen Token zurueck oder null bei Fehler.
 		 *
-		 * @return int Die Benutzer-ID des aktuell eingeloggten Users
+		 * @param string $token
+		 * @return int Die Benutzer-ID des aktuell eingeloggten Users oder null
 		 */
-		public function getUserId(): int;
+		public function getUserId(string $token): ?int;
 	}
