@@ -1,9 +1,9 @@
 <?php
-	require_once __DIR__ . '/JwtHandler.php';
+	require_once __DIR__ . '/JwtHandler-new.php';
 
 	namespace Shared\Auth;
 
-	use Shared\Auth\JwtHandler;
+	use Shared\Auth\JwtHandlerNew;
 	
 	class JwtAuthService implements AuthServiceInterface{
 		/*
@@ -16,20 +16,15 @@
 		 * - macht das System klarer steuerbar: JwtHandler ist keine globale
 		 * Hilfe mehr, sondern wird kontrolliert genutzt
 		 */
-		private JwtHandler $jwt;
+		private JwtHandlerNew $jwt;
 		
-		public function __construct(JwtHandler $jwt){
+		public function __construct(JwtHandlerNew $jwt){
 			$this->jwt = $jwt;
 		}
 		
-		public function getUserId(): int{
-			$token = JwtHandler::getBearerToken();
-			if(!$token){
-				throw new \RuntimeException('Token wurde nicht gefunden.');
-			}
-			
+		public function getUserId(string $token): ?int{
 			$userData = $this->jwt->validateToken($token);
-			$userId = $this->jwt->getUserIdFromToken;
+			$userId = $this->jwt->getUserIdFromToken($token);
 			
 			if($userData === null || $userId === null){
 				throw new \RuntimeException('Token ungueltig oder User-ID fehlt.');
