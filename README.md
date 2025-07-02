@@ -116,7 +116,7 @@ WebStart/
 │    │    ├─── shared/                              # Technische, modulunabhaengige Hilfen
 │    │    │    ├─── response/                       # Einheitliche API-Antwortstruktur(en)
 │    │    │    ├─── auth/                           # Zentrale Authentifizierungsstelle
-│    │    │    │    ├─── JwtHandler.php             # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - ALT, vor DI-Refactor, loeschen, sobald refactor abgeschlossen ist
+│    │    │    │    ├─── JwtHandler-new.php             # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - ALT, vor DI-Refactor, loeschen, sobald refactor abgeschlossen ist
 │    │    │    │    ├─── JwtHandler.php             # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - Aktuell, nach DI-Refactor
 │    │    │    │    ├─── AuthServiceInterface.php   # Vertrag für Authentifizierungsdienste (z. B. JWT, Session, Test)
 │    │    │	   │    └─── JwtAuthService.php         # Konkrete JWT-basierte Authentifizierung (Implementiert Interface)
