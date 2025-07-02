@@ -120,6 +120,7 @@ WebStart/
 │    │    │    │    ├─── JwtHandler.php             # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - Aktuell, nach DI-Refactor
 │    │    │    │    ├─── AuthServiceInterface.php   # Vertrag für Authentifizierungsdienste (z. B. JWT, Session, Test)
 │    │    │	   │    └─── JwtAuthService.php         # Konkrete JWT-basierte Authentifizierung (Implementiert Interface)
+│    │    │    ├─── http/                           # Infrastruktur-Helfer (z. B. Header-Parser, Tokenextraktion) rund um HTTP-Anfragen
 │    │    │    ├─── validation/                     # Zentrale Validierungsstelle
 │    │    │    └─── middleware/                     # Prueft, Login oder Eingaben vor dem Controller
 │    │    │         ├─── AuthMiddleware.php         # Prueft Authentifizierung vor Zugriff auf geschuetzte Endpunkte
