@@ -1,11 +1,13 @@
 <?php
-	require_once __DIR__ . '/../auth/JwtHandler.php';
 	require_once __DIR__ . '/../response/Response.php';
+	require_once __DIR__ . '/../auth/AuthServiceInterface.php';
+	require_once __DIR__ . '/../http/RequestHelper.php';
 
 	namespace Shared\Middleware;
 	
-	use Shared\Auth\JwtHandler;
 	use Shared\Response\Response;
+	use Shared\Auth\AuthServiceInterface;
+	use Shared\Http\RequestHelper;
 	
 	/**
 	 * Middleware zur Authentifizierung geschuetzter Endpunkt.
@@ -33,25 +35,41 @@
 	 * int Die Benutzer-ID aus dem Token bei erfolgreicher Authentifizierung.
 	 */
 	class AuthMiddleware{
+		private AuthServiceInterface $authService;
+		
+		public function __construct(AuthServiceInterface $authService){
+			$this->authService = $authService;
+		}
+		
 		/**
 		 * Fuehrt die Authentifizierungspruefung durch.
 		 * Wenn kein gueltiger Token vorliegt, wird der Zugriff abgebrochen.
 		 *
 		 * @return void Gibt bei Fehler eine strukturierte Antwort und beendet das Script.
 		 */
-		public static function handle(): int{
-			$authResult = JwtHandler::requireValidUserId();
+		public function handle(): int{
+			$token = RequestHelper::getBearerToken();
 			
-			if(!($authResult['success'] ?? false)){
-				/*
-				 * Sofort beenden bei Fehler
-				 */
+			if(!$token){
 				 // Entwicklermodus:
-				Response::debug('Authentifizierung fehlgeschlagen', $authResult, 401);
+				Response::debug(
+					'Kein Token uebergeben',[
+						'success' => false,
+						'source' => 'middleware/AuthMiddleware'
+					], 401);
 				// Produktionsmodus:
 				// Response:error('Authentifizierung fehlgeschlagen', 401);
 			}
 			
-			return $authResult['user_id'];
+			$userId = $this->authService->getUserId($token);
+			
+			if($userId === null){
+				Response::debug('Ungueltiger oder abgelaufener Token', [
+					'success' => false,
+					'source' => 'middleware/AuthMiddleware'
+				], 401);
+			}
+			
+			return $userId;
 		}
 	}
