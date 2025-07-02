@@ -116,13 +116,17 @@ WebStart/
 │    │    ├─── shared/                              # Technische, modulunabhaengige Hilfen
 │    │    │    ├─── response/                       # Einheitliche API-Antwortstruktur(en)
 │    │    │    ├─── auth/                           # Zentrale Authentifizierungsstelle
+│    │    │    │    ├─── JwtHandler.php             # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing)
+│    │    │    │    ├─── AuthServiceInterface.php   # Vertrag für Authentifizierungsdienste (z. B. JWT, Session, Test)
+│    │    │	   │    └─── JwtAuthService.php         # Konkrete JWT-basierte Authentifizierung (Implementiert Interface)
 │    │    │    ├─── validation/                     # Zentrale Validierungsstelle
 │    │    │    └─── middleware/                     # Prueft, Login oder Eingaben vor dem Controller
 │    │    │         ├─── AuthMiddleware.php         # Prueft Authentifizierung vor Zugriff auf geschuetzte Endpunkte
 │    │    │         └─── ValidationMiddleware.php   # Validiert Eingabedaten vor Weitergabe an Services oder Controller
 │    │    │
 │    │    ├─── auth/
-│    │    │	   └─── auth.php
+│    │    │    └─── auth.php
+│    │    │
 │    │    │
 │    │    ├─── core/
 │    │    │    ├─── db.php
