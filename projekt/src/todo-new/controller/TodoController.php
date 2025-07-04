@@ -1,11 +1,11 @@
 <?php
 	require_once __DIR__ . '/../service/TodoService.php';
 	require_once __DIR__ . '/../../shared/response/Response.php';
-
+	
+	require_once __DIR__ . '/../../shared/middleware/AuthMiddleware.php';
 	require_once __DIR__ . '/../../shared/middleware/ValidationMiddleware.php';
 	
 	use Shared\Response\Response;
-	
 	use Shared\Middleware\ValidationMiddleware;
 	use Shared\Middleware\AuthMiddleware;
 
@@ -16,6 +16,7 @@
 	 * Weitergabe an den Service.
 	 */
 	class TodoController{
+		protected AuthMiddleware $auth;
 		protected TodoService $service;
 		protected ValidationMiddleware $validation;
 		
@@ -24,7 +25,8 @@
 		 *
 		 * @param TodoService $service Service-Schicht zur Verarbeitung
 		 */
-		public function __construct(TodoService $service, ValidationMiddleware $validation){
+		public function __construct(AuthMiddleware $auth, TodoService $service, ValidationMiddleware $validation){
+			$this->auth = $auth;
 			$this->service = $service;
 			$this->validation = $validation;
 		}
@@ -56,7 +58,7 @@
 			 * Zugriffsschutz sofort pruefen.
 			 * handle() nur in Methoden aufrufen, die Schutz brauchen.
 			 */
-			$userId = AuthMiddleware::handle();
+			$userId = $this->auth->handle();
 			
 			/*
 			 * Eingabefeld 'title' pruefen
