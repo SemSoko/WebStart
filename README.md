@@ -122,6 +122,9 @@ WebStart/
 │    │    │	   │    └─── JwtAuthService.php         # Konkrete JWT-basierte Authentifizierung (Implementiert Interface)
 │    │    │    ├─── http/                           # Infrastruktur-Helfer (z. B. Header-Parser, Tokenextraktion) rund um HTTP-Anfragen
 │    │    │    ├─── validation/                     # Zentrale Validierungsstelle
+│    │    │    │    ├─── FieldValidatorInterface.php # Zentrale Schnittstelle für die Validierung von JSON-Eingaben (z. B. Pflichtfelder, Werteprüfung)
+│    │    │    │    ├─── JsonFieldValidator.php     # Validiert JSON-Eingaben anhand definierter Regeln
+│    │    │    │    └─── JsonValidator.php          # Sobald das DI-Refactoring abgeschlossen ist loeschen, wird von 
 │    │    │    └─── middleware/                     # Prueft, Login oder Eingaben vor dem Controller
 │    │    │         ├─── AuthMiddleware.php         # Prueft Authentifizierung vor Zugriff auf geschuetzte Endpunkte
 │    │    │         └─── ValidationMiddleware.php   # Validiert Eingabedaten vor Weitergabe an Services oder Controller
