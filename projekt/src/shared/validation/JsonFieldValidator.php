@@ -33,7 +33,7 @@
 		 * @param string $field
 		 * @return string|null
 		 */
-		public function getSanitizedValue(array $input, string $field): ?string{
+		public function getValue(array $input, string $field): ?string{
 			if(!isset($input[$field])){
 				return null;
 			}
