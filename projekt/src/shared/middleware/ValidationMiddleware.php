@@ -59,6 +59,6 @@
 			}
 			
 			// Wenn alles OK: Rueckgabe des bereinigten Wertes
-			return $this->validator->getSanitizedValue($input, $fieldName);
+			return $this->validator->getValue($input, $fieldName);
 		}
 	}
