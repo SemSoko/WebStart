@@ -17,14 +17,16 @@
 	 */
 	class TodoController{
 		protected TodoService $service;
+		protected ValidationMiddleware $validation;
 		
 		/**
 		 * Initialisiert den Controller mit einer Service-Instanz.
 		 *
 		 * @param TodoService $service Service-Schicht zur Verarbeitung
 		 */
-		public function __construct(TodoService $service){
+		public function __construct(TodoService $service, ValidationMiddleware $validation){
 			$this->service = $service;
+			$this->validation = $validation;
 		}
 		 
 		/**
@@ -59,7 +61,7 @@
 			/*
 			 * Eingabefeld 'title' pruefen
 			 */
-			$titleTodo = ValidationMiddleware::requireField('title');
+			$titleTodo = $this->validation->requireField('title');
 			
 			// Weitergabe an Service
 			$result = $this->service->addTodo($titleTodo, $userId);
