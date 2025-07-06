@@ -144,18 +144,14 @@ WebStart/
 │    │    └─── todo/                                          # Altes Feature-Modul (wird ersetzt)
 │    │         └─── todo.php
 │    │
-<<<<<<< HEAD
-│    ├─── tests/                                    # Unit-Tests (PHPUnit)
-│    │    ├─── base/                                # Gemeinsame Testbasis und Wiederverwendbare Hilfsfunktionen fuer Tests
-│    │    │    └─── DatabaseTestCasePreparation.php # Setup-Klasse fuer In-Memory-SQLite-Tests
+│    ├─── tests/                                              # Unit-Tests (PHPUnit)
+│    │    ├─── base/                                          # Gemeinsame Testbasis und Wiederverwendbare Hilfsfunktionen fuer Tests
+│    │    │    └─── DatabaseTestCasePreparation.php           # Setup-Klasse fuer In-Memory-SQLite-Tests
 │    │    │
-│    │    ├─── todo-new/                            # Modul: todo-new Tests
+│    │    ├─── todo-new/                                      # Modul: todo-new Tests
 │    │    │    └─── repository/
 │    │    │         └─── TodoRepositoryTest.php
 │    │    │
-=======
-│    ├─── tests/                                              # Unit-Tests (PHPUnit)
->>>>>>> origin/main
 │    │    ├─── auth/
 │    │    │    ├─── CreateUserTest.php
 │    │    │    ├─── IsEmailRegisteredTest.php
