@@ -1,5 +1,5 @@
 <?php
-	namespace Shared/Validation;
+	namespace Shared\Validation;
 	
 	/**
 	 * Validiert JSON-Eingaben.
@@ -16,7 +16,7 @@
 		 * @return bool true, wenn vorhanden und nicht leer, sonst false
 		 */
 		public static function required(array $input, string $field): bool{
-			return isset($input[$field]) && trim($input[$field]) !== '');
+			return ((isset($input[$field])) && (trim($input[$field]) !== ''));
 		}
 		
 		/**
