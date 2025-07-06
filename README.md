@@ -54,11 +54,11 @@ WebStart/
 │    └─── 001-init.sql
 │
 ├── projekt/
-│    ├─── bootstrap/                                # Initialisierung (DB, Autoloader, ... )
+│    ├─── bootstrap/                                          # Initialisierung (DB, Autoloader, ... )
 │    │	└─── init.php
 │    │
-│    ├─── public/                                   # Oeffentlich zugaenglicher Bereich (Frontend + API) (wird spaeter aufgeteilt)
-│    │    ├─── api/                                 # Temporaere API-Endpunkte (Werden ersetzt)
+│    ├─── public/                                             # Oeffentlich zugaenglicher Bereich (Frontend + API) (wird spaeter aufgeteilt)
+│    │    ├─── api/                                           # Temporaere API-Endpunkte (Werden ersetzt)
 │    │    │    ├─── addUserTodo.php
 │    │    │    ├─── deleteUserTodo.php
 │    │    │    ├─── get_user_todos.php
@@ -74,60 +74,63 @@ WebStart/
 │    │    │    ├─── login.html
 │    │    │    └─── register.html
 │    │    │
-│    │    ├─── js/                                  # JavaScript-Frontend-Logik (modular aufgebaut)
-│    │    │    │                                    # Feature-spezifische Module fuer das Dashboard
-│    │    │    ├─── dashboard/                      # Feature-Modul fuer dashboard.html
-│    │    │    │    ├─── index.js                   # Einstiegpunkt des Dashboards
-│    │    │    │    ├─── api/                       # Fuer dashboard spezifische API-Funktionen (temporaer noch vorhanden)
-│    │    │    │    ├─── dom/                       # Fuer Selektoren und DOM-Erzeugung fuer Dashboard
+│    │    ├─── js/                                            # JavaScript-Frontend-Logik (modular aufgebaut)
+│    │    │    │                                              # Feature-spezifische Module fuer das Dashboard
+│    │    │    ├─── dashboard/                                # Feature-Modul fuer dashboard.html
+│    │    │    │    ├─── index.js                             # Einstiegpunkt des Dashboards
+│    │    │    │    ├─── api/                                 # Fuer dashboard spezifische API-Funktionen (temporaer noch vorhanden)
+│    │    │    │    ├─── dom/                                 # Fuer Selektoren und DOM-Erzeugung fuer Dashboard
 │    │    │    │    │    ├─── create.js
 │    │    │    │    │    └─── selectors.js
-│    │    │    │    ├─── events/                    # Alle Eventlistener, Eventhandler fuer Dashboard
+│    │    │    │    ├─── events/                              # Alle Eventlistener, Eventhandler fuer Dashboard
 │    │    │    │    │    └─── dashboardEvents.js
 │    │    │    │    │
-│    │    │    │    └─── render/                    # Darstellung und DOM-Aktualisierungen
+│    │    │    │    └─── render/                              # Darstellung und DOM-Aktualisierungen
 │    │    │    │         └─── todoRenderer.js
 │    │    │    │
-│    │    │    │                                    # Wiederverwendbare, globale Module
-│    │    │    ├─── shared/                         # Feature unabhaengige Module (projektweit nutzbar)
-│    │    │    │    ├─── api/                       # API-Funktionalitaet
+│    │    │    │                                              # Wiederverwendbare, globale Module
+│    │    │    ├─── shared/                                   # Feature unabhaengige Module (projektweit nutzbar)
+│    │    │    │    ├─── api/                                 # API-Funktionalitaet
 │    │    │    │    │    ├─── fetchWrapper.js
 │    │    │    │    │    ├─── todo.js
 │    │    │    │    │    └─── user.js
-│    │    │    │    ├─── dom/                       # Helferfunktionen fuer das DOM
+│    │    │    │    ├─── dom/                                 # Helferfunktionen fuer das DOM
 │    │    │    │    │    └─── elements.js
-│    │    │    │    └─── utils/                     # Sonstige Hilfsfunktionen (z.B. Tokenverwaltung)
+│    │    │    │    └─── utils/                               # Sonstige Hilfsfunktionen (z.B. Tokenverwaltung)
 │    │    │    │         └─── token.js
 │    │    │    │
-│    │    │    │                                    # Weitere Feature-Einstiegspunkte (noch nicht modularisiert)
+│    │    │    │                                              # Weitere Feature-Einstiegspunkte (noch nicht modularisiert)
 │    │    │    ├─── login.js
 │    │    │    ├─── logout.js
 │    │    │    └─── register.js
 │    │    │
-│    │    └─── index.php                            # Weiterleitung zur Login-Seite des Frontends (kein Teil der API)
+│    │    └─── index.php                                      # Weiterleitung zur Login-Seite des Frontends (kein Teil der API)
 │    │
 │    ├─── src/
-│    │    ├─── todo-new/                            # Modulares Backend-Modul
-│    │    │    ├─── router.php                      # Leitet HTTP-Anfragen an Controller
-│    │    │    ├─── controller/                     # Verantwortlich fuer Anfragen und Antworten
-│    │    │    ├─── service/                        # Enthaelt Geschaeftslogik
-│    │    │    └─── repository/                     # Datenzugriff, fachlich gebunden
+│    │    ├─── todo-new/                                      # Modulares Backend-Modul
+│    │    │    ├─── router.php                                # Leitet HTTP-Anfragen an Controller
+│    │    │    ├─── controller/                               # Verantwortlich fuer Anfragen und Antworten
+│    │    │    ├─── service/                                  # Enthaelt Geschaeftslogik
+│    │    │    └─── repository/                               # Datenzugriff, fachlich gebunden
 │    │    │
-│    │    ├─── shared/                              # Technische, modulunabhaengige Hilfen
-│    │    │    ├─── response/                       # Einheitliche API-Antwortstruktur(en)
-│    │    │    ├─── auth/                           # Zentrale Authentifizierungsstelle
-│    │    │    │    ├─── JwtHandler-new.php             # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - ALT, vor DI-Refactor, loeschen, sobald refactor abgeschlossen ist
-│    │    │    │    ├─── JwtHandler.php             # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - Aktuell, nach DI-Refactor
-│    │    │    │    ├─── AuthServiceInterface.php   # Vertrag für Authentifizierungsdienste (z. B. JWT, Session, Test)
-│    │    │	   │    └─── JwtAuthService.php         # Konkrete JWT-basierte Authentifizierung (Implementiert Interface)
-│    │    │    ├─── http/                           # Infrastruktur-Helfer (z. B. Header-Parser, Tokenextraktion) rund um HTTP-Anfragen
-│    │    │    ├─── validation/                     # Zentrale Validierungsstelle
-│    │    │    │    ├─── FieldValidatorInterface.php # Zentrale Schnittstelle für die Validierung von JSON-Eingaben (z. B. Pflichtfelder, Werteprüfung)
-│    │    │    │    ├─── JsonFieldValidator.php     # Validiert JSON-Eingaben anhand definierter Regeln
-│    │    │    │    └─── JsonValidator.php          # Sobald das DI-Refactoring abgeschlossen ist loeschen, wird von 
-│    │    │    └─── middleware/                     # Prueft, Login oder Eingaben vor dem Controller
-│    │    │         ├─── AuthMiddleware.php         # Prueft Authentifizierung vor Zugriff auf geschuetzte Endpunkte
-│    │    │         └─── ValidationMiddleware.php   # Validiert Eingabedaten vor Weitergabe an Services oder Controller
+│    │    ├─── shared/                                        # Technische, modulunabhaengige Hilfen
+│    │    │    ├─── response/                                 # Einheitliche API-Antwortstruktur(en)
+│    │    │    │    ├─── JsonResponseHandler.php              # Konkrete Implementierung des ResponseHandlerInterface (liefert standardisierte JSON-Antworten)
+│    │    │    │    ├─── Response.php                         # Legacy-Responseklasse – wird durch JsonResponseHandler ersetzt (zur Entfernung markiert nach Refactoring)
+│    │    │    │    └─── ResponseHandlerInterface.php         # Schnittstelle für Response-Handler (definiert Struktur einheitlicher API-Antworten)
+│    │    │    ├─── auth/                                     # Zentrale Authentifizierungsstelle
+│    │    │    │    ├─── JwtHandler-new.php                   # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - ALT, vor DI-Refactor, loeschen, sobald refactor abgeschlossen ist
+│    │    │    │    ├─── JwtHandler.php                       # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - Aktuell, nach DI-Refactor
+│    │    │    │    ├─── AuthServiceInterface.php             # Vertrag für Authentifizierungsdienste (z. B. JWT, Session, Test)
+│    │    │	   │    └─── JwtAuthService.php                   # Konkrete JWT-basierte Authentifizierung (Implementiert Interface)
+│    │    │    ├─── http/                                     # Infrastruktur-Helfer (z. B. Header-Parser, Tokenextraktion) rund um HTTP-Anfragen
+│    │    │    ├─── validation/                               # Zentrale Validierungsstelle
+│    │    │    │    ├─── FieldValidatorInterface.php          # Zentrale Schnittstelle für die Validierung von JSON-Eingaben (z. B. Pflichtfelder, Werteprüfung)
+│    │    │    │    ├─── JsonFieldValidator.php               # Validiert JSON-Eingaben anhand definierter Regeln
+│    │    │    │    └─── JsonValidator.php                    # Sobald das DI-Refactoring abgeschlossen ist loeschen, wird von 
+│    │    │    └─── middleware/                               # Prueft, Login oder Eingaben vor dem Controller
+│    │    │         ├─── AuthMiddleware.php                   # Prueft Authentifizierung vor Zugriff auf geschuetzte Endpunkte
+│    │    │         └─── ValidationMiddleware.php             # Validiert Eingabedaten vor Weitergabe an Services oder Controller
 │    │    │
 │    │    ├─── auth/
 │    │    │    └─── auth.php
@@ -138,10 +141,10 @@ WebStart/
 │    │    │    ├─── funktionen.php
 │    │    │    └─── JwtHandler.php
 │    │    │
-│    │    └─── todo/                                # Altes Feature-Modul (wird ersetzt)
+│    │    └─── todo/                                          # Altes Feature-Modul (wird ersetzt)
 │    │         └─── todo.php
 │    │
-│    ├─── tests/                                    # Unit-Tests (PHPUnit)
+│    ├─── tests/                                              # Unit-Tests (PHPUnit)
 │    │    ├─── auth/
 │    │    │    ├─── CreateUserTest.php
 │    │    │    ├─── IsEmailRegisteredTest.php
@@ -150,9 +153,9 @@ WebStart/
 │    │    │    └─── ProcessLoginFormTest.php
 │    │    │
 │    │    └─── todo/
-│    │         ├─── TodoControllerTest.php          # Testet, ob Controller korrekt reagieren
-│    │         ├─── TodoServiceTest.php             # Testet, ob die Geschaeftslogik korrekt funktioniert
-│    │         ├─── TodoRepositoryTest.php          # Testet, ob Service-Helfer korrekt funktionieren
+│    │         ├─── TodoControllerTest.php                    # Testet, ob Controller korrekt reagieren
+│    │         ├─── TodoServiceTest.php                       # Testet, ob die Geschaeftslogik korrekt funktioniert
+│    │         ├─── TodoRepositoryTest.php                    # Testet, ob Service-Helfer korrekt funktionieren
 │    │         ├─── AddTodoTest.php
 │    │         ├─── DeleteTodoTest.php
 │    │         ├─── GetTodosByUserTest.php
