@@ -1,11 +1,11 @@
 <?php
-	require_once __DIR__ . '/../response/Response.php';
+	require_once __DIR__ . '/../response/ResponseHandlerInterface.php';
 	require_once __DIR__ . '/../auth/AuthServiceInterface.php';
 	require_once __DIR__ . '/../http/RequestHelper.php';
 
 	namespace Shared\Middleware;
 	
-	use Shared\Response\Response;
+	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Auth\AuthServiceInterface;
 	use Shared\Http\RequestHelper;
 	
@@ -36,9 +36,11 @@
 	 */
 	class AuthMiddleware{
 		private AuthServiceInterface $authService;
+		private ResponseHandlerInterface $response;
 		
-		public function __construct(AuthServiceInterface $authService){
+		public function __construct(AuthServiceInterface $authService, ResponseHandlerInterface $response){
 			$this->authService = $authService;
+			$this->response = $response;
 		}
 		
 		/**
@@ -51,20 +53,21 @@
 			$token = RequestHelper::getBearerToken();
 			
 			if(!$token){
-				 // Entwicklermodus:
-				Response::debug(
-					'Kein Token uebergeben',[
+				// Entwicklermodus:
+				$this->response->debug(
+					'Kein Token uebergeben', [
 						'success' => false,
 						'source' => 'middleware/AuthMiddleware'
-					], 401);
+					], 401
+				);
 				// Produktionsmodus:
-				// Response:error('Authentifizierung fehlgeschlagen', 401);
+				// $this->response->error('Authentifizierung fehlgeschlagen', 401);
 			}
 			
 			$userId = $this->authService->getUserId($token);
 			
 			if($userId === null){
-				Response::debug('Ungueltiger oder abgelaufener Token', [
+				$this->response->debug('Ungueltiger oder abgelaufener Token', [
 					'success' => false,
 					'source' => 'middleware/AuthMiddleware'
 				], 401);
