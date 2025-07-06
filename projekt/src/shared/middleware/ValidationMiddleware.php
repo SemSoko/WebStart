@@ -1,13 +1,13 @@
 <?php
 	require_once __DIR__ . '/../validation/InputHelper.php';
-	require_once __DIR__ . '/../response/Response.php';
+	require_once __DIR__ . '/../response/ResponseHandlerInterface.php';
 	require_once __DIR__ . '/../validation/FieldValidatorInterface.php';
 	
 	namespace Shared\Middleware;
 	
 	// Abhaengigkeiten
 	use Shared\Validation\InputHelper;
-	use Shared\Response\Response;
+	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Validation\FieldValidatorInterface;
 	
 	/**
@@ -28,6 +28,8 @@
 		 */
 		private FieldValidatorInterface $validator;
 		
+		private ResponseHandlerInterface $response;
+		
 		/**
 		 * Konstruktor mit Injektion der konkreten Validator-Implementierung.
 		 * Die Klasse erwartet hier *irgendeine* Klasse, die das
@@ -35,8 +37,9 @@
 		 *
 		 * @param FieldValidatorInterface $validator
 		 */
-		public function __construct(FieldValidatorInterface $validator){
+		public function __construct(FieldValidatorInterface $validator, ResponseHandlerInterface $response){
 			$this->validator = $validator;
+			$this->response = $response;
 		}
 		
 		/**
@@ -55,7 +58,7 @@
 			// Pruefe, ob das Feld vorhanden und nicht leer ist
 			if(!is_array($input) || !$this->validator->hasRequiredField($input, $fieldName)){
 				// Wenn nicht: sende Fehlerantwort und beende die Anfrage
-				Response::error("Feld \"{$fieldName}\" muss angegeben werden", 400);
+				$this->response->error("Feld \"{$fieldName}\" muss angegeben werden", 400);
 			}
 			
 			// Wenn alles OK: Rueckgabe des bereinigten Wertes

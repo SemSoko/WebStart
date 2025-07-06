@@ -1,11 +1,11 @@
 <?php
 	require_once __DIR__ . '/../service/TodoService.php';
-	require_once __DIR__ . '/../../shared/response/Response.php';
+	require_once __DIR__ . '/../../shared/response/ResponseHandlerInterface.php';
 	
 	require_once __DIR__ . '/../../shared/middleware/AuthMiddleware.php';
 	require_once __DIR__ . '/../../shared/middleware/ValidationMiddleware.php';
 	
-	use Shared\Response\Response;
+	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Middleware\ValidationMiddleware;
 	use Shared\Middleware\AuthMiddleware;
 
@@ -19,16 +19,20 @@
 		protected AuthMiddleware $auth;
 		protected TodoService $service;
 		protected ValidationMiddleware $validation;
+		protected ResponseHandlerInterface $response;
 		
 		/**
 		 * Initialisiert den Controller mit einer Service-Instanz.
 		 *
 		 * @param TodoService $service Service-Schicht zur Verarbeitung
 		 */
-		public function __construct(AuthMiddleware $auth, TodoService $service, ValidationMiddleware $validation){
+		public function __construct(AuthMiddleware $auth, TodoService $service,
+									ValidationMiddleware $validation,
+									ResponseHandlerInterface $response){
 			$this->auth = $auth;
 			$this->service = $service;
 			$this->validation = $validation;
+			$this->response = $response;
 		}
 		 
 		/**
@@ -73,13 +77,13 @@
 			 * @todo Bezeichnungen fuer das Feld: source in $result anpassen!!!
 			 */
 			if($result['success'] === true){
-				Response::success($result, 201);
+				$this->response->success($result, 201);
 			}elseif($result['success'] === false && ($result['source'] ?? '') === 'service'){
-				Response::debug('Service-Fehler', $result);
+				$this->response->debug('Service-Fehler', $result);
 			}elseif($result['success'] === false && ($result['source'] ?? '') === 'repository'){
-				Response::debug('Repository-Fehler', $result);
+				$this->response->debug('Repository-Fehler', $result);
 			}else{
-				Response::error(($result['error'] ?? 'Unbekannter Fehler'), 500);
+				$this->response->error(($result['error'] ?? 'Unbekannter Fehler'), 500);
 			}
 		 }
 	}
