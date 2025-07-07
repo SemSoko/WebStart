@@ -17,4 +17,13 @@
 			
 			$this->assertTrue($result);
 		}
+		
+		public function testHasRequiredFieldReturnsFalseWhenFieldIsMissing(): void{
+			$validator = new JsonFieldValidator();
+			$input = ['description' => 'Falsches Feld'];
+			
+			$result = $validator->hasRequiredField($input, 'title');
+			
+			$this->assertFalse($result);
+		}
 	}
