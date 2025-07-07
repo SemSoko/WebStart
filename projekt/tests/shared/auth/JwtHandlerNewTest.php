@@ -52,4 +52,9 @@
 			
 			$this->assertNull($userId);
 		}
+		
+		public function testGetUserIdFromTokenReturnsNullOnInvalidToken(): void{
+			$userId = $this->jwt->getUserIdFromToken('not.a.valid.token');
+			$this->assertNull($userId);
+		}
 	}
