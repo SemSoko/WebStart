@@ -65,6 +65,17 @@
 		}
 		
 		public function testHandlesMissingApacheFunctionGracefully(): void{
+			// Sicherstellen, dass auch dort kein Header ist
+			$_SERVER = [];
 			
+			$mockedHelper = new class extends RequestHelper{
+				public static function getApacheRequestHeaders(): array{
+					// Simuliert, dass apache_request_headers nicht existiert
+					return [];
+				}
+			};
+			
+			$result = $mockedHelper::getBearerToken();
+			$this->assertNull($result);
 		}
 	}
