@@ -121,4 +121,13 @@
 			
 			$this->assertSame('', $result);
 		}
+		
+		public function testGetValueReturnsStringWhenFieldIsNummeric(): void{
+			$validator = new JsonFieldValidator();
+			$input = ['title' => 123];
+			
+			$result = $validator->getValue($input, 'title');
+			
+			$this->assertSame('123', $result);
+		}
 	}
