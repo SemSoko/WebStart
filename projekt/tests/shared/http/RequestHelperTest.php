@@ -16,7 +16,8 @@
 		}
 		
 		public function testReturnsNullForInvalidDirectHeader(): void{
-			
+			$token = RequestHelper::getBearerToken('Basic abc123');
+			$this->assertNull($token);
 		}
 		
 		public function testReturnsTokenFromServerGlobal(): void{
