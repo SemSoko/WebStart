@@ -34,7 +34,7 @@
 		public static function getJsonBody(): ?array{
 			if(self::$cachedInput === null){
 				// delegiert an neue Methode
-				$raw = self::getRawInput();
+				$raw = static::getRawInput();
 				self::$cachedInput = json_decode($raw, true);
 			}
 			
