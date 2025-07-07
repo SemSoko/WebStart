@@ -9,6 +9,8 @@
 			parent::setUp();
 		}
 		
+		// === Tests für hasRequiredField() ======================================
+		
 		public function testHasRequiredFieldReturnsTrueFieldIsSetAndNotEmpty(): void{
 			$validator = new JsonFieldValidator();
 			$input = ['title' => 'My Todo'];
@@ -70,5 +72,16 @@
 			$result = $validator->hasRequiredField($input, 'title');
 			
 			$this->assertTrue($result);
+		}
+		
+		// === Tests für getValue() ==============================================
+		
+		public function testGetValueReturnsTrimmedStringWhenFieldIsSet(): void{
+			$validator = new JsonFieldValidator();
+			$input = ['title' => 'My Todo'];
+			
+			$result = $validator->getValue($input, 'title');
+			
+			$this->assertSame('My Todo', $result);
 		}
 	}
