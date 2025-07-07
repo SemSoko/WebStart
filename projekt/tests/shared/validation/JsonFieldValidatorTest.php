@@ -44,4 +44,13 @@
 			
 			$this->assertFalse($result);
 		}
+		
+		public function testHasRequiredFieldReturnsFalseWhenFieldIsNull(): void{
+			$validator = new JsonFieldValidator();
+			$input = ['title' => null];
+			
+			$result = $validator->hasRequiredField($input, 'title');
+			
+			$this->assertFalse($result);
+		}
 	}
