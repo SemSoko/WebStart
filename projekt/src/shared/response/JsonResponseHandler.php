@@ -1,12 +1,12 @@
 <?php
-	require_once __DIR__ . '/ResponseHandlerInterface.php';
-	
 	/*
 		namespace Shared\Response;: Diese Klasse gehört in das shared/response/-Modul unseres Projekts.
 		Das macht spätere use-Statements möglich wie:
 		use Shared\Response\Response;
 	*/
 	namespace Shared\Response;
+
+	require_once __DIR__ . '/ResponseHandlerInterface.php';
 	
 	/**
      * Standardisierte API-Antwortstruktur fuer alle HTTP-Responses im Projekt.
