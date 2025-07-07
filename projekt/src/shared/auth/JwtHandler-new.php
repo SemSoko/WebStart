@@ -38,8 +38,8 @@
 		 * Initialisiert den Handler mit Secret, Signaturalgorithmus und
 		 * Token-Gueltigkeit.
 		 */
-		public function __construct(string $secret = getenv('JWT_SECRET'), string $algo = 'HS256', int $ttl = 86400){
-			$this->secret = $secret;
+		public function __construct(?string $secret = null, string $algo = 'HS256', int $ttl = 86400){
+			$this->secret = $secret ?? getenv('JWT_SECRET');
 			$this->algo = $algo;
 			$this->ttl = $ttl;
 		}
