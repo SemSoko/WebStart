@@ -16,4 +16,14 @@
 			$token = $this->jwt->generateToken(['user_id' => 42]);
 			$this->assertIsString($token);
 		}
+		
+		public function testValidateTokenReturnsPayloadForValidToken(): void{
+			$token = $this->jwt->generateToken(['user_id' => 1]);
+			$payload = $this->jwt->validateToken($token);
+			
+			$this->assertIsArray($payload);
+			$this->assertSame(1, $payload['user_id']);
+			$this->assertArrayHasKey('iat', $payload);
+			$this->assertArrayHasKey('exp', $payload);
+		}
 	}
