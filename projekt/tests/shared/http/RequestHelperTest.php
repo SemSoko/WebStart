@@ -48,7 +48,20 @@
 		}
 		
 		public function testReturnsNullWhenNoValidSourceFound(): void{
+			// $_SERVER explizit leeren (zur Sicherheit)
+			$_SERVER = [];
 			
+			// Subklasse mit leerem apache_headers-Mock
+			$mockedHelper = new class extends RequestHelper{
+				public static function getApacheRequestHeaders(): array{
+					// Simuliert: Keine Fallback-Header
+					return [];
+				}
+			};
+			
+			// Kein Header uebergeben
+			$result = $mockedHelper::getBearerToken();
+			$this->assertNull($result);
 		}
 		
 		public function testHandlesMissingApacheFunctionGracefully(): void{
