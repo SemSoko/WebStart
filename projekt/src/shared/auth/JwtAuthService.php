@@ -1,7 +1,8 @@
 <?php
-	require_once __DIR__ . '/JwtHandler-new.php';
-
 	namespace Shared\Auth;
+
+	require_once __DIR__ . '/AuthServiceInterface.php';
+	require_once __DIR__ . '/JwtHandler-new.php';
 
 	use Shared\Auth\JwtHandlerNew;
 	
