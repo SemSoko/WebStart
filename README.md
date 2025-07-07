@@ -149,9 +149,11 @@ WebStart/
 │    │    │    └─── DatabaseTestCasePreparation.php           # Setup-Klasse fuer In-Memory-SQLite-Tests
 │    │    │
 │    │    ├─── shared/                                        # Tests für technische, modulunabhängige Hilfsklassen (src/shared)
-│    │    │    └─── auth/                                     # Tests für zentrale Authentifizierungslogik (src/shared/auth)
-│    │    │         ├─── JwtAuthServiceTest.php               # Testet die Service-Logik zum Extrahieren der User-ID aus Tokens
-│    │    │         └─── JwtHandlerNewTest.php                # Testet Low-Level JWT-Erzeugung, Validierung und Payload-Verarbeitung
+│    │    │    ├─── auth/                                     # Tests für zentrale Authentifizierungslogik (src/shared/auth)
+│    │    │    │    ├─── JwtAuthServiceTest.php               # Testet die Service-Logik zum Extrahieren der User-ID aus Tokens
+│    │    │    │    └─── JwtHandlerNewTest.php                # Testet Low-Level JWT-Erzeugung, Validierung und Payload-Verarbeitung
+│    │    │    └─── http/                                     # Tests fuer Infrastruktur-Utilities rund um HTTP-Requests (Header-Auswertung etc.)
+│    │    │         └─── RequestHelperTest.php                # Testet die Extraktion von Bearer-Tokens aus Headern ($_SERVER, apache_request_headers)
 │    │    │
 │    │    ├─── todo-new/                                      # Modul: todo-new Tests
 │    │    │    └─── repository/
