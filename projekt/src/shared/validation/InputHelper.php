@@ -33,10 +33,15 @@
 		 */
 		public static function getJsonBody(): ?array{
 			if(self::$cachedInput === null){
-				$raw = file_get_contents('php://input');
+				// delegiert an neue Methode
+				$raw = self::getRawInput();
 				self::$cachedInput = json_decode($raw, true);
 			}
 			
 			return self::$cachedInput;
+		}
+		
+		public static function getRawInput(): string{
+			return file_get_contents('php://input');
 		}
 	}
