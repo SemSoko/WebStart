@@ -112,4 +112,13 @@
 			
 			$this->assertSame('', $result);
 		}
+		
+		public function test(): void{
+			$validator = new JsonFieldValidator();
+			$input = ['title' => '     '];
+			
+			$result = $validator->getValue($input, 'title');
+			
+			$this->assertSame('', $result);
+		}
 	}
