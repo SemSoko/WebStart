@@ -53,5 +53,23 @@
 			$this->assertNull($jsonBody);
 		}
 		
-		
+		public function testGetJsonBodyUsesCacheOnSecondCall(): void{
+			$this->resetCache();
+			
+			$mockedHelper = new class extends InputHelper{
+				public static int $callCount = 0;
+				
+				public static function getRawInput(): string{
+					self::$callCount++;
+					return '{"cached": true}';
+				}
+			};
+			
+			$firstCall = $mockedHelper::getJsonBody();
+			$secondCall = $mockedHelper::getJsonBody();
+			$this->assertSame(['cached' => true], $firstCall);
+			$this->assertSame(['cached' => true], $secondCall);
+			// Nur einmal gelesen
+			$this->assertSame(1, $mockedHelper::$callCount);
+		}
 	}
