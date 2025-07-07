@@ -26,4 +26,16 @@
 			$this->assertArrayHasKey('iat', $payload);
 			$this->assertArrayHasKey('exp', $payload);
 		}
+		
+		public function testValidateTokenReturnsErrorForInvalidToken(): void{
+			$token = $this->jwt->generateToken(['user_id' => 1]);
+			$manipulated = $token . 'xyz';
+			
+			$result = $this->jwt->validateToken($manipulated);
+			
+			$this->assertIsArray($result);
+			$this->assertFalse($result['success']);
+			$this->assertArrayHasKey('error', $result);
+			$this->assertSame('shared/auth/validateToken', $result['source']);
+		}
 	}
