@@ -45,4 +45,11 @@
 			
 			$this->assertSame(99, $userId);
 		}
+		
+		public function testGetUserIdFromTokenReturnsNullIfUserIdMissing(): void{
+			$token = $this->jwt->generateToken(['role' => 'admin']);
+			$userId = $this->jwt->getUserIdFromToken($token);
+			
+			$this->assertNull($userId);
+		}
 	}
