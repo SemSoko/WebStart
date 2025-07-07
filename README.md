@@ -152,8 +152,12 @@ WebStart/
 │    │    │    ├─── auth/                                     # Tests für zentrale Authentifizierungslogik (src/shared/auth)
 │    │    │    │    ├─── JwtAuthServiceTest.php               # Testet die Service-Logik zum Extrahieren der User-ID aus Tokens
 │    │    │    │    └─── JwtHandlerNewTest.php                # Testet Low-Level JWT-Erzeugung, Validierung und Payload-Verarbeitung
-│    │    │    └─── http/                                     # Tests fuer Infrastruktur-Utilities rund um HTTP-Requests (Header-Auswertung etc.)
-│    │    │         └─── RequestHelperTest.php                # Testet die Extraktion von Bearer-Tokens aus Headern ($_SERVER, apache_request_headers)
+│    │    │    ├─── http/                                     # Tests fuer Infrastruktur-Utilities rund um HTTP-Requests (Header-Auswertung etc.)
+│    │    │    │    └─── RequestHelperTest.php                # Testet die Extraktion von Bearer-Tokens aus Headern ($_SERVER, apache_request_headers)
+│    │    │    │
+│    │    │    └─── validation/                               # Test fuer generische Validierungsfehler (z.B. Input, JSON-Felder)
+│    │    │         ├─── InputHelperTest.php                  # Testet das Einlesen und Caching von JSON-Bodies aus php://input
+│    │    │         └─── JsonFieldValidator.php               # Testet Validierung und Extraktion einzelner Felder aus dem JSON-Body
 │    │    │
 │    │    ├─── todo-new/                                      # Modul: todo-new Tests
 │    │    │    └─── repository/

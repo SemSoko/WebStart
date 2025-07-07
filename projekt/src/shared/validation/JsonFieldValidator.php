@@ -1,5 +1,5 @@
 <?php
-	namespace Shared/Validation;
+	namespace Shared\Validation;
 	
 	require_once __DIR__ . '/FieldValidatorInterface.php';
 	
