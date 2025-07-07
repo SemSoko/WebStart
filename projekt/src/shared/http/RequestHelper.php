@@ -19,8 +19,8 @@
 			if($authHeader === null){
 				$authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
 				
-				if(empty($authHeader) && function_exists('apache_request_header')){
-					$headers = apache_request_headers();
+				if(empty($authHeader)){
+					$headers = self::getApacheRequestHeaders();
 					$authHeader = $headers['Authorization'];
 				}
 			}
@@ -30,5 +30,9 @@
 			}
 			
 			return null;
+		}
+		
+		public static function getApacheRequestHeaders(): array{
+			return function_exists('apache_request_headers') ? apache_request_headers() : [];
 		}
 	}
