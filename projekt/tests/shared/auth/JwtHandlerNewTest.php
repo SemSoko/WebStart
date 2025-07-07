@@ -38,4 +38,11 @@
 			$this->assertArrayHasKey('error', $result);
 			$this->assertSame('shared/auth/validateToken', $result['source']);
 		}
+		
+		public function testGetUserIdFromTokenReturnsCorrectId(): void{
+			$token = $this->jwt->generateToken(['user_id' => 99]);
+			$userId = $this->jwt->getUserIdFromToken($token);
+			
+			$this->assertSame(99, $userId);
+		}
 	}
