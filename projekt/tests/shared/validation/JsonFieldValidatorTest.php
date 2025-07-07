@@ -93,4 +93,14 @@
 			
 			$this->assertSame('My Todo', $result);
 		}
+		
+		public function testGetValueReturnsNullWhenFieldIsMissing(): void{
+			$validator = new JsonFieldValidator();
+			// 'title' fehlt
+			$input = ['description' => 'Irgendwas'];
+			
+			$result = $validator->getValue($input, 'title');
+			
+			$this->assertNull($result);
+		}
 	}
