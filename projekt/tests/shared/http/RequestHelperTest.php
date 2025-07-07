@@ -21,7 +21,14 @@
 		}
 		
 		public function testReturnsTokenFromServerGlobal(): void{
+			$_SERVER['HTTP_AUTHORIZATION'] = 'Bearer serverToken456';
 			
+			$token = RequestHelper::getBearerToken();
+			
+			$this->assertSame('serverToken456', $token);
+			
+			// Cleanup, wichtig fuer Testisolation
+			unset($_SERVER['HTTP_AUTHORIZATION']);
 		}
 		
 		public function testReturnsTokenFromApacheHeadersFallback(): void{
