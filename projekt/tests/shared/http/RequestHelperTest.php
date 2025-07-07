@@ -32,7 +32,19 @@
 		}
 		
 		public function testReturnsTokenFromApacheHeadersFallback(): void{
+			// Temporaere Subklasse mit Mock-Verhalten.
+			$mockedHelper = new class extends RequestHelper{
+				public static function getApacheRequestHeaders(): array{
+					return ['Authorization' => 'Bearer fromApache789'];
+				}
+			};
 			
+			// $_SERVER bewusst leeren, um Fallback zu erzwingen.
+			unset($_SERVER['HTTP_AUTHORIZATION']);
+			
+			$token = $mockedHelper::getBearerToken();
+			
+			$this->assertSame('fromApache789', $token);
 		}
 		
 		public function testReturnsNullWhenNoValidSourceFound(): void{
