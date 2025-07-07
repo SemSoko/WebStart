@@ -84,4 +84,13 @@
 			
 			$this->assertSame('My Todo', $result);
 		}
+		
+		public function testGetValueReturnsTrimmedStringWhenFieldHasWhitespaces(): void{
+			$validator = new JsonFieldValidator();
+			$input = ['title' => '    My Todo    '];
+			
+			$result = $validator->getValue($input, 'title');
+			
+			$this->assertSame('My Todo', $result);
+		}
 	}
