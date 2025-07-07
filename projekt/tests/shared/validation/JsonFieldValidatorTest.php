@@ -35,4 +35,13 @@
 			
 			$this->assertFalse($result);
 		}
+		
+		public function testHasRequiredFieldReturnsFalseWhenFieldIsOnlyWhitespace(): void{
+			$validator = new JsonFieldValidator();
+			$input = ['title' => '   '];
+			
+			$result = $validator->hasRequiredField($input, 'title');
+			
+			$this->assertFalse($result);
+		}
 	}
