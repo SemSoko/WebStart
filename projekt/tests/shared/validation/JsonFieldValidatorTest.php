@@ -62,4 +62,13 @@
 			
 			$this->assertTrue($result);
 		}
+		
+		public function testHasRequiredFieldReturnsTrueWhenFieldIsNumeric(): void{
+			$validator = new JsonFieldValidator();
+			$input = ['title' => 123];
+			
+			$result = $validator->hasRequiredField($input, 'title');
+			
+			$this->assertTrue($result);
+		}
 	}
