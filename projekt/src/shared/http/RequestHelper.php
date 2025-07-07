@@ -20,8 +20,8 @@
 				$authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
 				
 				if(empty($authHeader)){
-					$headers = self::getApacheRequestHeaders();
-					$authHeader = $headers['Authorization'];
+					$headers = static::getApacheRequestHeaders();
+					$authHeader = $headers['Authorization'] ?? '';
 				}
 			}
 			
