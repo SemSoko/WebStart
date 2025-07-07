@@ -1,0 +1,20 @@
+<?php
+	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../../src/shared/validation/JsonFieldValidator.php';
+	
+	use Shared\Validation\JsonFieldValidator;
+	
+	class JsonFieldValidatorTest extends DatabaseTestCase{
+		public function setUp(): void{
+			parent::setUp();
+		}
+		
+		public function testHasRequiredFieldReturnsTrueFieldIsSetAndNotEmpty(): void{
+			$validator = new JsonFieldValidator();
+			$input = ['title' => 'My Todo'];
+			
+			$result = $validator->hasRequiredField($input, 'title');
+			
+			$this->assertTrue($result);
+		}
+	}
