@@ -88,4 +88,29 @@
 			
 			$middleware->requireField('title');
 		}
+		
+		public function testRequireFieldAbortsWhenInputIsNotArray(): void{
+			$this->input
+				->method('getJsonBody')
+				// oder: return 'not-an-array';
+				->willReturn(null);
+			
+			// hasRequiredField wird gar nicht erst aufgerufen
+			$this->validator
+				->expects($this->never())
+				->method('hasRequiredField');
+			
+			$response = new TestableJsonResponseHandler();
+			
+			$middleware = new ValidationMiddleware(
+				$this->validator,
+				$response,
+				$this->input
+			);
+			
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked error: Feld "title" muss angegeben werden (400)');
+			
+			$middleware->requireField('title');
+		}
 	}
