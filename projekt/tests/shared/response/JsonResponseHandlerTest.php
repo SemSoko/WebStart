@@ -12,20 +12,15 @@
 		
 		public function testSuccessOutputsExpectedJsonAndExits(): void{
 			$handler = new class extends TestableJsonResponseHandler{				
-				public function success(array $data = [], int $statusCode = 200): void{
-					http_response_code($statusCode);
-					echo(json_encode([
-						'success' => true,
-						'data' => $data
-					]));
-					$this->exit();
+				public function runSuccess(array $data, int $code): void{
+					parent::success($data, $code);
 				}
 			};
 			
 			// Buffer starten
 			ob_start();
 			$data = ['foo' => 'bar'];
-			$handler->success($data, 201);
+			$handler->runSuccess($data, 201);
 			// Buffer auslesen und beenden
 			$output = ob_get_clean();
 			
