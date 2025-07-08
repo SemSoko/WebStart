@@ -32,6 +32,26 @@
 			$this->assertTrue($handler->hasExited());
 		}
 		
+		public function testSuccessDefaultsToEmptyDataAndStatus200(): void{
+			$handler = new class extends TestableJsonResponseHandler{
+				public function runSuccess(): void{
+					// ohne Argumente
+					parent::success();
+				}
+			};
+			
+			ob_start();
+			$handler->runSuccess();
+			$output = ob_get_clean();
+			
+			$json = json_decode($output, true);
+			
+			$this->assertSame(200, http_response_code());
+			$this->assertTrue($json['success']);
+			$this->assertSame([], $json['data']);
+			$this->assertTrue($handler->hasExited());
+		}
+		
 		public function testErrorOutputsExpectedJsonAndExits(): void{
 			$handler = new class extends TestableJsonResponseHandler{
 				public function runError(string $message, int $code): void{
