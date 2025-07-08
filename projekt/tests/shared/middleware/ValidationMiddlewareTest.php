@@ -3,13 +3,14 @@
 	require_once __DIR__ . '/../../../src/shared/middleware/ValidationMiddleware.php';
 	require_once __DIR__ . '/../../../src/shared/validation/FieldValidatorInterface.php';
 	require_once __DIR__ . '/../../../src/shared/http/InputProviderInterface.php';
-	require_once __DIR__ . '/../../../src/shared/response/JsonResponseHandler.php';
+	require_once __DIR__ . '/../response/TestableJsonResponseHandler.php';
 	
 	use Shared\Middleware\ValidationMiddleware;
 	use PHPUnit\Framework\MockObject\MockObject;
 	use Shared\Validation\FieldValidatorInterface;
 	use Shared\Http\InputProviderInterface;
 	use Shared\Response\ResponseHandlerInterface;
+	use Tests\Shared\Response\TestableJsonResponseHandler;
 	
 	class ValidationMiddlewareTest extends DatabaseTestCase{
 		private MockObject $validator;
@@ -57,5 +58,34 @@
 			$result = $middleware->requireField('title');
 			$this->assertSame('Test-Todo', $result);
 		}
-
+		
+		public function testRequireFieldAbortsWhenFieldIsMissing(): void{
+			// 'title' fehlt
+			$jsonInput = ['foo' => 'bar'];
+			
+			$this->input
+				->method('getJsonBody')
+				->willReturn($jsonInput);
+			
+			$this->validator
+				->expects($this->once())
+				->method('hasRequiredField')
+				->with($jsonInput, 'title')
+				// Pflichtfeld fehlt
+				->willReturn(false);
+			
+			$response = new TestableJsonResponseHandler();
+			
+			// Methode wird ausgefuehrt, sie ruft dann ->error() auf
+			$middleware = new ValidationMiddleware(
+				$this->validator,
+				$response,
+				$this->input
+			);
+			
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked error: Feld "title" muss angegeben werden (400)');
+			
+			$middleware->requireField('title');
+		}
 	}
