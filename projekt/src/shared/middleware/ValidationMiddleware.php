@@ -1,12 +1,12 @@
 <?php
-	require_once __DIR__ . '/../validation/InputHelper.php';
+	require_once __DIR__ . '/../http/InputProviderInterface.php';
 	require_once __DIR__ . '/../response/ResponseHandlerInterface.php';
 	require_once __DIR__ . '/../validation/FieldValidatorInterface.php';
 	
 	namespace Shared\Middleware;
 	
 	// Abhaengigkeiten
-	use Shared\Validation\InputHelper;
+	use Shared\Http\InputProviderInterface;
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Validation\FieldValidatorInterface;
 	
@@ -30,6 +30,8 @@
 		
 		private ResponseHandlerInterface $response;
 		
+		private InputProviderInterface $input;
+		
 		/**
 		 * Konstruktor mit Injektion der konkreten Validator-Implementierung.
 		 * Die Klasse erwartet hier *irgendeine* Klasse, die das
@@ -37,9 +39,11 @@
 		 *
 		 * @param FieldValidatorInterface $validator
 		 */
-		public function __construct(FieldValidatorInterface $validator, ResponseHandlerInterface $response){
+		public function __construct(FieldValidatorInterface $validator, ResponseHandlerInterface $response,
+									InputProviderInterface $input){
 			$this->validator = $validator;
 			$this->response = $response;
+			$this->input = $input;
 		}
 		
 		/**
@@ -53,7 +57,7 @@
 		 */
 		public function requireField(string $fieldName): string{
 			// Hole den JSON-Body als assoziatives Array
-			$input = InputHelper::getJsonBody();
+			$input = $this->input->getJsonBody();
 			
 			// Pruefe, ob das Feld vorhanden und nicht leer ist
 			if(!is_array($input) || !$this->validator->hasRequiredField($input, $fieldName)){
