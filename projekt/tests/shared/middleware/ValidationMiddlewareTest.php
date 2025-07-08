@@ -113,4 +113,31 @@
 			
 			$middleware->requireField('title');
 		}
+		
+		public function testGetValueNotCalledIfValidationFails(): void{
+			$this->input
+				->method('getJsonBody')
+				->willReturn(['foo' => 'bar']);
+				
+			$this->validator
+				->method('hasRequiredField')
+				->willReturn(false);
+			
+			$this->validator
+				->expects($this->never())
+				->method('getValue');
+			
+			$response = new TestableJsonResponseHandler();
+			
+			$middleware = new ValidationMiddleware(
+				$this->validator,
+				$response,
+				$this->input
+			);
+			
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked error: Feld "title" muss angegeben werden (400)');
+			
+			$middleware->requireField('title');
+		}
 	}
