@@ -31,4 +31,23 @@
 			$this->assertSame($data, $json['data']);
 			$this->assertTrue($handler->hasExited());
 		}
+		
+		public function testErrorOutputsExpectedJsonAndExits(): void{
+			$handler = new class extends TestableJsonResponseHandler{
+				public function runError(string $message, int $code): void{
+					parent::error($message, $code);
+				}
+			};
+			
+			ob_start();
+			$handler->runError('Validation failed', 422);
+			$output = ob_get_clean();
+			
+			$json = json_decode($output, true);
+			
+			$this->assertSame(422, http_response_code());
+			$this->assertFalse($json['success']);
+			$this->assertSame('Validation failed', $json['message']);
+			$this->assertTrue($handler->hasExited());
+		}
 	}
