@@ -110,6 +110,26 @@
 			$this->assertTrue($handler->hasExited());
 		}
 		
+		public function testDebugCanHandleEmptyDetails(): void{
+			$handler = new class extends TestableJsonResponseHandler{
+				public function runDebug(): void{
+					parent::debug('Error occured', []);
+				}
+			};
+			
+			ob_start();
+			$handler->runDebug();
+			$output = ob_get_clean();
+			
+			$json = json_decode($output, true);
+			
+			$this->assertSame(500, http_response_code());
+			$this->assertFalse($json['success']);
+			$this->assertSame('Error occured', $json['message']);
+			$this->assertSame([], $json['debug']);
+			$this->assertTrue($handler->hasExited());
+		}
+		
 		public function testStatusOutputsExpectedJsonAndExits(): void{
 			$handler = new class extends TestableJsonResponseHandler{
 				public function runStatus(string $message, bool $success, int $code): void{
