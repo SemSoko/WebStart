@@ -1,9 +1,9 @@
 <?php
+	namespace Shared\Middleware;
+
 	require_once __DIR__ . '/../http/InputProviderInterface.php';
 	require_once __DIR__ . '/../response/ResponseHandlerInterface.php';
 	require_once __DIR__ . '/../validation/FieldValidatorInterface.php';
-	
-	namespace Shared\Middleware;
 	
 	// Abhaengigkeiten
 	use Shared\Http\InputProviderInterface;
