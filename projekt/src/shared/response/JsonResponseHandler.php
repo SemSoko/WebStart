@@ -41,6 +41,13 @@
 	 */	
 	class JsonResponseHandler implements ResponseHandlerInterface{
 		/**
+		 * Geschuetzte exit()-Funktion, damit sie im Test ueberschrieben werden kann.
+		 */
+		protected function doExit(): void{
+			exit();
+		}
+		
+		/**
 		 * Gibt eine erfolgreiche API-Antwort als JSON aus.
 		 * 
 		 * @param array $data Beliebige Nutzdaten (Payload)
@@ -54,7 +61,7 @@
 				'success' => true,
 				'data' => $data
 			]));
-			exit();
+			$this->doExit();
 		}
 		
 		/**
@@ -71,7 +78,7 @@
 				'success' => false,
 				'message' => $message
 			]));
-			exit();
+			$this->doExit();
 		}
 		
 		/**
@@ -92,7 +99,7 @@
 				'message' => $message,
 				'debug' => $details
 			]));
-			exit();
+			$this->doExit();
 		}
 		
 		/**
@@ -113,6 +120,6 @@
 				'status' => $message,
 				'timestamp' => gmdate('c')
 			]));
-			exit();
+			$this->doExit();
 		}
 	}
