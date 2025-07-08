@@ -124,6 +124,10 @@ WebStart/
 │    │    │    │    ├─── AuthServiceInterface.php             # Vertrag für Authentifizierungsdienste (z. B. JWT, Session, Test)
 │    │    │	   │    └─── JwtAuthService.php                   # Konkrete JWT-basierte Authentifizierung (Implementiert Interface)
 │    │    │    ├─── http/                                     # Infrastruktur-Helfer (z. B. Header-Parser, Tokenextraktion) rund um HTTP-Anfragen
+│    │    │    │    ├─── DefaultInputProvider.php             # Konkrete, testbare Implementierung des InputProviderInterface (verwendet intern InputHelper)
+│    │    │    │    ├─── InputHelper.php                      # Legacy: Statische Klasse für einmaliges Einlesen & Caching des JSON-Request-Bodys (Wird ersetzt durch: InputProviderInterface, entsprechend spaeter aus dem Projekt loeschen)
+│    │    │    │    ├─── InputProviderInterface.php           # Abstrakte Schnittstelle für lesbaren JSON-Input (z. B. aus php://input)
+│    │    │    │    └─── RequestHelper.php                    # Liest HTTP-Header (z. B. Authorization) aus $_SERVER, rein statisch & unabhängig
 │    │    │    ├─── validation/                               # Zentrale Validierungsstelle
 │    │    │    │    ├─── FieldValidatorInterface.php          # Zentrale Schnittstelle für die Validierung von JSON-Eingaben (z. B. Pflichtfelder, Werteprüfung)
 │    │    │    │    ├─── JsonFieldValidator.php               # Validiert JSON-Eingaben anhand definierter Regeln
