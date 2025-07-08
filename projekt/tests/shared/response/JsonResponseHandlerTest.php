@@ -150,4 +150,24 @@
 			$this->assertNotEmpty($json['timestamp']);
 			$this->assertTrue($handler->hasExited());
 		}
+		
+		public function testStatusDefaultsToOkAndSuccessTrue(): void{
+			$handler = new class extends TestableJsonResponseHandler{
+				public function runStatus(): void{
+					parent::status();
+				}
+			};
+			
+			ob_start();
+			$handler->runStatus();
+			$output = ob_get_clean();
+			
+			$json = json_decode($output, true);
+			
+			$this->assertSame(200, http_response_code());
+			$this->assertTrue($json['success']);
+			$this->assertSame('OK', $json['status']);
+			$this->assertArrayHasKey('timestamp', $json);
+			$this->assertTrue($handler->hasExited());
+		}
 	}
