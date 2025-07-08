@@ -6,7 +6,7 @@
 	class TestableJsonResponseHandler extends JsonResponseHandler{
 		private bool $exited = false;
 		
-		protected function exit(): void{
+		protected function doExit(): void{
 			$this->exited = true;
 		}
 		
