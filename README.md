@@ -160,6 +160,9 @@ WebStart/
 │    │    │    │    ├─── RequestHelperTest.php                # Testet die Extraktion von Bearer-Tokens aus Headern ($_SERVER, apache_request_headers)
 │    │    │    │    └─── DefaultInputProviderTest.php         # Testet das Einlesen und Caching von JSON-Request-Bodies via DefaultInputProvider (DI-fähiger Ersatz für InputHelper)
 │    │    │    │
+│    │    │    ├─── middleware/                               # Tests fuer zentrale Zwischenlogik (z.B. Auth, Validierung)
+│    │    │    │    └─── ValidationMiddlewareTest.php         # Testet Pflichtfeldpruefung im JSON-Body via ValidationMiddleware
+│    │    │    │
 │    │    │    ├─── response/                                 # Tests fuer HTTP-Response-Utilities (z.B. JSON-Ausgaben)
 │    │    │    │    ├─── JsonResponseHandlerTest.php          # Testet strukturierte JSON-Antworten (Statuscode, Payload, etc.)
 │    │    │    │    └─── TestableJsonResponseHandler.php      # Testbare Subklasse von JsonResponseHandler (verhindert exit fuer Unit-Tests)
