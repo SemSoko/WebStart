@@ -70,4 +70,25 @@
 			$this->assertSame('Detailed error', $json['message']);
 			$this->assertTrue($handler->hasExited());
 		}
+		
+		public function testStatusOutputsExpectedJsonAndExits(): void{
+			$handler = new class extends TestableJsonResponseHandler{
+				public function runStatus(string $message, bool $success, int $code): void{
+					parent::status($message, $success, $code);
+				}
+			};
+			
+			ob_start();
+			$handler->runStatus('All good', true, 202);
+			$output = ob_get_clean();
+			
+			$json = json_decode($output, true);
+			
+			$this->assertSame(202, http_response_code());
+			$this->assertTrue($json['success']);
+			$this->assertSame('All good', $json['status']);
+			$this->assertArrayHasKey('timestamp', $json);
+			$this->assertNotEmpty($json['timestamp']);
+			$this->assertTrue($handler->hasExited());
+		}
 	}
