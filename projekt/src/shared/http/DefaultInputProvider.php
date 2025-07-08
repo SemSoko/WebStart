@@ -9,7 +9,7 @@
 		private ?array $cachedInput = null;
 		
 		public function getJsonBody(): ?array{
-			if(self::$cachedInput === null){
+			if($this->cachedInput === null){
 				$raw = $this->getRawInput();
 				$this->cachedInput = json_decode($raw, true);
 			}
@@ -17,7 +17,7 @@
 			return $this->cachedInput;
 		}
 		
-		private function getRawInput(): string{
+		protected function getRawInput(): string{
 			return file_get_contents('php://input');
 		}
 	}
