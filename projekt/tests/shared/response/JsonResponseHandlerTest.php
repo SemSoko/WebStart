@@ -50,4 +50,24 @@
 			$this->assertSame('Validation failed', $json['message']);
 			$this->assertTrue($handler->hasExited());
 		}
+		
+		public function testDebugOutputsExpectedJsonWithDetailsAndExits(): void{
+			$handler = new class extends TestableJsonResponseHandler{
+				public function runDebug(string $message, array $details, int $code): void{
+					parent::debug($message, $details, $code);
+				}
+			};
+			
+			ob_start();
+			$details = ['line' => 42, 'file' => 'somefile.php'];
+			$handler->runDebug('Detailed error', $details, 500);
+			$output = ob_get_clean();
+			
+			$json = json_decode($output, true);
+			
+			$this->assertSame(500, http_response_code());
+			$this->assertFalse($json['success']);
+			$this->assertSame('Detailed error', $json['message']);
+			$this->assertTrue($handler->hasExited());
+		}
 	}
