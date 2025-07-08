@@ -71,6 +71,25 @@
 			$this->assertTrue($handler->hasExited());
 		}
 		
+		public function testErrorDefaultsToStatusCode400(): void{
+			$handler = new class extends TestableJsonResponseHandler{
+				public function runError(): void{
+					parent::error('Bad input');
+				}
+			};
+			
+			ob_start();
+			$handler->runError();
+			$output = ob_get_clean();
+			
+			$json = json_decode($output, true);
+			
+			$this->assertSame(400, http_response_code());
+			$this->assertFalse($json['success']);
+			$this->assertSame('Bad input', $json['message']);
+			$this->assertTrue($handler->hasExited());
+		}
+		
 		public function testDebugOutputsExpectedJsonWithDetailsAndExits(): void{
 			$handler = new class extends TestableJsonResponseHandler{
 				public function runDebug(string $message, array $details, int $code): void{
