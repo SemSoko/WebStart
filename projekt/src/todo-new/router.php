@@ -10,12 +10,14 @@
 	require_once __DIR__ . '/repository/TodoRepository.php';
 	
 	require_once __DIR__ . '/../shared/response/JsonResponseHandler.php';
+	require_once __DIR__ . '/../shared/http/DefaultInputProvider.php';
 	
 	require_once __DIR__ . '/../shared/middleware/AuthMiddleware.php';
 	require_once __DIR__ . '/../shared/validation/JsonFieldValidator.php';
 	
 	
 	use Shared\Response\JsonResponseHandler;
+	use Shared\Http\JsonFieldValidator;
 	use Shared\Auth\JwtHandlerNew;
 	use Shared\Validation\JsonFieldValidator;
 	
@@ -173,6 +175,8 @@
 		     */
 			$auth = new AuthMiddleware($authService, $response);
 			
+			$inputProvider = new DefaultInputProvider();
+			
 		    /**
 		     * 7. Eingabevalidierung (Low-Level)
 		     * - Prueft JSON-Felder auf Vorhandensein und Gueltigkeit.
@@ -185,7 +189,7 @@
 		     * - Verwendet FieldValidatorInterface + ResponseHandler zur Ausgabe
 		     * von Fehler.
 		     */
-			$validation = new ValidationMiddleware($validator, $response);
+			$validation = new ValidationMiddleware($validator, $response, $inputProvider);
 		
 		    /**
 		     * 9. Konstruktion des Controllers
