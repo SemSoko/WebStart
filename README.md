@@ -155,6 +155,10 @@ WebStart/
 │    │    │    ├─── http/                                     # Tests fuer Infrastruktur-Utilities rund um HTTP-Requests (Header-Auswertung etc.)
 │    │    │    │    └─── RequestHelperTest.php                # Testet die Extraktion von Bearer-Tokens aus Headern ($_SERVER, apache_request_headers)
 │    │    │    │
+│    │    │    ├─── response/                                 # Tests fuer HTTP-Response-Utilities (z.B. JSON-Ausgaben)
+│    │    │    │    ├─── JsonResponseHandlerTest.php          # Testet strukturierte JSON-Antworten (Statuscode, Payload, etc.)
+│    │    │    │    └─── TestableJsonResponseHandler.php      # Testbare Subklasse von JsonResponseHandler (verhindert exit fuer Unit-Tests)
+│    │    │    │
 │    │    │    └─── validation/                               # Test fuer generische Validierungsfehler (z.B. Input, JSON-Felder)
 │    │    │         ├─── InputHelperTest.php                  # Testet das Einlesen und Caching von JSON-Bodies aus php://input
 │    │    │         └─── JsonFieldValidator.php               # Testet Validierung und Extraktion einzelner Felder aus dem JSON-Body
