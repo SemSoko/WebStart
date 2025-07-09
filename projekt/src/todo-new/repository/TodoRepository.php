@@ -37,14 +37,14 @@
 	 * @return bool|array true bei Erfolg, sonst strukturierter Fehler
 	 */
 	class TodoRepository{
-		protected PDO $pdo;
+		protected \PDO $pdo;
 		
 		/**
 		 * Initialisiert das Repository mit einer PDO-Verbindung.
 		 *
 		 * @param PDO $pdo Die zu verwendende PDO-Verbindung.
 		 */
-		public function __construct(PDO $pdo){
+		public function __construct(\PDO $pdo){
 			$this->pdo = $pdo;
 		}
 		/**
@@ -56,11 +56,11 @@
 		 */
 		public function insertTodo(int $userId, string $title): bool|array{
 			if(trim($title) === ''){
-				throw new InvalidArgumentException('Titel darf nicht leer sein.');
+				throw new \InvalidArgumentException('Titel darf nicht leer sein.');
 			}
 			
 			if(strlen($title) > 255){
-				throw new InvalidArgumentException('Title darf nicht länger als 255 Zeichen sein.');
+				throw new \InvalidArgumentException('Title darf nicht länger als 255 Zeichen sein.');
 			}
 			
 			try{
@@ -79,7 +79,7 @@
 					];
 				}
 				
-			}catch(PDOException $e){
+			}catch(\PDOException $e){
 				/*
 				 * Gibt ein strukturiertes Fehler-Array mit Debug-Infos
 				 * zurueck (fuer Controller sichtbar)

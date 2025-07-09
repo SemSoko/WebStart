@@ -2,6 +2,8 @@
 	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
 	require_once __DIR__ . '/../../../src/todo-new/repository/TodoRepository.php';
 	
+	use todoNew\Repository\TodoRepository;
+	
 	class TodoRepositoryTest extends DatabaseTestCase{
 		
 		protected function createSchema(): void{
