@@ -1,13 +1,13 @@
 <?php
 	require_once __DIR__ . '/../response/ResponseHandlerInterface.php';
 	require_once __DIR__ . '/../auth/AuthServiceInterface.php';
-	require_once __DIR__ . '/../http/RequestHelper.php';
+	require_once __DIR__ . '/../http/TokenProviderInterface.php';
 
 	namespace Shared\Middleware;
 	
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Auth\AuthServiceInterface;
-	use Shared\Http\RequestHelper;
+	use Shared\Http\TokenProviderInterface;
 	
 	/**
 	 * Middleware zur Authentifizierung geschuetzter Endpunkt.
@@ -37,10 +37,14 @@
 	class AuthMiddleware{
 		private AuthServiceInterface $authService;
 		private ResponseHandlerInterface $response;
+		private RequestTokenReaderInterface $tokenReader;
 		
-		public function __construct(AuthServiceInterface $authService, ResponseHandlerInterface $response){
+		public function __construct(AuthServiceInterface $authService,
+									ResponseHandlerInterface $response,
+									RequestTokenReaderInterface $tokenReader){
 			$this->authService = $authService;
 			$this->response = $response;
+			$this->tokenReader = $tokenReader;
 		}
 		
 		/**
@@ -50,7 +54,7 @@
 		 * @return void Gibt bei Fehler eine strukturierte Antwort und beendet das Script.
 		 */
 		public function handle(): int{
-			$token = RequestHelper::getBearerToken();
+			$token = $this->tokenReader->getBearerToken();
 			
 			if(!$token){
 				// Entwicklermodus:
