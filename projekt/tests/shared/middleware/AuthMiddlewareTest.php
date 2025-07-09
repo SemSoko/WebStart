@@ -68,4 +68,24 @@
 			
 			$middleware->handle();
 		}
+		
+		public function testReturnsUserIdWhenTokenIsValid(): void{
+			$this->tokenReader
+				->method('getBearerToken')
+				->willReturn('valid-token');
+			
+			$this->authService
+				->method('getUserId')
+				->with('valid-token')
+				->willReturn(42);
+			
+			$middleware = new AuthMiddleware(
+				$this->authService,
+				new TestableJsonResponseHandler(),
+				$this->tokenReader
+			);
+			
+			$result = $middleware->handle();
+			$this->assertSame(42, $result);
+		}
 	}
