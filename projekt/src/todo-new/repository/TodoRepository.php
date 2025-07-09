@@ -1,4 +1,6 @@
 <?php
+	namespace todoNew\Repository;
+
 	require_once __DIR__ . '/../../../bootstrap/init.php';
 	
 	/**

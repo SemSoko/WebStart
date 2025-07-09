@@ -1,4 +1,6 @@
 <?php
+	namespace todoNew\Controller;
+
 	require_once __DIR__ . '/../service/TodoService.php';
 	require_once __DIR__ . '/../../shared/response/ResponseHandlerInterface.php';
 	
@@ -8,6 +10,7 @@
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Middleware\ValidationMiddlewareInterface;
 	use Shared\Middleware\AuthMiddlewareInterface;
+	use todoNew\Service\TodoService;
 
 	/**
 	 * Controller fuer Todo-Endpunkte.
@@ -64,10 +67,15 @@
 			 */
 			$userId = $this->auth->handle();
 			
-			/*
-			 * Eingabefeld 'title' pruefen
-			 */
-			$titleTodo = $this->validation->requireField('title');
+			try{
+				/*
+				* Eingabefeld 'title' pruefen
+				*/
+				$titleTodo = $this->validation->requireField('title');
+			}catch(\InvalidArgumentException $e){
+				$this->response->error($e->getMessage(), 400);
+				return;
+			}
 			
 			// Weitergabe an Service
 			$result = $this->service->addTodo($titleTodo, $userId);

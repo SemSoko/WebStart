@@ -1,4 +1,6 @@
 <?php
+	namespace todoNew\Service;
+
 	require_once __DIR__ . '/../repository/TodoRepository.php';
 	
 	/**
