@@ -44,4 +44,28 @@
 			// Test: Methode aufrufen -> erwartet, dass debug() aufgerufen wird
 			$middleware->handle();
 		}
+		
+		public function testReturnsDebugWhenTokenInvalid(): void{
+			$this->tokenReader
+				->method('getBearerToken')
+				->willReturn('invalid-token');
+			
+			$this->authService
+				->method('getUserId')
+				->with('invalid-token')
+				->willReturn(null);
+			
+			$response = new TestableJsonResponseHandler();
+			
+			$middleware = new AuthMiddleware(
+				$this->authService,
+				$response,
+				$this->tokenReader
+			);
+			
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked debug: Ungueltiger oder abgelaufener Token (401)');
+			
+			$middleware->handle();
+		}
 	}
