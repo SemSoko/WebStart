@@ -27,7 +27,7 @@
 			return null;
 		}
 		
-		private function getApacheRequestHeaders(): array{
+		protected function getApacheRequestHeaders(): array{
 			return function_exists('apache_request_headers') ? apache_request_headers() : [];
 		}
 	}
