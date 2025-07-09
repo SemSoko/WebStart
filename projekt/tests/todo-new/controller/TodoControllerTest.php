@@ -152,4 +152,32 @@
 			
 			$controller->add();
 		}
+		
+		public function testAddReturnsGenericErrorResponseOnUnknownError(): void{
+			$mockAuth = $this->createMock(AuthMiddlewareInterface::class);
+			$mockAuth->method('handle')->willReturn(1);
+			
+			$mockValidation = $this->createMock(ValidationMiddlewareInterface::class);
+			$mockValidation->method('requireField')->willReturn('Test-Todo');
+			
+			$mockService = $this->createMock(TodoService::class);
+			$mockService->method('addTodo')->willReturn([
+				'success' => false,
+				'error' => 'Unbekannter Fehler'
+			]);
+			
+			$mockResponse = $this->createMock(ResponseHandlerInterface::class);
+			$mockResponse->expects($this->once())
+				->method('error')
+				->with('Unbekannter Fehler', 500);
+			
+			$controller = new TodoController(
+				$mockAuth,
+				$mockService,
+				$mockValidation,
+				$mockResponse
+			);
+			
+			$controller->add();
+		}
 	}
