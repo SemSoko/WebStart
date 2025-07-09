@@ -2,12 +2,12 @@
 	require_once __DIR__ . '/../service/TodoService.php';
 	require_once __DIR__ . '/../../shared/response/ResponseHandlerInterface.php';
 	
-	require_once __DIR__ . '/../../shared/middleware/AuthMiddleware.php';
+	require_once __DIR__ . '/../../shared/middleware/AuthMiddlewareInterface.php';
 	require_once __DIR__ . '/../../shared/middleware/ValidationMiddlewareInterface.php';
 	
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Middleware\ValidationMiddlewareInterface;
-	use Shared\Middleware\AuthMiddleware;
+	use Shared\Middleware\AuthMiddlewareInterface;
 
 	/**
 	 * Controller fuer Todo-Endpunkte.
@@ -16,7 +16,7 @@
 	 * Weitergabe an den Service.
 	 */
 	class TodoController{
-		protected AuthMiddleware $auth;
+		protected AuthMiddlewareInterface $auth;
 		protected TodoService $service;
 		protected ValidationMiddlewareInterface $validation;
 		protected ResponseHandlerInterface $response;
@@ -26,7 +26,7 @@
 		 *
 		 * @param TodoService $service Service-Schicht zur Verarbeitung
 		 */
-		public function __construct(AuthMiddleware $auth, TodoService $service,
+		public function __construct(AuthMiddlewareInterface $auth, TodoService $service,
 									ValidationMiddlewareInterface $validation,
 									ResponseHandlerInterface $response){
 			$this->auth = $auth;
