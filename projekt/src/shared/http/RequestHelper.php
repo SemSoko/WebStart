@@ -1,4 +1,9 @@
 <?php
+	/**
+	 * Legacy-Klasse. Wird ersetzt durch RequestTokenReader (DI-faehig, testbar).
+	 * Nach vollstaendigem Refactor loeschen.
+	 */
+
 	/*
 	 * Zugriff auf $_SERVER ist Infrastruktur
 	 * Diese Klasse hat eine Aufgabe (SRP): HTTP-Header lesen
