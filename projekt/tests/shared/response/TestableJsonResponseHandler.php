@@ -23,6 +23,12 @@
 			throw new \RuntimeException("Mocked error: {$message} ({$statusCode})", $statusCode);
 		}
 		
+		public function debug(string $message, array $details = [], int $statusCode = 500): void{
+			$this->lastErrorMessage = $message;
+			$this->lastStatusCode = $statusCode;
+			throw new \RuntimeException("Mocked debug: {$message} ({$statusCode})", $statusCode);
+		}
+		
 		public function hasExited(): bool{
 			return $this->exited;
 		}

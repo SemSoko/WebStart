@@ -164,6 +164,7 @@ WebStart/
 │    │    │    │    └─── RequestTokenReaderTest.php           # Testet die DI-basierte Extraktion von Bearer-Tokens aus HTTP-Headern
 │    │    │    │
 │    │    │    ├─── middleware/                               # Tests fuer zentrale Zwischenlogik (z.B. Auth, Validierung)
+│    │    │    │    ├─── AuthMiddlewareTest.php               # Testet Zugriffsschutz via AuthMiddleware (Tokenprüfung, User-ID-Ermittlung, Fehlerantworten)
 │    │    │    │    └─── ValidationMiddlewareTest.php         # Testet Pflichtfeldpruefung im JSON-Body via ValidationMiddleware
 │    │    │    │
 │    │    │    ├─── response/                                 # Tests fuer HTTP-Response-Utilities (z.B. JSON-Ausgaben)
