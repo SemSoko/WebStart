@@ -4,10 +4,12 @@
 	require_once __DIR__ . '/../response/ResponseHandlerInterface.php';
 	require_once __DIR__ . '/../auth/AuthServiceInterface.php';
 	require_once __DIR__ . '/../http/RequestTokenReaderInterface.php';
+	require_once __DIR__ . '/AuthMiddlewareInterface.php';
 	
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Auth\AuthServiceInterface;
 	use Shared\Http\RequestTokenReaderInterface;
+	use Shared\Middleware\AuthMiddlewareInterface.php
 	
 	/**
 	 * Middleware zur Authentifizierung geschuetzter Endpunkt.
@@ -34,7 +36,7 @@
 	 * @return
 	 * int Die Benutzer-ID aus dem Token bei erfolgreicher Authentifizierung.
 	 */
-	class AuthMiddleware{
+	class AuthMiddleware implements AuthMiddlewareInterface{
 		private AuthServiceInterface $authService;
 		private ResponseHandlerInterface $response;
 		private RequestTokenReaderInterface $tokenReader;
