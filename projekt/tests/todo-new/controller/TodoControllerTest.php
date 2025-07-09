@@ -1,0 +1,64 @@
+<?php
+	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../../src/todo-new/controller/TodoController.php';
+	
+	require_once __DIR__ . '/../../../src/shared/middleware/AuthMiddlewareInterface.php';
+	require_once __DIR__ . '/../../../src/shared/middleware/ValidationMiddlewareInterface.php';
+	require_once __DIR__ . '/../../../src/shared/response/ResponseHandlerInterface.php';
+	
+	use Shared\Middleware\AuthMiddlewareInterface;
+	use Shared\Middleware\ValidationMiddlewareInterface;
+	use Shared\Response\ResponseHandlerInterface;
+	use todoNew\Controller\TodoController;
+	use todoNew\Service\TodoService;
+	
+	class TodoControllerTest extends DatabaseTestCase{
+		
+		protected function createSchema(): void{
+			$this->pdo->exec("
+				create table users(
+					id integer primary key autoincrement,
+					email varchar(255) unique not null,
+					password varchar(255) not null,
+					created_at timestamp default current_timestamp
+				);
+			");
+			
+			$this->pdo->exec("
+				CREATE TABLE todos(
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					user_id INT NOT NULL,
+					title VARCHAR(255) NOT NULL,
+					is_done BOOLEAN DEFAULT FALSE,
+					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+					FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+				);
+			");
+		}
+		
+		protected function seedTestData(): void{
+			$stmt = $this->pdo->prepare("insert into users (email, password) values (?, ?)");
+			$stmt->execute(['test@test.de', password_hash('EinPasswort123-', PASSWORD_DEFAULT)]);
+		}
+		
+		public function testAddCallsSuccessReponseOnValidInput(): void{
+			$mockAuth = $this->createMock(AuthMiddlewareInterface::class);
+			$mockAuth->method('handle')->willReturn(1);
+			
+			$mockValidation = $this->createMock(ValidationMiddlewareInterface::class);
+			$mockValidation->method('requireField')->willReturn('Einkaufen');
+			
+			$mockService = $this->createMock(TodoService::class);
+			$mockService->method('addTodo')->willReturn(['success' => true]);
+			
+			$mockResponse = $this->createMock(ResponseHandlerInterface::class);
+			$mockResponse->expects($this->once())
+				->method('success')
+				->with(['success' => true], 201);
+			
+			$controller = new TodoController($mockAuth, $mockService,
+									$mockValidation, $mockResponse);
+			
+			$controller->add();
+		}
+	}
