@@ -136,6 +136,7 @@ WebStart/
 │    │    │    │    └─── JsonValidator.php                    # Sobald das DI-Refactoring abgeschlossen ist loeschen, wird von 
 │    │    │    └─── middleware/                               # Prueft, Login oder Eingaben vor dem Controller
 │    │    │         ├─── AuthMiddleware.php                   # Prueft Authentifizierung vor Zugriff auf geschuetzte Endpunkte
+│    │    │         ├─── AuthMiddlewareInterface.php          # Schnittstelle für Middleware zur Authentifizierungsprüfung
 │    │    │         ├─── ValidationMiddleware.php             # Validiert Eingabedaten vor Weitergabe an Services oder Controller
 │    │    │         └─── ValidationMiddlewareInterface.php    # Schnittstelle für Middleware zur Validierung von JSON-Eingaben
 │    │    │
