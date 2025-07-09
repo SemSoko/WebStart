@@ -159,8 +159,9 @@ WebStart/
 │    │    │    │    ├─── JwtAuthServiceTest.php               # Testet die Service-Logik zum Extrahieren der User-ID aus Tokens
 │    │    │    │    └─── JwtHandlerNewTest.php                # Testet Low-Level JWT-Erzeugung, Validierung und Payload-Verarbeitung
 │    │    │    ├─── http/                                     # Tests fuer Infrastruktur-Utilities rund um HTTP-Requests (Header-Auswertung etc.)
-│    │    │    │    ├─── RequestHelperTest.php                # Testet die Extraktion von Bearer-Tokens aus Headern ($_SERVER, apache_request_headers)
-│    │    │    │    └─── DefaultInputProviderTest.php         # Testet das Einlesen und Caching von JSON-Request-Bodies via DefaultInputProvider (DI-fähiger Ersatz für InputHelper)
+│    │    │    │    ├─── RequestHelperTest.php                # (veraltet) Testet die Extraktion von Bearer-Tokens aus Headern ($_SERVER, apache_request_headers), wird durch RequestTokenReaderTest ersetzt (löschen nach Refactor)
+│    │    │    │    ├─── DefaultInputProviderTest.php         # Testet das Einlesen und Caching von JSON-Request-Bodies via DefaultInputProvider (DI-fähiger Ersatz für InputHelper)
+│    │    │    │    └─── RequestTokenReaderTest.php           # Testet die DI-basierte Extraktion von Bearer-Tokens aus HTTP-Headern
 │    │    │    │
 │    │    │    ├─── middleware/                               # Tests fuer zentrale Zwischenlogik (z.B. Auth, Validierung)
 │    │    │    │    └─── ValidationMiddlewareTest.php         # Testet Pflichtfeldpruefung im JSON-Body via ValidationMiddleware
