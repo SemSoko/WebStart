@@ -39,7 +39,7 @@
 			// Leeren, um Fallback zu erzwingen
 			$_SERVER = [];
 			
-			$reader = new class RequestTokenReader{
+			$reader = new class extends RequestTokenReader{
 				protected function getApacheRequestHeaders(): array{
 					return ['Authorization' => 'Bearer apache789'];
 				}
@@ -52,7 +52,7 @@
 		public function testReturnsNullWhenNoTokenFound(): void{
 			$_SERVER = [];
 			
-			$reader = new class RequestTokenReader{
+			$reader = new class extends RequestTokenReader{
 				protected function getApacheRequestHeaders(): array{
 					return [];
 				}
