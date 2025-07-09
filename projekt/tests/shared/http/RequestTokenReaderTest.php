@@ -48,5 +48,18 @@
 			$token = $reader->getBearerToken();
 			$this->assertSame('apache789', $token);
 		}
+		
+		public function testReturnsNullWhenNoTokenFound(): void{
+			$_SERVER = [];
+			
+			$reader = new class RequestTokenReader{
+				protected function getApacheRequestHeaders(): array{
+					return [];
+				}
+			};
+			
+			$token = $reader->getBearerToken();
+			$this->assertNull($token);
+		}
 	}
 	
