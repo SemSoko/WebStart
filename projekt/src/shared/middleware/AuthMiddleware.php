@@ -3,11 +3,11 @@
 
 	require_once __DIR__ . '/../response/ResponseHandlerInterface.php';
 	require_once __DIR__ . '/../auth/AuthServiceInterface.php';
-	require_once __DIR__ . '/../http/TokenProviderInterface.php';
+	require_once __DIR__ . '/../http/RequestTokenReaderInterface.php';
 	
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Auth\AuthServiceInterface;
-	use Shared\Http\TokenProviderInterface;
+	use Shared\Http\RequestTokenReaderInterface;
 	
 	/**
 	 * Middleware zur Authentifizierung geschuetzter Endpunkt.
