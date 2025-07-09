@@ -88,4 +88,23 @@
 			$result = $middleware->handle();
 			$this->assertSame(42, $result);
 		}
+		
+		public function testTokenReaderIsCalledDuringHandle(): void{
+			$this->tokenReader
+				->expects($this->once())
+				->method('getBearerToken')
+				->willReturn('test-token');
+			
+			$this->authService
+				->method('getUserId')
+				->willReturn(42);
+			
+			$middleware = new AuthMiddleware(
+				$this->authService,
+				new TestableJsonResponseHandler(),
+				$this->tokenReader
+			);
+			
+			$middleware->handle();
+		}
 	}
