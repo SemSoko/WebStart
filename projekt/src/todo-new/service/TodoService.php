@@ -3,6 +3,8 @@
 
 	require_once __DIR__ . '/../repository/TodoRepository.php';
 	
+	use todoNew\Repository\TodoRepository;
+	
 	/**
 	 * Service-Schicht fuer Todo-Funktionalitaet.
 	 *

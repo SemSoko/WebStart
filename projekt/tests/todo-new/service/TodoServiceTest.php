@@ -3,6 +3,9 @@
 	require_once __DIR__ . '/../../../src/todo-new/repository/TodoRepository.php';
 	require_once __DIR__ . '/../../../src/todo-new/service/TodoService.php';
 	
+	use todoNew\Service\TodoService;
+	use todoNew\Repository\TodoRepository;
+	
 	class TodoServiceTest extends DatabaseTestCase{
 		
 		protected function createSchema(): void{
@@ -67,17 +70,17 @@
 		}
 		
 		public function testAddTodoReturnsServiceErrorOnException(): void{
-			$mockRepo = $this->createMock(TodoRepository::class);
-			$mockRepo->method('insertTodo')->willThrowException(new PDOException('Integrity constraint violation: FOREIGN KEY constraint failed'));
+			$repository = new TodoRepository($this->pdo);
+			$service = new TodoService($repository);
 			
-			$service = new TodoService($mockRepo);
+			$userId = 999;
+			$title = 'Ungueltiges Todo';
 			
-			$userId = 1;
-			$title = 'Einkaufen';
 			$result = $service->addTodo($title, $userId);
 			
 			$this->assertFalse($result['success']);
-			$this->assertSame('service', $result['source']);
-			$this->assertStringContainsString('FOREIGN KEY constraint failed', $result['error']);
+			$this->assertSame('repository', $result['source']);
+			$this->assertArrayHasKey('debug', $result);
+			$this->assertStringContainsString('FOREIGN KEY', $result['debug']['exception']);
 		}
 	}
