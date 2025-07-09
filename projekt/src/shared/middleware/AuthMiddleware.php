@@ -1,9 +1,9 @@
 <?php
+	namespace Shared\Middleware;
+
 	require_once __DIR__ . '/../response/ResponseHandlerInterface.php';
 	require_once __DIR__ . '/../auth/AuthServiceInterface.php';
 	require_once __DIR__ . '/../http/TokenProviderInterface.php';
-
-	namespace Shared\Middleware;
 	
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Auth\AuthServiceInterface;
