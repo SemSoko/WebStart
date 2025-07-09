@@ -61,4 +61,29 @@
 			
 			$controller->add();
 		}
+		
+		public function testAddReturnsErrorResponseOnMissingTitle(): void{
+			$mockAuth = $this->createMock(AuthMiddlewareInterface::class);
+			$mockAuth->method('handle')->willReturn(1);
+			
+			$mockValidation = $this->createMock(ValidationMiddlewareInterface::class);
+			$mockValidation->method('requireField')->willThrowException(new InvalidArgumentException('title fehlt'));
+			
+			$mockService = $this->createMock(TodoService::class);
+			$mockService->expects($this->never())->method('addTodo');
+			
+			$mockResponse = $this->createMock(ResponseHandlerInterface::class);
+			$mockResponse->expects($this->once())
+				->method('error')
+				->with('title fehlt', 400);
+			
+			$controller = new TodoController(
+				$mockAuth,
+				$mockService,
+				$mockValidation,
+				$mockResponse
+			);
+			
+			$controller->add();
+		}
 	}
