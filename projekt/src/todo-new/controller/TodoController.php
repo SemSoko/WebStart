@@ -10,6 +10,7 @@
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Middleware\ValidationMiddlewareInterface;
 	use Shared\Middleware\AuthMiddlewareInterface;
+	use todoNew\Service\TodoService;
 
 	/**
 	 * Controller fuer Todo-Endpunkte.
