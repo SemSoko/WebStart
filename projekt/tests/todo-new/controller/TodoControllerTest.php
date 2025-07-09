@@ -119,4 +119,37 @@
 			
 			$controller->add();
 		}
+		
+		public function testAddReturnsDebugResponseOnRepositoryError(): void{
+			$mockAuth = $this->createMock(AuthMiddlewareInterface::class);
+			$mockAuth->method('handle')->willReturn(1);
+			
+			$mockValidation = $this->createMock(ValidationMiddlewareInterface::class);
+			$mockValidation->method('requireField')->willReturn('Test-Todo');
+			
+			$mockService = $this->createMock(TodoService::class);
+			$mockService->method('addTodo')->willReturn([
+				'success' => false,
+				'error' => 'Insert failed',
+				'source' => 'repository'
+			]);
+			
+			$mockResponse = $this->createMock(ResponseHandlerInterface::class);
+			$mockResponse->expects($this->once())
+				->method('debug')
+				->with('Repository-Fehler', [
+					'success' => false,
+					'error' => 'Insert failed',
+					'source' => 'repository'
+				]);
+			
+			$controller = new TodoController(
+				$mockAuth,
+				$mockService,
+				$mockValidation,
+				$mockResponse
+			);
+			
+			$controller->add();
+		}
 	}
