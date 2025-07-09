@@ -9,7 +9,7 @@
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Auth\AuthServiceInterface;
 	use Shared\Http\RequestTokenReaderInterface;
-	use Shared\Middleware\AuthMiddlewareInterface.php
+	use Shared\Middleware\AuthMiddlewareInterface;
 	
 	/**
 	 * Middleware zur Authentifizierung geschuetzter Endpunkt.
