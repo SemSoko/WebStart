@@ -4,6 +4,7 @@
 	require_once __DIR__ . '/../http/InputProviderInterface.php';
 	require_once __DIR__ . '/../response/ResponseHandlerInterface.php';
 	require_once __DIR__ . '/../validation/FieldValidatorInterface.php';
+	require_once __DIR__ . '/ValidationMiddlewareInterface.php';
 	
 	// Abhaengigkeiten
 	use Shared\Http\InputProviderInterface;
@@ -21,7 +22,7 @@
 	 * Prueft z. B., ob erforderliche Felder wie 'title' im Body gesetzt
 	 * sind.
 	 */
-	class ValidationMiddleware{
+	class ValidationMiddleware implements ValidationMiddlewareInterface{
 		/**
 		 * Die Validierungslogik wird nicht fest verdrahtet,
 		 * sondern ueber ein Interface abstrahiert -> Dependency Injection.
