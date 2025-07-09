@@ -34,5 +34,19 @@
 			// Cleanup
 			unset($_SERVER['HTTP_AUTHORIZATION']);
 		}
+		
+		public function testReturnsTokenFromApacheFallback(): void{
+			// Leeren, um Fallback zu erzwingen
+			$_SERVER = [];
+			
+			$reader = new class RequestTokenReader{
+				protected function getApacheRequestHeaders(): array{
+					return ['Authorization' => 'Bearer apache789'];
+				}
+			};
+			
+			$token = $reader->getBearerToken();
+			$this->assertSame('apache789', $token);
+		}
 	}
 	
