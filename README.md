@@ -127,7 +127,9 @@ WebStart/
 │    │    │    │    ├─── DefaultInputProvider.php             # Konkrete, testbare Implementierung des InputProviderInterface (verwendet intern InputHelper)
 │    │    │    │    ├─── InputHelper.php                      # Legacy: Statische Klasse für einmaliges Einlesen & Caching des JSON-Request-Bodys (Wird ersetzt durch: InputProviderInterface, entsprechend spaeter aus dem Projekt loeschen)
 │    │    │    │    ├─── InputProviderInterface.php           # Abstrakte Schnittstelle für lesbaren JSON-Input (z. B. aus php://input)
-│    │    │    │    └─── RequestHelper.php                    # Liest HTTP-Header (z. B. Authorization) aus $_SERVER, rein statisch & unabhängig
+│    │    │    │    ├─── RequestHelper.php                    # Legacy: Statische Klasse für das Extrahieren von Tokens aus HTTP-Headern (wird durch RequestTokenReader ersetzt, löschen nach Refactor)
+│    │    │    │    ├─── RequestTokenReader.php               # DI-faehiger, testbarer Service zur Extraktion von Bearer-Token aus HTTP-Headern
+│    │    │    │    └─── RequestTokenReaderInterface .php     # Schnittstelle fuer Services, die Bearer-Tokens aus Headern lesen
 │    │    │    ├─── validation/                               # Zentrale Validierungsstelle
 │    │    │    │    ├─── FieldValidatorInterface.php          # Zentrale Schnittstelle für die Validierung von JSON-Eingaben (z. B. Pflichtfelder, Werteprüfung)
 │    │    │    │    ├─── JsonFieldValidator.php               # Validiert JSON-Eingaben anhand definierter Regeln
