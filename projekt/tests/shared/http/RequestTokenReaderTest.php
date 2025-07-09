@@ -22,5 +22,17 @@
 			
 			$this->assertNull($token);
 		}
+		
+		public function testReturnsTokenFromServerGlobal(): void{
+			$_SERVER['HTTP_AUTHORIZATION'] = 'Bearer server456';
+			
+			$reader = new RequestTokenReader();
+			$token = $reader->getBearerToken();
+			
+			$this->assertSame('server456', $token);
+			
+			// Cleanup
+			unset($_SERVER['HTTP_AUTHORIZATION']);
+		}
 	}
 	
