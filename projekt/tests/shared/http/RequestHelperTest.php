@@ -6,10 +6,6 @@
 	use Tests\Base\UnitTestCase;
 	
 	class RequestHelperTest extends UnitTestCase{
-		public function setUp(): void{
-			parent::setUp();
-		}
-		
 		public function testReturnsTokenWhenHeaderPassedDirectly(): void{
 			$token = RequestHelper::getBearerToken('Bearer abc123');
 			
