@@ -110,8 +110,11 @@ WebStart/
 │    │    ├─── todo-new/                                      # Modulares Backend-Modul
 │    │    │    ├─── router.php                                # Leitet HTTP-Anfragen an Controller
 │    │    │    ├─── controller/                               # Verantwortlich fuer Anfragen und Antworten
+│    │    │    │    └─── TodoController.php                   # Steuert die Verarbeitung eingehender HTTP-Anfragen für Todos
 │    │    │    ├─── service/                                  # Enthaelt Geschaeftslogik
 │    │    │    └─── repository/                               # Datenzugriff, fachlich gebunden
+│    │    │         ├─── TodoRepository.php                   # Konkrete Datenzugriffslogik für Todos (PDO-Insert)
+│    │    │         └─── TodoRepositoryInterface.php          # Vertrag für TodoRepository (für Austauschbarkeit & Tests)
 │    │    │
 │    │    ├─── shared/                                        # Technische, modulunabhaengige Hilfen
 │    │    │    ├─── response/                                 # Einheitliche API-Antwortstruktur(en)
