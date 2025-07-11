@@ -69,21 +69,20 @@
 		
 		public function testErrorDefaultsToStatusCode400(): void{
 			$handler = new class extends TestableJsonResponseHandler{
-				public function runError(): void{
+				public function runError(string $message): void{
 					parent::error('Bad input');
 				}
 			};
 			
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked error: Bad input (400)');
+			
 			ob_start();
-			$handler->runError();
-			$output = ob_get_clean();
-			
-			$json = json_decode($output, true);
-			
-			$this->assertSame(400, http_response_code());
-			$this->assertFalse($json['success']);
-			$this->assertSame('Bad input', $json['message']);
-			$this->assertTrue($handler->hasExited());
+			try{
+				$handler->runError('Bad input');
+			}finally{
+				ob_get_clean();
+			}
 		}
 		
 		public function testDebugOutputsExpectedJsonWithDetailsAndExits(): void{
