@@ -2,7 +2,7 @@
 	namespace todoNew\Service;
 
 	require_once __DIR__ . '/../repository/TodoRepositoryInterface.php';
-	require_once __DIR__ . '/TodoServiceRepository.php';
+	require_once __DIR__ . '/../repository/TodoServiceRepository.php';
 	
 	use TodoNew\Repository\TodoRepositoryInterface;
 	use TodoNew\Service\TodoServiceRepository;
