@@ -112,6 +112,8 @@ WebStart/
 │    │    │    ├─── controller/                               # Verantwortlich fuer Anfragen und Antworten
 │    │    │    │    └─── TodoController.php                   # Steuert die Verarbeitung eingehender HTTP-Anfragen für Todos
 │    │    │    ├─── service/                                  # Enthaelt Geschaeftslogik
+│    │    │    │    ├─── TodoService.php                      # Implementierung der Todo-Geschäftslogik (nutzt Repository)
+│    │    │    │    └─── TodoServiceInterface.php             # Schnittstelle für Service-Logik rund um Todos
 │    │    │    └─── repository/                               # Datenzugriff, fachlich gebunden
 │    │    │         ├─── TodoRepository.php                   # Konkrete Datenzugriffslogik für Todos (PDO-Insert)
 │    │    │         └─── TodoRepositoryInterface.php          # Vertrag für TodoRepository (für Austauschbarkeit & Tests)
