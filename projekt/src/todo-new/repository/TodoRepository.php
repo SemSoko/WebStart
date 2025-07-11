@@ -2,6 +2,9 @@
 	namespace todoNew\Repository;
 
 	require_once __DIR__ . '/../../../bootstrap/init.php';
+	require_once __DIR__ . '/TodoRepositoryInterface.php';
+	
+	use TodoNew\Repository\TodoRepositoryInterface;
 	
 	/**
 	 * Fuegt ein neues Todo fuer den angegebenen Benutzer hinzu.
@@ -36,7 +39,7 @@
 	 * @param string $title Titel des Todos
 	 * @return bool|array true bei Erfolg, sonst strukturierter Fehler
 	 */
-	class TodoRepository{
+	class TodoRepository implements TodoRepositoryInterface{
 		protected \PDO $pdo;
 		
 		/**
