@@ -1,4 +1,6 @@
 <?php
+	namespace Tests\Base;
+
 	use PHPUnit\Framework\TestCase;
 	
 	abstract class IntegrationTestCase extends TestCase{
@@ -21,12 +23,16 @@
 		protected function setUp(): void{
 			parent::setUp();
 			
-			$this->pdo = new PDO("sqlite::memory:");
-			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$this->pdo->exec('PRAGMA foreign_keys = ON;');
+			try{
+				$this->pdo = new PDO("sqlite::memory:");
+				$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$this->pdo->exec('PRAGMA foreign_keys = ON;');
 			
-			$this->createSchema();
-			$this->seedTestData();
+				$this->createSchema();
+				$this->seedTestData();
+			}catch(\PDOException $e){
+				$this->fail('DB-Verbindung fehlgeschlagen: ', $e->getMessage());
+			}
 		}
 		
 		/*
