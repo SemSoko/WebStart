@@ -6,9 +6,6 @@
 	use Tests\Base\UnitTestCase;
 	
 	class DefaultInputProviderTest extends UnitTestCase{
-		public function setUp(): void{
-			parent::setUp();
-		}
 		
 		public function testGetJsonBodyReturnsParsedArray(): void{
 			$provider = new class extends DefaultInputProvider{
