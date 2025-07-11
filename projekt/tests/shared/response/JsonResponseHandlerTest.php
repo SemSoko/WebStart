@@ -6,11 +6,7 @@
 	use Shared\Response\JsonResponseHandler;
 	use Tests\Base\UnitTestCase;
 	
-	class JsonResponseHandlerTest extends UnitTestCase{
-		public function setUp(): void{
-			parent::setUp();
-		}
-		
+	class JsonResponseHandlerTest extends UnitTestCase{		
 		public function testSuccessOutputsExpectedJsonAndExits(): void{
 			$handler = new class extends TestableJsonResponseHandler{				
 				public function runSuccess(array $data, int $code): void{
