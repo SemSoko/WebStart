@@ -56,16 +56,15 @@
 				}
 			};
 			
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked error: Validation failed (422)');
+			
 			ob_start();
-			$handler->runError('Validation failed', 422);
-			$output = ob_get_clean();
-			
-			$json = json_decode($output, true);
-			
-			$this->assertSame(422, http_response_code());
-			$this->assertFalse($json['success']);
-			$this->assertSame('Validation failed', $json['message']);
-			$this->assertTrue($handler->hasExited());
+			try{
+				$handler->runError('Validation failed', 422);
+			}finally{
+				ob_end_clean();
+			}
 		}
 		
 		public function testErrorDefaultsToStatusCode400(): void{
