@@ -3,6 +3,7 @@
 	require_once __DIR__ . '/../../../src/todo-new/repository/TodoRepository.php';
 	
 	use todoNew\Repository\TodoRepository;
+	use Tests\Base\IntegrationTestCase;
 	
 	class TodoRepositoryTest extends IntegrationTestCase{
 		

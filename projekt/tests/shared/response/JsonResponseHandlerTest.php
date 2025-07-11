@@ -1,11 +1,12 @@
 <?php
-	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
+	require_once __DIR__ . '/../../base/UnitTestCase.php';
 	require_once __DIR__ . '/../../../src/shared/response/JsonResponseHandler.php';
 	require_once __DIR__ . '/TestableJsonResponseHandler.php';
 	
 	use Shared\Response\JsonResponseHandler;
+	use Tests\Base\UnitTestCase;
 	
-	class JsonResponseHandlerTest extends IntegrationTestCase{
+	class JsonResponseHandlerTest extends UnitTestCase{
 		public function setUp(): void{
 			parent::setUp();
 		}

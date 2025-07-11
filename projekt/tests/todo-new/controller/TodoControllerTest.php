@@ -11,6 +11,7 @@
 	use Shared\Response\ResponseHandlerInterface;
 	use todoNew\Controller\TodoController;
 	use todoNew\Service\TodoService;
+	use Tests\Base\IntegrationTestCase;
 	
 	class TodoControllerTest extends IntegrationTestCase{
 		

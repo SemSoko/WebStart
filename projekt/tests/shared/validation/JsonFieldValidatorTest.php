@@ -1,10 +1,11 @@
 <?php
-	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
+	require_once __DIR__ . '/../../base/UnitTestCase.php';
 	require_once __DIR__ . '/../../../src/shared/validation/JsonFieldValidator.php';
 	
 	use Shared\Validation\JsonFieldValidator;
+	use Tests\Base\UnitTestCase;
 	
-	class JsonFieldValidatorTest extends IntegrationTestCase{
+	class JsonFieldValidatorTest extends UnitTestCase{
 		public function setUp(): void{
 			parent::setUp();
 		}
