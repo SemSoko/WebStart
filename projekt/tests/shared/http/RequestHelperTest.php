@@ -1,10 +1,10 @@
 <?php
-	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
 	require_once __DIR__ . '/../../../src/shared/http/RequestHelper.php';
 	
 	use Shared\Http\RequestHelper;
 	
-	class RequestHelperTest extends DatabaseTestCase{
+	class RequestHelperTest extends IntegrationTestCase{
 		public function setUp(): void{
 			parent::setUp();
 		}

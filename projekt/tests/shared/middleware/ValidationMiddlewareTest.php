@@ -1,5 +1,5 @@
 <?php
-	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
 	require_once __DIR__ . '/../../../src/shared/middleware/ValidationMiddleware.php';
 	require_once __DIR__ . '/../../../src/shared/validation/FieldValidatorInterface.php';
 	require_once __DIR__ . '/../../../src/shared/http/InputProviderInterface.php';
@@ -12,7 +12,7 @@
 	use Shared\Response\ResponseHandlerInterface;
 	use Tests\Shared\Response\TestableJsonResponseHandler;
 	
-	class ValidationMiddlewareTest extends DatabaseTestCase{
+	class ValidationMiddlewareTest extends IntegrationTestCase{
 		private MockObject $validator;
 		private MockObject $response;
 		private MockObject $input;

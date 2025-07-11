@@ -1,10 +1,10 @@
 <?php
-	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
 	require_once __DIR__ . '/../../../src/shared/auth/JwtHandler-new.php';
 	
 	use Shared\Auth\JwtHandlerNew;
 	
-	class JwtHandlerNewTest extends DatabaseTestCase{
+	class JwtHandlerNewTest extends IntegrationTestCase{
 		private JwtHandlerNew $jwt;
 		
 		protected function setUp(): void{

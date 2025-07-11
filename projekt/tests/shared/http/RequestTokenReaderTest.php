@@ -1,10 +1,10 @@
 <?php
-	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
 	require_once __DIR__ . '/../../../src/shared/http/RequestTokenReader.php';
 	
 	use Shared\Http\RequestTokenReader;
 	
-	class RequestTokenReaderTest extends DatabaseTestCase{
+	class RequestTokenReaderTest extends IntegrationTestCase{
 		public function setUp(): void{
 			parent::setUp();
 		}

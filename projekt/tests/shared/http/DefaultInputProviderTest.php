@@ -1,10 +1,10 @@
 <?php
-	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
 	require_once __DIR__ . '/../../../src/shared/http/DefaultInputProvider.php';
 	
 	use Shared\Http\DefaultInputProvider;
 	
-	class DefaultInputProviderTest extends DatabaseTestCase{
+	class DefaultInputProviderTest extends IntegrationTestCase{
 		public function setUp(): void{
 			parent::setUp();
 		}

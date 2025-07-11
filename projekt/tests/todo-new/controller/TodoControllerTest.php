@@ -1,5 +1,5 @@
 <?php
-	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
 	require_once __DIR__ . '/../../../src/todo-new/controller/TodoController.php';
 	
 	require_once __DIR__ . '/../../../src/shared/middleware/AuthMiddlewareInterface.php';
@@ -12,7 +12,7 @@
 	use todoNew\Controller\TodoController;
 	use todoNew\Service\TodoService;
 	
-	class TodoControllerTest extends DatabaseTestCase{
+	class TodoControllerTest extends IntegrationTestCase{
 		
 		protected function createSchema(): void{
 			$this->pdo->exec("

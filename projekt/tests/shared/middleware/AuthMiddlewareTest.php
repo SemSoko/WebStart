@@ -1,5 +1,5 @@
 <?php
-	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
 	require_once __DIR__ . '/../../../src/shared/middleware/AuthMiddleware.php';
 	require_once __DIR__ . '/../../../src/shared/auth/AuthServiceInterface.php';
 	require_once __DIR__ . '/../../../src/shared/http/RequestTokenReaderInterface.php';
@@ -12,7 +12,7 @@
 	use Shared\Response\ResponseHandlerInterface;
 	use Tests\Shared\Response\TestableJsonResponseHandler;
 	
-	class AuthMiddlewareTest extends DatabaseTestCase{
+	class AuthMiddlewareTest extends IntegrationTestCase{
 		private MockObject $authService;
 		private MockObject $tokenReader;
 		private MockObject $response;
