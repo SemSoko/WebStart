@@ -3,7 +3,7 @@
 	require_once __DIR__ . '/../../../src/shared/response/JsonResponseHandler.php';
 	require_once __DIR__ . '/TestableJsonResponseHandler.php';
 	
-	use Shared\Response\JsonResponseHandler;
+	use Tests\Shared\Response\TestableJsonResponseHandler;
 	use Tests\Base\UnitTestCase;
 	
 	class JsonResponseHandlerTest extends UnitTestCase{		
