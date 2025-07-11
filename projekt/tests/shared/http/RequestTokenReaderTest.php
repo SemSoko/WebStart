@@ -5,11 +5,7 @@
 	use Shared\Http\RequestTokenReader;
 	use Tests\Base\UnitTestCase;
 	
-	class RequestTokenReaderTest extends UnitTestCase{
-		public function setUp(): void{
-			parent::setUp();
-		}
-		
+	class RequestTokenReaderTest extends UnitTestCase{		
 		public function testReturnsTokenFromDirectHeader(): void{
 			$reader = new RequestTokenReader();
 			$token = $reader->getBearerToken('Bearer abc123');
