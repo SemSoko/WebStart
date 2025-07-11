@@ -1,7 +1,7 @@
 <?php
 	use PHPUnit\Framework\TestCase;
 	
-	abstract class DatabaseTestCase extends TestCase{
+	abstract class IntegrationTestCase extends TestCase{
 		protected ?PDO $pdo = null;
 		
 		/*
