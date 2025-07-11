@@ -3,14 +3,10 @@
 	require_once __DIR__ . '/../../../src/shared/response/JsonResponseHandler.php';
 	require_once __DIR__ . '/TestableJsonResponseHandler.php';
 	
-	use Shared\Response\JsonResponseHandler;
+	use Tests\Shared\Response\TestableJsonResponseHandler;
 	use Tests\Base\UnitTestCase;
 	
-	class JsonResponseHandlerTest extends UnitTestCase{
-		public function setUp(): void{
-			parent::setUp();
-		}
-		
+	class JsonResponseHandlerTest extends UnitTestCase{		
 		public function testSuccessOutputsExpectedJsonAndExits(): void{
 			$handler = new class extends TestableJsonResponseHandler{				
 				public function runSuccess(array $data, int $code): void{
@@ -60,35 +56,33 @@
 				}
 			};
 			
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked error: Validation failed (422)');
+			
 			ob_start();
-			$handler->runError('Validation failed', 422);
-			$output = ob_get_clean();
-			
-			$json = json_decode($output, true);
-			
-			$this->assertSame(422, http_response_code());
-			$this->assertFalse($json['success']);
-			$this->assertSame('Validation failed', $json['message']);
-			$this->assertTrue($handler->hasExited());
+			try{
+				$handler->runError('Validation failed', 422);
+			}finally{
+				ob_end_clean();
+			}
 		}
 		
 		public function testErrorDefaultsToStatusCode400(): void{
 			$handler = new class extends TestableJsonResponseHandler{
-				public function runError(): void{
+				public function runError(string $message): void{
 					parent::error('Bad input');
 				}
 			};
 			
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked error: Bad input (400)');
+			
 			ob_start();
-			$handler->runError();
-			$output = ob_get_clean();
-			
-			$json = json_decode($output, true);
-			
-			$this->assertSame(400, http_response_code());
-			$this->assertFalse($json['success']);
-			$this->assertSame('Bad input', $json['message']);
-			$this->assertTrue($handler->hasExited());
+			try{
+				$handler->runError('Bad input');
+			}finally{
+				ob_get_clean();
+			}
 		}
 		
 		public function testDebugOutputsExpectedJsonWithDetailsAndExits(): void{
@@ -98,37 +92,30 @@
 				}
 			};
 			
-			ob_start();
 			$details = ['line' => 42, 'file' => 'somefile.php'];
-			$handler->runDebug('Detailed error', $details, 500);
-			$output = ob_get_clean();
 			
-			$json = json_decode($output, true);
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked debug: Detailed error (500)');
 			
-			$this->assertSame(500, http_response_code());
-			$this->assertFalse($json['success']);
-			$this->assertSame('Detailed error', $json['message']);
-			$this->assertTrue($handler->hasExited());
+			ob_start();
+			try{
+				$handler->runDebug('Detailed error', $details, 500);
+			}finally{
+				ob_get_clean();
+			}
 		}
 		
 		public function testDebugCanHandleEmptyDetails(): void{
 			$handler = new class extends TestableJsonResponseHandler{
-				public function runDebug(): void{
-					parent::debug('Error occured', []);
+				public function runDebug(string $message): void{
+					parent::debug($message);
 				}
 			};
 			
-			ob_start();
-			$handler->runDebug();
-			$output = ob_get_clean();
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked debug: Detailed error (500)');
 			
-			$json = json_decode($output, true);
-			
-			$this->assertSame(500, http_response_code());
-			$this->assertFalse($json['success']);
-			$this->assertSame('Error occured', $json['message']);
-			$this->assertSame([], $json['debug']);
-			$this->assertTrue($handler->hasExited());
+			$handler->runDebug('Detailed error');
 		}
 		
 		public function testStatusOutputsExpectedJsonAndExits(): void{

@@ -5,11 +5,7 @@
 	use Shared\Validation\JsonFieldValidator;
 	use Tests\Base\UnitTestCase;
 	
-	class JsonFieldValidatorTest extends UnitTestCase{
-		public function setUp(): void{
-			parent::setUp();
-		}
-		
+	class JsonFieldValidatorTest extends UnitTestCase{		
 		// === Tests für hasRequiredField() ======================================
 		
 		public function testHasRequiredFieldReturnsTrueFieldIsSetAndNotEmpty(): void{
@@ -114,7 +110,7 @@
 			$this->assertSame('', $result);
 		}
 		
-		public function test(): void{
+		public function testGetValueReturnsEmptyStringWhenFieldHasOnlySpaces(): void{
 			$validator = new JsonFieldValidator();
 			$input = ['title' => '     '];
 			
