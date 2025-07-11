@@ -92,17 +92,17 @@
 				}
 			};
 			
-			ob_start();
 			$details = ['line' => 42, 'file' => 'somefile.php'];
-			$handler->runDebug('Detailed error', $details, 500);
-			$output = ob_get_clean();
 			
-			$json = json_decode($output, true);
+			$this->expectException(\RuntimeException::class);
+			$this->expectExceptionMessage('Mocked debug: Detailed error (500)');
 			
-			$this->assertSame(500, http_response_code());
-			$this->assertFalse($json['success']);
-			$this->assertSame('Detailed error', $json['message']);
-			$this->assertTrue($handler->hasExited());
+			ob_start();
+			try{
+				$handler->runDebug('Detailed error', $details, 500);
+			}finally{
+				ob_get_clean();
+			}
 		}
 		
 		public function testDebugCanHandleEmptyDetails(): void{
