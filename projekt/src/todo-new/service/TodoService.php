@@ -1,24 +1,26 @@
 <?php
 	namespace todoNew\Service;
 
-	require_once __DIR__ . '/../repository/TodoRepository.php';
+	require_once __DIR__ . '/../repository/TodoRepositoryInterface.php';
+	require_once __DIR__ . '/TodoServiceRepository.php';
 	
-	use todoNew\Repository\TodoRepository;
+	use TodoNew\Repository\TodoRepositoryInterface;
+	use TodoNew\Service\TodoServiceRepository;
 	
 	/**
 	 * Service-Schicht fuer Todo-Funktionalitaet.
 	 *
 	 * Kapselt die Geschaeftslogik rund um Todos.
 	 */
-	class TodoService{
-		protected TodoRepository $repository;
+	class TodoService implements TodoRepositoryInterface{
+		protected TodoRepositoryInterface $repository;
 		
 		/**
 		 * Initialisiert den Service mit einem Repository.
 		 *
 		 * @param TodoRepository $repository Instanz des Repositories
 		 */
-		public function __construct(TodoRepository $repository){
+		public function __construct(TodoRepositoryInterface $repository){
 			$this->repository = $repository;
 		}
 		
