@@ -159,7 +159,8 @@ WebStart/
 │    │
 │    ├─── tests/                                              # Unit-Tests (PHPUnit)
 │    │    ├─── base/                                          # Gemeinsame Testbasis und Wiederverwendbare Hilfsfunktionen fuer Tests
-│    │    │    └─── DatabaseTestCasePreparation.php           # Setup-Klasse fuer In-Memory-SQLite-Tests
+│    │    │    ├─── IntegrationTestCase.php                   # Für Tests mit echter Infrastruktur (z. B. DB)
+│    │    │    └─── UnitTestCase.php                          # Für isolierte Klassen-Tests mit Mocks
 │    │    │
 │    │    ├─── shared/                                        # Tests für technische, modulunabhängige Hilfsklassen (src/shared)
 │    │    │    ├─── auth/                                     # Tests für zentrale Authentifizierungslogik (src/shared/auth)
