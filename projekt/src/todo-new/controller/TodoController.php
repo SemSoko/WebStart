@@ -1,7 +1,7 @@
 <?php
 	namespace todoNew\Controller;
 
-	require_once __DIR__ . '/../service/TodoService.php';
+	require_once __DIR__ . '/../service/TodoServiceInterface.php';
 	require_once __DIR__ . '/../../shared/response/ResponseHandlerInterface.php';
 	
 	require_once __DIR__ . '/../../shared/middleware/AuthMiddlewareInterface.php';
@@ -10,7 +10,7 @@
 	use Shared\Response\ResponseHandlerInterface;
 	use Shared\Middleware\ValidationMiddlewareInterface;
 	use Shared\Middleware\AuthMiddlewareInterface;
-	use todoNew\Service\TodoService;
+	use TodoNew\Service\TodoServiceInterface;
 
 	/**
 	 * Controller fuer Todo-Endpunkte.
@@ -20,16 +20,17 @@
 	 */
 	class TodoController{
 		protected AuthMiddlewareInterface $auth;
-		protected TodoService $service;
+		protected TodoServiceInterface $service;
 		protected ValidationMiddlewareInterface $validation;
 		protected ResponseHandlerInterface $response;
 		
 		/**
 		 * Initialisiert den Controller mit einer Service-Instanz.
 		 *
-		 * @param TodoService $service Service-Schicht zur Verarbeitung
+		 * @param TodoServiceInterface $service Service-Interface
 		 */
-		public function __construct(AuthMiddlewareInterface $auth, TodoService $service,
+		public function __construct(AuthMiddlewareInterface $auth,
+									TodoServiceInterface $service,
 									ValidationMiddlewareInterface $validation,
 									ResponseHandlerInterface $response){
 			$this->auth = $auth;
