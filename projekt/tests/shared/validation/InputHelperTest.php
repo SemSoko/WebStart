@@ -1,13 +1,14 @@
 <?php
-	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../base/UnitTestCase.php';
 	require_once __DIR__ . '/../../../src/shared/validation/InputHelper.php';
 	
 	use Shared\Validation\InputHelper;
+	use Tests\Base\UnitTestCase;
 	
 	/**
 	 * @coversDefaultClass \Shared\Validation\InputHelper
 	 */
-	class InputHelperTest extends DatabaseTestCase{
+	class InputHelperTest extends UnitTestCase{
 		public function setUp(): void{
 			parent::setUp();
 		}

@@ -159,7 +159,8 @@ WebStart/
 │    │
 │    ├─── tests/                                              # Unit-Tests (PHPUnit)
 │    │    ├─── base/                                          # Gemeinsame Testbasis und Wiederverwendbare Hilfsfunktionen fuer Tests
-│    │    │    └─── DatabaseTestCasePreparation.php           # Setup-Klasse fuer In-Memory-SQLite-Tests
+│    │    │    ├─── IntegrationTestCase.php                   # Für Tests mit echter Infrastruktur (z. B. DB)
+│    │    │    └─── UnitTestCase.php                          # Für isolierte Klassen-Tests mit Mocks
 │    │    │
 │    │    ├─── shared/                                        # Tests für technische, modulunabhängige Hilfsklassen (src/shared)
 │    │    │    ├─── auth/                                     # Tests für zentrale Authentifizierungslogik (src/shared/auth)
@@ -183,8 +184,12 @@ WebStart/
 │    │    │         └─── JsonFieldValidator.php               # Testet Validierung und Extraktion einzelner Felder aus dem JSON-Body
 │    │    │
 │    │    ├─── todo-new/                                      # Modul: todo-new Tests
-│    │    │    └─── repository/
-│    │    │         └─── TodoRepositoryTest.php
+│    │    │    ├─── controller/                               # Testet Controller-Logik mit echten Services (Integration)
+│    │    │    │    └─── TodoControllerTest.php               # Prüft End-to-End-Abläufe (z. B. Auth + Service + Response)
+│    │    │    ├─── repository/                               # Testet Datenzugriffsschicht (Integration mit echter DB)
+│    │    │    │    └─── TodoRepositoryTest.php               # Prüft SQL-Operationen auf In-Memory-Datenbank
+│    │    │    └─── service/                                  # Testet Geschäftslogik (Unit mit gemocktem Repo)
+│    │    │         └─── TodoServiceTest.php                  # Prüft fachliche Logik unabhängig vom Speicher
 │    │    │
 │    │    ├─── auth/
 │    │    │    ├─── CreateUserTest.php

@@ -1,12 +1,13 @@
 <?php
-	require_once __DIR__ . '/../../base/DatabaseTestCasePreparation.php';
+	require_once __DIR__ . '/../../base/UnitTestCase.php';
 	require_once __DIR__ . '/../../../src/todo-new/repository/TodoRepository.php';
 	require_once __DIR__ . '/../../../src/todo-new/service/TodoService.php';
 	
 	use todoNew\Service\TodoService;
 	use todoNew\Repository\TodoRepository;
+	use Tests\Base\UnitTestCase;
 	
-	class TodoServiceTest extends DatabaseTestCase{
+	class TodoServiceTest extends UnitTestCase{
 		
 		protected function createSchema(): void{
 			$this->pdo->exec("
