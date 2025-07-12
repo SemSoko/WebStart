@@ -6,6 +6,7 @@
 	
 	use TodoNew\Repository\TodoRepositoryInterface;
 	use TodoNew\Service\TodoServiceInterface;
+	use Exception;
 	
 	/**
 	 * Service-Schicht fuer Todo-Funktionalitaet.
