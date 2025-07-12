@@ -1,5 +1,5 @@
 <?php
-	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
+	require_once __DIR__ . '/../../base/UnitTestCase.php';
 	require_once __DIR__ . '/../../../src/todo-new/controller/TodoController.php';
 	require_once __DIR__ . '/../../../src/todo-new/service/TodoService.php';
 	
@@ -12,9 +12,9 @@
 	use Shared\Response\ResponseHandlerInterface;
 	use todoNew\Controller\TodoController;
 	use todoNew\Service\TodoService;
-	use Tests\Base\IntegrationTestCase;
+	use Tests\Base\UnitTestCase;
 	
-	class TodoControllerTest extends IntegrationTestCase{		
+	class TodoControllerTest extends UnitTestCase{		
 		public function testAddCallsSuccessReponseOnValidInput(): void{
 			$mockAuth = $this->createMock(AuthMiddlewareInterface::class);
 			$mockAuth->method('handle')->willReturn(1);
