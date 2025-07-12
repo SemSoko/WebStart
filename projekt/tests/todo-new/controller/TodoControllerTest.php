@@ -13,35 +13,7 @@
 	use todoNew\Service\TodoService;
 	use Tests\Base\IntegrationTestCase;
 	
-	class TodoControllerTest extends IntegrationTestCase{
-		
-		protected function createSchema(): void{
-			$this->pdo->exec("
-				create table users(
-					id integer primary key autoincrement,
-					email varchar(255) unique not null,
-					password varchar(255) not null,
-					created_at timestamp default current_timestamp
-				);
-			");
-			
-			$this->pdo->exec("
-				CREATE TABLE todos(
-					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					user_id INT NOT NULL,
-					title VARCHAR(255) NOT NULL,
-					is_done BOOLEAN DEFAULT FALSE,
-					created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-					FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-				);
-			");
-		}
-		
-		protected function seedTestData(): void{
-			$stmt = $this->pdo->prepare("insert into users (email, password) values (?, ?)");
-			$stmt->execute(['test@test.de', password_hash('EinPasswort123-', PASSWORD_DEFAULT)]);
-		}
-		
+	class TodoControllerTest extends IntegrationTestCase{		
 		public function testAddCallsSuccessReponseOnValidInput(): void{
 			$mockAuth = $this->createMock(AuthMiddlewareInterface::class);
 			$mockAuth->method('handle')->willReturn(1);
