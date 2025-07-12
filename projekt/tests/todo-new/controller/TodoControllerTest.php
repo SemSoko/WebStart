@@ -1,6 +1,7 @@
 <?php
 	require_once __DIR__ . '/../../base/IntegrationTestCase.php';
 	require_once __DIR__ . '/../../../src/todo-new/controller/TodoController.php';
+	require_once __DIR__ . '/../../../src/todo-new/service/TodoService.php';
 	
 	require_once __DIR__ . '/../../../src/shared/middleware/AuthMiddlewareInterface.php';
 	require_once __DIR__ . '/../../../src/shared/middleware/ValidationMiddlewareInterface.php';
