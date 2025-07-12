@@ -9,8 +9,10 @@
 	
 	class TodoServiceTest extends UnitTestCase{
 		public function testAddTodoReturnsSuccessOnValidInput(): void{
-			$repository = new TodoRepository($this->pdo); // muss gemockt werden
-			$service = new TodoService($repository); // mit mock an interface uebergeben werden
+			$mockRepo = $this->createMock(TodoRepository::class);
+			$mockRepo->method('insertTodo')->willReturn(true);
+			
+			$service = new TodoService($mockRepo);
 			
 			$userId = 1;
 			$title = 'Einkaufen';
@@ -43,18 +45,18 @@
 		}
 		
 		public function testAddTodoReturnsServiceErrorOnException(): void{
-			// muss ebenfalls gemockt werden
-			$repository = new TodoRepository($this->pdo);
-			$service = new TodoService($repository);
+			$mockRepo = $this->createMock(TodoRepository::class);
+			$mockRepo->method('insertTodo')->willThrowException(new \Exception("Simulierter Fehler"));
 			
-			$userId = 999;
+			$service = new TodoService($mockRepo);
+			
 			$title = 'Ungueltiges Todo';
+			$userId = 999;
 			
 			$result = $service->addTodo($title, $userId);
 			
 			$this->assertFalse($result['success']);
-			$this->assertSame('repository', $result['source']);
-			$this->assertArrayHasKey('debug', $result);
-			$this->assertStringContainsString('FOREIGN KEY', $result['debug']['exception']);
+			$this->assertSame('service', $result['source']);
+			$this->assertSame('Simulierter Fehler', $result['error']);
 		}
 	}
