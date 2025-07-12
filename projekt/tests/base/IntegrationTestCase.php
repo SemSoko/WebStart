@@ -2,6 +2,7 @@
 	namespace Tests\Base;
 
 	use PHPUnit\Framework\TestCase;
+	use PDO;
 	
 	abstract class IntegrationTestCase extends TestCase{
 		protected ?PDO $pdo = null;
