@@ -23,6 +23,8 @@
 	require_once __DIR__ . '/../shared/response/JsonResponseHandler.php';
 	// Container einbinden
 	require_once __DIR__ . '/../shared/service-container/Container.php';
+	// ServiceIDs einbinden
+	require_once __DIR__ . '/../shared/service-container/ServiceIds.php';
 	
 	use todoNew\Repository\TodoRepository;
 	use todoNew\Service\TodoService;
@@ -34,8 +36,9 @@
 	use todoNew\Controller\TodoController;
 	use Shared\ServiceContainer\Container;
 	
-	class TodoModule{
+	use Shared\ServiceContainer\ServiceIds;
 	
+	class TodoModule{		
 		/*
 		 * Static ist ok weil:
 		 *	Du arbeitest mit:
@@ -65,27 +68,27 @@
 		public static function register(Container $container): void{
 			// ResponseHandler
 			// 0.
-			$container->register('response', fn() => new JsonResponseHandler());
+			$container->register(ServiceIds::RESPONSE, fn() => new JsonResponseHandler());
 			
 			// Database Connection
 			// 1. Datenbankverbindung (PDO)
 		    // - Wird benoetigt, um SQL-basierte Repositories zu initialisieren.
-			$container->register('pdo', fn() => Database::getConnection());
+			$container->register(ServiceIds::PDO, fn() => Database::getConnection());
 			
 			// Repository
 			// 2. Repository-Schicht
 		    // - Verwaltet den Zugriff auf die persistierten Todos (CRUD).
 		    // - Erwartet ein PDO-Objekt fuer DB-Zugriffe.
-			$container->register('todo-repo', fn(Container $c) =>
-				new TodoRepository($c->get('pdo'))
+			$container->register(ServiceIds::TODO_REPO, fn(Container $c) =>
+				new TodoRepository($c->get(ServiceIds::PDO))
 			);
 			
 			// Service
 			// 3. Service-Schicht (Business-Logik)
 		    // Kapselt fachliche Regeln (z.B. keine leeren Titel).
 		    // Arbeitet mit dem Repository zur Datenhaltung.
-			$container->register('todo-service', fn(Container $c) =>
-				new TodoService($c->get('todo-repo'));
+			$container->register(ServiceIds::TODO_SERVICE, fn(Container $c) =>
+				new TodoService($c->get(ServiceIds::TODO_REPO))
 			);
 			
 			
@@ -93,35 +96,35 @@
 			// 4. Authentifizierungs-Service (Low-Level)
 		    // - Implementiert AuthServiceInterface.
 		    // - Stellt Methoden zur Token-Verarbeitung (z.B. JWT-Validierung) bereit.
-			$container->register('jwt', fn() => new JwtHandlerNew());
+			$container->register(ServiceIds::AUTH_SERVICE, fn() => new JwtHandlerNew());
 			
 			// Middleware
 		    // 5. AuthMiddleware (High-Level)
 		    // - Schutz von Routen durch Pruefung eines gueltigen Tokens.
 		    // - Erwartet einen AuthService + ResponseHandler
-			$container->register('auth-middleware', fn(Container $c) =>
-				new AuthMiddleware($c->get('auth-service'), $c->get('response'))
+			$container->register(ServiceIds::AUTH_MIDDLEWARE, fn(Container $c) =>
+				new AuthMiddleware($c->get(ServiceIds::AUTH_SERVICE), $c->get(ServiceIds::RESPONSE))
 			);
 			
 			// DefaultInputProvider
 			// 6.
-			$container->register('input', fn() => new DefaultInputProvider());
+			$container->register(ServiceIds::INPUT, fn() => new DefaultInputProvider());
 			
 			// FieldValidator
 		    // 7. Eingabevalidierung (Low-Level)
 		    // - Prueft JSON-Felder auf Vorhandensein und Gueltigkeit.
 		    // - Implementiert FieldValidatorInteface.
-			$container->register('validator', fn() => JsonFieldValidator());
+			$container->register(ServiceIds::VALIDATOR, fn() => JsonFieldValidator());
 			
 			// ValidationMiddleware
 		    // 8. ValidationMiddleware (High-Level)
 		    // - Fuehrt Pflichtfeldpruefungen aus.
 		    // - Verwendet FieldValidatorInterface + ResponseHandler zur Ausgabe
 		    //   von Fehler.
-			$container->register('validation-middleware', fn(Container $c) =>
-				new ValidationMiddleware($c->get('validator'),
-										$c->get('response'),
-										$c->get('input'))
+			$container->register(ServiceIds::VALIDATION_MIDDLEWARE, fn(Container $c) =>
+				new ValidationMiddleware($c->get(ServiceIds::VALIDATOR),
+										$c->get(ServiceIds::RESPONSE),
+										$c->get(ServiceIds::INPUT))
 			);
 			
 			// Controller
@@ -129,12 +132,12 @@
 		    // - Entgegennahme aller uebergeordneten Komponenten.
 		    // - Der Controller selbst steuert die Ablaufkette und koordiniert
 		    //   Middleware, Service & Response.
-			$container->register('todo-controller', fn(Container $c) =>
+			$container->register(ServiceIds::TODO_CONTROLLER, fn(Container $c) =>
 				new TodoController(
-					$c->get('auth-middleware'),
-					$c->get('todo-service'),
-					$c->get('validation-middleware'),
-					$c->get('response')
+					$c->get(ServiceIds::AUTH_MIDDLEWARE),
+					$c->get(ServiceIds::TODO_SERVICE),
+					$c->get(ServiceIds::VALIDATION_MIDDLEWARE),
+					$c->get(ServiceIds::RESPONSE)
 				)
 			);
 		}
