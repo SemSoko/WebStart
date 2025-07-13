@@ -138,7 +138,8 @@ WebStart/
 │    │    │    │    ├─── RequestTokenReader.php               # DI-faehiger, testbarer Service zur Extraktion von Bearer-Token aus HTTP-Headern
 │    │    │    │    └─── RequestTokenReaderInterface .php     # Schnittstelle fuer Services, die Bearer-Tokens aus Headern lesen
 │    │    │    ├─── service-container/                        # Projektweiter Service-Container für modulübergreifende Dependency Injection
-│    │    │    │    └─── Container.php                        # Verwaltet Registrierungen & Auflösung aller Dienste (Controller, Middleware, Services, etc.)
+│    │    │    │    ├─── Container.php                        # Verwaltet Registrierungen & Auflösung aller Dienste (Controller, Middleware, Services, etc.)
+│    │    │    │    └─── ServiceIds.php                       # Zentrale Konstanten für Container-Schlüssel
 │    │    │    ├─── validation/                               # Zentrale Validierungsstelle
 │    │    │    │    ├─── FieldValidatorInterface.php          # Zentrale Schnittstelle für die Validierung von JSON-Eingaben (z. B. Pflichtfelder, Werteprüfung)
 │    │    │    │    ├─── JsonFieldValidator.php               # Validiert JSON-Eingaben anhand definierter Regeln
