@@ -109,6 +109,8 @@ WebStart/
 │    ├─── src/
 │    │    ├─── todo-new/                                      # Modulares Backend-Modul
 │    │    │    ├─── router.php                                # Leitet HTTP-Anfragen an Controller
+│    │    │    ├─── router-di.php                             # Neuer, DI-basierter Router (alte Logik bleibt in router.php)
+│    │    │    ├─── TodoModule.php                            # Registert alle relevanten Klassen in den Container
 │    │    │    ├─── controller/                               # Verantwortlich fuer Anfragen und Antworten
 │    │    │    │    └─── TodoController.php                   # Steuert die Verarbeitung eingehender HTTP-Anfragen für Todos
 │    │    │    ├─── service/                                  # Enthaelt Geschaeftslogik
@@ -135,6 +137,9 @@ WebStart/
 │    │    │    │    ├─── RequestHelper.php                    # Legacy: Statische Klasse für das Extrahieren von Tokens aus HTTP-Headern (wird durch RequestTokenReader ersetzt, löschen nach Refactor)
 │    │    │    │    ├─── RequestTokenReader.php               # DI-faehiger, testbarer Service zur Extraktion von Bearer-Token aus HTTP-Headern
 │    │    │    │    └─── RequestTokenReaderInterface .php     # Schnittstelle fuer Services, die Bearer-Tokens aus Headern lesen
+│    │    │    ├─── service-container/                        # Projektweiter Service-Container für modulübergreifende Dependency Injection
+│    │    │    │    ├─── Container.php                        # Verwaltet Registrierungen & Auflösung aller Dienste (Controller, Middleware, Services, etc.)
+│    │    │    │    └─── ServiceIds.php                       # Zentrale Konstanten für Container-Schlüssel
 │    │    │    ├─── validation/                               # Zentrale Validierungsstelle
 │    │    │    │    ├─── FieldValidatorInterface.php          # Zentrale Schnittstelle für die Validierung von JSON-Eingaben (z. B. Pflichtfelder, Werteprüfung)
 │    │    │    │    ├─── JsonFieldValidator.php               # Validiert JSON-Eingaben anhand definierter Regeln
