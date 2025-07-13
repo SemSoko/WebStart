@@ -2,19 +2,6 @@
 	// Init einbinden
 	require_once __DIR__ . '/../../bootstrap/init.php';
 
-	// Controller einbinden
-	require_once __DIR__ . '/controller/TodoController.php';
-	// Service einbinden
-	require_once __DIR__ . '/service/TodoService.php';
-	// Repository einbinden
-	require_once __DIR__ . '/repository/TodoRepository.php';
-	
-	require_once __DIR__ . '/../shared/response/JsonResponseHandler.php';
-	require_once __DIR__ . '/../shared/http/DefaultInputProvider.php';
-	
-	require_once __DIR__ . '/../shared/middleware/AuthMiddleware.php';
-	require_once __DIR__ . '/../shared/validation/JsonFieldValidator.php';
-	
 	// Container einbinden
 	require_once __DIR__ . '/../shared/service-container/Container.php';
 	// ServiceIDs einbinden
@@ -22,12 +9,6 @@
 	// TodoModule einbinden
 	require_once __DIR__ . '/TodoModule.php';
 	
-	
-	use Shared\Response\JsonResponseHandler;
-	use Shared\Http\JsonFieldValidator;
-	use Shared\Auth\JwtHandlerNew;
-	use Shared\Validation\JsonFieldValidator;
-	use todoNew\Service\TodoService;
 	use Shared\ServiceContainer\Container;
 	use Shared\ServiceContainer\ServiceIds;
 	use TodoNew\TodoModule;
