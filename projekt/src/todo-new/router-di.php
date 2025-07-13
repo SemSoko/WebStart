@@ -15,12 +15,26 @@
 	require_once __DIR__ . '/../shared/middleware/AuthMiddleware.php';
 	require_once __DIR__ . '/../shared/validation/JsonFieldValidator.php';
 	
+	// Container einbinden
+	require_once __DIR__ . '/../shared/service-container/Container.php';
+	// ServiceIDs einbinden
+	require_once __DIR__ . '/../shared/service-container/ServiceIds.php';
+	// TodoModule einbinden
+	require_once __DIR__ . '/TodoModule.php';
+	
 	
 	use Shared\Response\JsonResponseHandler;
 	use Shared\Http\JsonFieldValidator;
 	use Shared\Auth\JwtHandlerNew;
 	use Shared\Validation\JsonFieldValidator;
 	use todoNew\Service\TodoService;
+	use Shared\ServiceContainer\Container;
+	use Shared\ServiceContainer\ServiceIds;
+	use TodoNew\TodoModule;
+	
+	// Container fuer alle notwendigen Operationen
+	$container = new Container();
+	TodoModule::register($container);
 	
 	// HTTP-Methode (z. B. GET, POST, ...)
 	
@@ -69,24 +83,10 @@
 			'/api/todo-new' => [TodoController::class, 'toggleStatus'],
 		],
 		'DELETE' => [
-			'api/todo-new' => [TodoController::class, 'delete'],
+			'/api/todo-new' => [TodoController::class, 'delete'],
 		]
 	];
 	
-	/**
-	 * Globale Instanzierung des Response-Handlers
-	 *
-	 * Diese Instanz wird zentral verwendet, um konsistente JSON-Antworten
-	 * ueber alle Schichten hinweg (Middleware, Controller, Fehlerfaelle im
-	 * Router) sicherzustellen.
-	 *
-	 * Vorteile:
-	 * - Vermeidung mehrfacher Instanzierung
-	 * - Einheitliches Format fuer Fehler- und Statusantworten
-	 * - Ermoeglicht Format fuer Fehler- und Statusantworten
-	 * - Ermoeglicht spaetere Erweiterungen (z.B. Logging, Tracing) an einer Stelle
-	 */
-	$response = new JsonResponseHandler();
 	// Route suchen
 	$matchedRoute = $routes[$method][$requestUri] ?? null;
 	
@@ -103,12 +103,15 @@
 	 * HTTP-Status: 404 Not Found
 	 */
 	if(!$matchedRoute){
+		$response = $container->get(ServiceIds::RESPONSE);
 		$response->error('Route not found', 404);
 	}
 	
 	// Sonderfall: Status-Pruefung
 	if($matchedRoute === '__status__'){
+		$response = $container->get(ServiceIds::RESPONSE);
 		$response->status('Todo-Modul erreichbar');
+		exit();
 	}
 	
 	// Controller aufrufen
@@ -130,78 +133,11 @@
 	
 	switch($controllerClass){
 		case TodoController::class:
-		    /**
-		     * Dependency Injection fuer TodoController und seine Abhaengigkeiten
-		     *
-			 * Die Kette folgt den Prinzipien von:
-			 * - Clean Architecture (Low-Level zu High-Level -> Controller aggregiert alles)
-			 * - Dependency Inversion Principle (DIP) -> Controller hängt nur von Interfaces ab
-			 * - Single Responsibility Principle (SRP) -> jede Klasse macht genau eine Sache
-			 *
-		     * Schrittweise Erstellung und Verkabelung der Abhaengigkeiten:
-		     *
-		     * ┌───────────────────────────────┐
-		     * │            ROUTER             │
-		     * └───────────────────────────────┘
-		     *                │
-		     * 1. Datenbankverbindung (PDO)
-		     * - Wird benoetigt, um SQL-basierte Repositories zu initialisieren.
-		     */
-			$pdo = Database::getConnection(); // kommt aus der init.php
-			
-		    /**
-		     * 2. Repository-Schicht
-		     * - Verwaltet den Zugriff auf die persistierten Todos (CRUD).
-		     * - Erwartet ein PDO-Objekt fuer DB-Zugriffe.
-		     */
-			$repository = new TodoRepository($pdo);
-		
-		    /**
-		     * 3. Service-Schicht (Business-Logik)
-		     * - Kapselt fachliche Regeln (z.B. keine leeren Titel).
-		     * - Arbeitet mit dem Repository zur Datenhaltung.
-		     */
-			$service = new TodoService($repository);
-			
-		    /**
-		     * 5. Authentifizierungs-Service (Low-Level)
-		     * - Implementiert AuthServiceInterface.
-		     * - Stellt Methoden zur Token-Verarbeitung (z.B. JWT-Validierung) bereit.
-		     */
-			$authService = new JwtHandlerNew();
-		    /**
-		     * 6. AuthMiddleware (High-Level)
-		     * - Schutz von Routen durch Pruefung eines gueltigen Tokens.
-		     * - Erwartet einen AuthService + ResponseHandler
-		     */
-			$auth = new AuthMiddleware($authService, $response);
-			
-			$inputProvider = new DefaultInputProvider();
-			
-		    /**
-		     * 7. Eingabevalidierung (Low-Level)
-		     * - Prueft JSON-Felder auf Vorhandensein und Gueltigkeit.
-		     * - Implementiert FieldValidatorInteface.
-		     */
-			$validator = new JsonFieldValidator();
-		    /**
-		     * 8. ValidationMiddleware (High-Level)
-		     * - Fuehrt Pflichtfeldpruefungen aus.
-		     * - Verwendet FieldValidatorInterface + ResponseHandler zur Ausgabe
-		     * von Fehler.
-		     */
-			$validation = new ValidationMiddleware($validator, $response, $inputProvider);
-		
-		    /**
-		     * 9. Konstruktion des Controllers
-		     * - Entgegennahme aller uebergeordneten Komponenten.
-		     * - Der Controller selbst steuert die Ablaufkette und koordiniert
-		     * Middleware, Service & Response.
-		     */
-			$controller = new TodoController($auth, $service, $validation, $response);
+			$controller = $container->get(ServiceIds::TODO_CONTROLLER);
 			break;
 		
 		default:
+			$response = $container->get(ServiceIds::RESPONSE);
 			$response->error('Unbekannter Controller', 500);
 	}
 	
