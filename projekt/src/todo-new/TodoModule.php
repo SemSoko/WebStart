@@ -95,6 +95,8 @@
 				new TodoService($c->get(ServiceIds::TODO_REPO))
 			);
 			
+			// RequestTokenReader
+			$container->register(ServiceIds::REQUEST_TOKEN_READER, fn() => new RequestTokenReader);
 			
 			// JwtHandlerNew
 			// 4. Authentifizierungs-Service (Low-Level)
