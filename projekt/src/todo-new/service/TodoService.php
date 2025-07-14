@@ -57,7 +57,6 @@
 					if(is_array($todoData) && ($todoData['success'] ?? true) !== false){
 						// Falls: Alles lief gut
 						return [
-							'success' => true,
 							'completeTodo' => $todoData
 						];
 					}else{
