@@ -18,4 +18,5 @@
 		public const VALIDATOR				= 'validator';
 		public const VALIDATION_MIDDLEWARE	= 'validation-middleware';
 		public const TODO_CONTROLLER		= 'todo-controller';
+		public const REQUEST_TOKEN_READER	= 'request_token_reader';
 	}
