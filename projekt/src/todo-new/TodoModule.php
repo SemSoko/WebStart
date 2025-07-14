@@ -9,6 +9,8 @@
 	require_once __DIR__ . '/service/TodoService.php';
 	// JwtHandlerNew einbinden
 	require_once __DIR__ . '/../shared/auth/JwtHandler-new.php';
+	// JwtAuthService einbinden
+	require_once __DIR__ . '/../shared/auth/JwtAuthService.php';
 	// AuthMiddleware einbinden
 	require_once __DIR__ . '/../shared/middleware/AuthMiddleware.php';
 	// DefaultInputProvider einbinden
@@ -39,6 +41,7 @@
 	use Shared\Response\JsonResponseHandler;
 	use Shared\ServiceContainer\Container;
 	use Shared\Http\RequestTokenReader;
+	use Shared\Auth\JwtAuthService;
 	
 	use Shared\ServiceContainer\ServiceIds;
 	
