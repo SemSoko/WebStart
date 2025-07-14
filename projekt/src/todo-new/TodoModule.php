@@ -109,7 +109,9 @@
 		    // - Schutz von Routen durch Pruefung eines gueltigen Tokens.
 		    // - Erwartet einen AuthService + ResponseHandler
 			$container->register(ServiceIds::AUTH_MIDDLEWARE, fn(Container $c) =>
-				new AuthMiddleware($c->get(ServiceIds::AUTH_SERVICE), $c->get(ServiceIds::RESPONSE))
+				new AuthMiddleware($c->get(ServiceIds::AUTH_SERVICE),
+									$c->get(ServiceIds::RESPONSE),
+									$c->get(ServiceIds::REQUEST_TOKEN_READER))
 			);
 			
 			// DefaultInputProvider
