@@ -157,22 +157,24 @@ document.addEventListener("DOMContentLoaded", () => {
 			 */
 			const response = await addTodo(title);
 			
-			if("error" in response){
-				console.error("Error: addUserTodo() - ", response?.responseText);
+			if(!response.success){
+				console.error("Serverfehler: addUserTodo() - ", response?.error ?? "Unbekannter Fehler");
 				return;
-			}else{
-				/**
-				 * Neues Todo in die Liste einhaengen und im DOM rendern.
-				 */
-				appendTodoItem(response.completeTodo, {
-					onToggle: toggleUserTodoStatus,
-					onDelete: deleteUserTodo
-				});
-				console.log("Updated todolist: ", response);
-				return response;
 			}
+			
+			/**
+			 * Neues Todo in die Liste einhaengen und im DOM rendern.
+			 * Alles lief gut -> Todo anzeigen
+			 */
+			appendTodoItem(response.data, {
+				onToggle: toggleUserTodoStatus,
+				onDelete: deleteUserTodo
+			});
+			console.log("Updated todolist: ", response);
+			return response;
+			
 		}catch(err){
-			console.error("Error: addUserTodo() - ", err.message);
+			console.error("Netzwerk-/Clientfehler: addUserTodo() - ", err.message);
 		}
 	}
 	
