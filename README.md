@@ -59,7 +59,7 @@ WebStart/
 │    │
 │    ├─── public/                                             # Oeffentlich zugaenglicher Bereich (Frontend + API) (wird spaeter aufgeteilt)
 │    │    ├─── api/                                           # Temporaere API-Endpunkte (Werden ersetzt)
-│    │    │    ├─── addUserTodo.php
+│    │    │    ├─── addUserTodo.php                           # Legacy-Endpunkt (loeschen, sobald Umstieg auf das neue Todo-Backend komplett abgeschlossen ist)
 │    │    │    ├─── deleteUserTodo.php
 │    │    │    ├─── get_user_todos.php
 │    │    │    ├─── login.php
