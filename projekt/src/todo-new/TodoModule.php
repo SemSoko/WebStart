@@ -44,6 +44,7 @@
 	use Shared\Auth\JwtAuthService;
 	
 	use Shared\ServiceContainer\ServiceIds;
+	use \Database;
 	
 	class TodoModule{		
 		/*
