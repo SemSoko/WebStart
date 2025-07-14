@@ -56,12 +56,15 @@
 					
 					if(is_array($todoData) && ($todoData['success'] ?? true) !== false){
 						// Falls: Alles lief gut
-						return [
-							'completeTodo' => $todoData
-						];
+						return $todoData;
 					}else{
 						// Falls: Fehlerhafter Aufruf von getTodoById
-						return $todoData;
+						return [
+							'success' => false,
+							'error' => $todoData['error'] ?? 'Fehler beim Abrufen des neuen Todos.',
+							'debug' => $todoData['debug'] ?? [],
+							'source' => 'service'
+						];
 					}
 				}else{
 					return $success;
