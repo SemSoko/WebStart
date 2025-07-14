@@ -34,6 +34,7 @@
 	use Shared\Validation\JsonFieldValidator;
 	use Shared\Middleware\ValidationMiddleware;
 	use todoNew\Controller\TodoController;
+	use Shared\Response\JsonResponseHandler;
 	use Shared\ServiceContainer\Container;
 	
 	use Shared\ServiceContainer\ServiceIds;
