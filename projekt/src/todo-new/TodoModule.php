@@ -102,6 +102,9 @@
 			// 4. Authentifizierungs-Service (Low-Level)
 		    // - Implementiert AuthServiceInterface.
 		    // - Stellt Methoden zur Token-Verarbeitung (z.B. JWT-Validierung) bereit.
+			$container->register(ServiceIds::JWT_HANDLER, fn() => new JwtHandlerNew());
+			
+			// AuthService
 			$container->register(ServiceIds::AUTH_SERVICE, fn() => new JwtHandlerNew());
 			
 			// Middleware
