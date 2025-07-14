@@ -2,7 +2,7 @@
 	namespace TodoNew;
 	
 	// Db einbinden: Database
-	require_once '/../core/db.php';
+	require_once __DIR__ '/../core/db.php';
 	// Repository einbinden
 	require_once __DIR__ . '/repository/TodoRepository.php';
 	// Service einbinden
