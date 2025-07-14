@@ -102,4 +102,28 @@
 				];
 			}
 		}
+		
+		public function getTodoById(int $todoId): array{
+			$stmt = $this->pdo->prepare("SELECT * from todos where id = ?");
+			$dbResult = $stmt->execute([$todoId]);
+			$newTodo = $stmt->fetch(PDO::FETCH_ASSOC);
+			
+			if($dbResult && $newTodo){
+				return[
+					'todo_id' => $newTodo['id'],
+					'todo_title' => $newTodo['title'],
+					'todo_status' => $newTodo['is_done'],
+					'todo_iat' => $newTodo['created_at']
+				];
+			}else{
+				return [
+					'success' => false,
+					'error' => 'SELECT fehlgeschlagen',
+					'debug' => [
+						'errorInfo' => $stmt->errorInfo()
+					],
+					'source' => 'todo-new/repository'
+				];
+			}
+		}
 	}
