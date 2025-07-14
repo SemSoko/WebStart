@@ -85,14 +85,34 @@
 			/**
 			 * @todo Bezeichnungen fuer das Feld: source in $result anpassen!!!
 			 */
-			if($result['success'] === true){
-				$this->response->success($result, 201);
-			}elseif($result['success'] === false && ($result['source'] ?? '') === 'service'){
-				$this->response->debug('Service-Fehler', $result);
-			}elseif($result['success'] === false && ($result['source'] ?? '') === 'repository'){
-				$this->response->debug('Repository-Fehler', $result);
-			}else{
-				$this->response->error(($result['error'] ?? 'Unbekannter Fehler'), 500);
+			// Schritt Nr. 1
+			// Wurde success: false zurückgegeben?
+			// Dann ist etwas schiefgelaufen – also müssen wir nicht erfolgreich
+			// antworten, sondern Fehler behandeln.
+			if(isset($result['success']) && $result['success'] === false){
+				// Schritt Nr. 2
+				// Woher kommt der Fehler?
+				// Aus dem repository, dem service oder ist er nicht genau bekannt?
+				$source = $result['source'] ?? '';
+				
+				// Schritt Nr. 3
+				// Der Fehler kam aus der Datenbankschicht (z. B. INSERT fehlgeschlagen).
+				// Also geben wir detaillierte Debug-Infos zurück.
+				if($source === 'repository'){
+					$this->response->debug('Repository-Fehler', $result);
+				// Der Fehler passierte in der Logikschicht, z. B. ein ungültiger Titel
+				// wurde trotzdem weitergegeben.
+				}elseif($source === 'service'){
+					$this->response->debug('Service-Fehler', $result);
+				// Es gibt keinen source, oder wir wissen nicht woher der Fehler
+				// kommt → also geben wir eine generische Fehlermeldung zurück.
+				}else{
+					$this->response->error($result['error'] ?? 'Unbekannter Fehler', 500);
+				}
+				
+				return;
 			}
+			
+			$this->response->success($result, 201);
 		 }
 	}
