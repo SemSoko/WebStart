@@ -105,7 +105,9 @@
 			$container->register(ServiceIds::JWT_HANDLER, fn() => new JwtHandlerNew());
 			
 			// AuthService
-			$container->register(ServiceIds::AUTH_SERVICE, fn() => new JwtHandlerNew());
+			$container->register(ServiceIds::AUTH_SERVICE, fn(Container $c) =>
+				new JwtAuthService($c->get(ServiceIds::JWT_HANDLER))
+			);
 			
 			// Middleware
 		    // 5. AuthMiddleware (High-Level)
