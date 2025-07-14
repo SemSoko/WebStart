@@ -11,7 +11,7 @@
 		public const PDO					= 'pdo';
 		public const TODO_REPO				= 'todo-repo';
 		public const TODO_SERVICE			= 'todo-service';
-		// JWT
+		public const JWT_HANDLER			= 'jwt_handler';
 		public const AUTH_SERVICE			= 'auth-service';
 		public const AUTH_MIDDLEWARE		= 'auth-middleware';
 		public const INPUT					= 'input';
