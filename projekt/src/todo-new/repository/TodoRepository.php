@@ -106,7 +106,7 @@
 		public function getTodoById(int $todoId): array{
 			$stmt = $this->pdo->prepare("SELECT * from todos where id = ?");
 			$dbResult = $stmt->execute([$todoId]);
-			$newTodo = $stmt->fetch(PDO::FETCH_ASSOC);
+			$newTodo = $stmt->fetch(\PDO::FETCH_ASSOC);
 			
 			if($dbResult && $newTodo){
 				return[
