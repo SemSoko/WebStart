@@ -70,7 +70,11 @@
 				$stmt = $this->pdo->prepare("INSERT INTO todos (user_id, title) values (?, ?)");
 				$dbResult = $stmt->execute([$userId, $title]);
 				if($dbResult){
-					return true;
+					$todoId = (int)$this->pdo->lastInsertId();
+					return [
+						'success' => true,
+						'todo_id' => $todoId
+					];
 				}else{
 					return [
 						'success' => false,
