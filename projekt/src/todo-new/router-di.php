@@ -42,7 +42,7 @@
 	// Ergebnis:
 	// $requestUri = "/api/todo-new/router.php"
 	// So kannst du genau den Teil vergleichen, der in deinem Routing-Array steht.
-	$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	$requestUri = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 	// Um es spaeter besser nachvollziehen zu koennen.
 	// echo('<br>'.$requestUri.'<br>');
 	

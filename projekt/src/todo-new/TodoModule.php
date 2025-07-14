@@ -2,17 +2,21 @@
 	namespace TodoNew;
 	
 	// Db einbinden: Database
-	require_once '/../core/db.php';
+	require_once __DIR__ . '/../core/db.php';
 	// Repository einbinden
 	require_once __DIR__ . '/repository/TodoRepository.php';
 	// Service einbinden
 	require_once __DIR__ . '/service/TodoService.php';
 	// JwtHandlerNew einbinden
 	require_once __DIR__ . '/../shared/auth/JwtHandler-new.php';
+	// JwtAuthService einbinden
+	require_once __DIR__ . '/../shared/auth/JwtAuthService.php';
 	// AuthMiddleware einbinden
 	require_once __DIR__ . '/../shared/middleware/AuthMiddleware.php';
 	// DefaultInputProvider einbinden
 	require_once __DIR__ . '/../shared/http/DefaultInputProvider.php';
+	// RequestTokenReader einbinden
+	require_once __DIR__ . '/../shared/http/RequestTokenReader.php';
 	// JsonFieldValidator einbinden
 	require_once __DIR__ . '/../shared/validation/JsonFieldValidator.php';
 	// ValidationMiddleware einbinden
@@ -34,9 +38,13 @@
 	use Shared\Validation\JsonFieldValidator;
 	use Shared\Middleware\ValidationMiddleware;
 	use todoNew\Controller\TodoController;
+	use Shared\Response\JsonResponseHandler;
 	use Shared\ServiceContainer\Container;
+	use Shared\Http\RequestTokenReader;
+	use Shared\Auth\JwtAuthService;
 	
 	use Shared\ServiceContainer\ServiceIds;
+	use \Database;
 	
 	class TodoModule{		
 		/*
@@ -91,19 +99,28 @@
 				new TodoService($c->get(ServiceIds::TODO_REPO))
 			);
 			
+			// RequestTokenReader
+			$container->register(ServiceIds::REQUEST_TOKEN_READER, fn() => new RequestTokenReader);
 			
 			// JwtHandlerNew
 			// 4. Authentifizierungs-Service (Low-Level)
 		    // - Implementiert AuthServiceInterface.
 		    // - Stellt Methoden zur Token-Verarbeitung (z.B. JWT-Validierung) bereit.
-			$container->register(ServiceIds::AUTH_SERVICE, fn() => new JwtHandlerNew());
+			$container->register(ServiceIds::JWT_HANDLER, fn() => new JwtHandlerNew());
+			
+			// AuthService
+			$container->register(ServiceIds::AUTH_SERVICE, fn(Container $c) =>
+				new JwtAuthService($c->get(ServiceIds::JWT_HANDLER))
+			);
 			
 			// Middleware
 		    // 5. AuthMiddleware (High-Level)
 		    // - Schutz von Routen durch Pruefung eines gueltigen Tokens.
 		    // - Erwartet einen AuthService + ResponseHandler
 			$container->register(ServiceIds::AUTH_MIDDLEWARE, fn(Container $c) =>
-				new AuthMiddleware($c->get(ServiceIds::AUTH_SERVICE), $c->get(ServiceIds::RESPONSE))
+				new AuthMiddleware($c->get(ServiceIds::AUTH_SERVICE),
+									$c->get(ServiceIds::RESPONSE),
+									$c->get(ServiceIds::REQUEST_TOKEN_READER))
 			);
 			
 			// DefaultInputProvider
@@ -114,7 +131,7 @@
 		    // 7. Eingabevalidierung (Low-Level)
 		    // - Prueft JSON-Felder auf Vorhandensein und Gueltigkeit.
 		    // - Implementiert FieldValidatorInteface.
-			$container->register(ServiceIds::VALIDATOR, fn() => JsonFieldValidator());
+			$container->register(ServiceIds::VALIDATOR, fn() => new JsonFieldValidator());
 			
 			// ValidationMiddleware
 		    // 8. ValidationMiddleware (High-Level)

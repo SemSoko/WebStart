@@ -37,7 +37,7 @@ export async function addTodo(title){
 	 * Ausstehende Erweiterung:
 	 * prüfen, ob response.xxx, also ob eine gueltige Antwort von der API geliefert wird
 	 */
-	const endpoint = "/api/todo-new.php";
+	const endpoint = "/api/todo-new/";
 	const method = "POST";
 	const body = {title};
 	const token = getToken();

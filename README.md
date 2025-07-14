@@ -59,14 +59,15 @@ WebStart/
 │    │
 │    ├─── public/                                             # Oeffentlich zugaenglicher Bereich (Frontend + API) (wird spaeter aufgeteilt)
 │    │    ├─── api/                                           # Temporaere API-Endpunkte (Werden ersetzt)
-│    │    │    ├─── addUserTodo.php
+│    │    │    ├─── addUserTodo.php                           # Legacy-Endpunkt (loeschen, sobald Umstieg auf das neue Todo-Backend komplett abgeschlossen ist)
 │    │    │    ├─── deleteUserTodo.php
 │    │    │    ├─── get_user_todos.php
 │    │    │    ├─── login.php
 │    │    │    ├─── register.php
-│    │    │    ├─── todo-new.php                              # Weiterleitung zum modularen Todo-Router
 │    │    │    ├─── toggleUserTodoStatus.php
-│    │    │    └─── user_info.php
+│    │    │    ├─── user_info.php
+│    │    │    └─── todo-new/                                 # API-Einstiegspunkt für das modulare Todo-Backend
+│    │    │         └─── todo-new.php                         # Weiterleitung zum modularen Todo-Router
 │    │    │
 │    │    ├─── css/
 │    │    │
