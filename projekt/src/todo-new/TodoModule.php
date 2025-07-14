@@ -131,7 +131,7 @@
 		    // 7. Eingabevalidierung (Low-Level)
 		    // - Prueft JSON-Felder auf Vorhandensein und Gueltigkeit.
 		    // - Implementiert FieldValidatorInteface.
-			$container->register(ServiceIds::VALIDATOR, fn() => JsonFieldValidator());
+			$container->register(ServiceIds::VALIDATOR, fn() => new JsonFieldValidator());
 			
 			// ValidationMiddleware
 		    // 8. ValidationMiddleware (High-Level)
