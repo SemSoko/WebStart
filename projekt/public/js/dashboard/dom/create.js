@@ -21,6 +21,9 @@ export function createEmptyTodoMessage(){
 }
 
 /**
+ * @deprecated Diese Funktion nutzt die alte Todo-Struktur (todo_id, todo_title, ...).
+ * Verwende stattdessen `createTodoListItemModern()`.
+ *
  * Erzeugt einen vollstaendigen Eintrag fuer die Todo-Liste
  * 
  * @param {TodoItem} todo - Ein einzelnes Todo-Objekt aus der API.
