@@ -51,11 +51,23 @@
 			try{
 				// Weitergabe an Repository
 				$success = $this->repository->insertTodo($userId, $title);
-				
-				if(is_array($success) && ($success['success'] ?? false) === false){
-					return $success;
+				if(is_array($success) && ($success['success'] ?? false) === true){
+					$todoData = $this->repository->getTodoById($success['todo_id']);
+					
+					if(is_array($todoData) && ($todoData['success'] ?? true) !== false){
+						// Falls: Alles lief gut
+						return $todoData;
+					}else{
+						// Falls: Fehlerhafter Aufruf von getTodoById
+						return [
+							'success' => false,
+							'error' => $todoData['error'] ?? 'Fehler beim Abrufen des neuen Todos.',
+							'debug' => $todoData['debug'] ?? [],
+							'source' => 'service'
+						];
+					}
 				}else{
-					return ['success' => true];
+					return $success;
 				}
 			}catch(Exception $e){
 				return [
