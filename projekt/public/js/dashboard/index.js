@@ -1,7 +1,7 @@
 // shared/api/...
 
 // Funktionale-Imports
-import {getTodos, addTodo, toggleTodoStatus, deleteTodo} from "./../shared/api/todo.js"
+import {getTodos, addTodo, addTodoModern, toggleTodoStatus, deleteTodo} from "./../shared/api/todo.js"
 import {getUserInfo} from "./../shared/api/user.js"
 
 // dashboard/dom/...
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			/**
 			 * API-Aufruf um neues Todos hinzuzufuegen.
 			 */
-			const response = await addTodo(title);
+			const response = await addTodoModern(title);
 			
 			if("error" in response){
 				console.error("Error: addUserTodo() - ", response?.responseText);
