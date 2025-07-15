@@ -57,14 +57,27 @@ export async function apiRequest(endpoint, method='GET', body=null, token=null){
      * Die Rückgabe erfolgreicher API-Antworten ist derzeit als {Object} typisiert.
      * Passendes @typedef-Objekt erstellen und die @returns-Typen entsprechend konkretisieren.
 	 */
-	if(contentType.includes("application/json")){
-		const data = await response.json();
-		return data;
-	}else{
+	
+	// Fehlerhafte Antwort? (z.B. 400 oder 500)
+	if(!response.ok){
 		const text = await response.text();
 		return{
 			error: true,
-			responseText: text
+			responseText: text,
+			status: response.status
 		};
 	}
+	
+	// Ist Antwort JSON? dann -> Parse
+	if(contentType.includes("application/json")){
+		return await response.json();
+	}
+	
+	// Sonst: Text-Antwort (z.B. HTML-Fehlerseite)
+	const text = await response.text();
+	return{
+		error: true,
+		responseText: text,
+		status: response.status
+	};
 }
