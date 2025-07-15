@@ -14,7 +14,7 @@ import {createTodoListItem, createEmptyTodoMessage} from "./dom/create.js"
 // Import von Renderern
 
 // Imports zur Listen-Aktualisierung
-import {renderTodoList, appendTodoItem} from "./render/todoRenderer.js"
+import {renderTodoList, appendTodoItem, appendTodoItemModern} from "./render/todoRenderer.js"
 import {removeTodoItem, updateTodoItem} from "./render/todoRenderer.js"
 
 // Import von Events
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			 * API-Aufruf um neues Todos hinzuzufuegen.
 			 */
 			const response = await addTodoModern(title);
-			
+			console.log(response);
 			if("error" in response){
 				console.error("Error: addUserTodo() - ", response?.responseText);
 				return;
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				/**
 				 * Neues Todo in die Liste einhaengen und im DOM rendern.
 				 */
-				appendTodoItem(response.completeTodo, {
+				appendTodoItemModern(response.completeTodo, {
 					onToggle: toggleUserTodoStatus,
 					onDelete: deleteUserTodo
 				});
