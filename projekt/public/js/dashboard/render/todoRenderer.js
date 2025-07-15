@@ -61,6 +61,9 @@ export function renderTodoList(todos, handlers){
 }
 
 /**
+ * @deprecated Diese Funktion nutzt die alte Todo-Struktur.
+ * Verwende `appendTodoItemModern()` fuer neue API-Antworten.
+ *
  * Haengt ein einzelnes Todo-Element an die Todo-Liste an.
  *
  * @param {TodoItem} todo - Ein Todo-Objekt aus der API.
