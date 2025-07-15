@@ -156,10 +156,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			 * API-Aufruf um neues Todos hinzuzufuegen.
 			 */
 			const response = await addTodoModern(title);
-			console.log(response);
+			
 			if("error" in response){
 				console.error("Error: addUserTodo() - ", response?.responseText);
-				return;
+				return {
+					success: false,
+					message: response?.message || "Todo konnte nicht hinzugefuegt werden."
+				};
 			}else{
 				/**
 				 * Neues Todo in die Liste einhaengen und im DOM rendern.
@@ -169,10 +172,14 @@ document.addEventListener("DOMContentLoaded", () => {
 					onDelete: deleteUserTodo
 				});
 				console.log("Updated todolist: ", response);
-				return response;
+				return {success: true};
 			}
 		}catch(err){
 			console.error("Error: addUserTodo() - ", err.message);
+			return {
+				success: false,
+				message: err.message
+			};
 		}
 	}
 	
