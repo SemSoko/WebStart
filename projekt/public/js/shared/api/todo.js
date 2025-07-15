@@ -73,7 +73,7 @@ export async function addTodoModern(title){
 		completeTodo: {
 			id: todo_id,
 			title: todo_title,
-			idDone: todo_status,
+			isDone: todo_status,
 			createdAt: todo_iat
 		}
 	};
