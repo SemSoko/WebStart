@@ -21,6 +21,9 @@ export function createEmptyTodoMessage(){
 }
 
 /**
+ * @deprecated Diese Funktion nutzt die alte Todo-Struktur (todo_id, todo_title, ...).
+ * Verwende stattdessen `createTodoListItemModern()`.
+ *
  * Erzeugt einen vollstaendigen Eintrag fuer die Todo-Liste
  * 
  * @param {TodoItem} todo - Ein einzelnes Todo-Objekt aus der API.
@@ -103,6 +106,97 @@ export function createTodoListItem(todo, {onToggle, onDelete}){
 		 * Todos-Loeschen-Callback
 		 */
 		deleteButton.addEventListener("click", () => onDelete(todo.todo_id));
+	}
+	
+	return li;
+}
+
+/**
+ * Erzeugt einen vollstaendigen Eintrag im neuen Format fuer die Todo-Liste.
+ *
+ * Verwendet die modernisierte Struktur:
+ * {id, title, isDone, createdAt}
+ * 
+ * @param {TodoItem} todo - Ein einzelnes Todo-Objekt aus der API.
+ * @param {{
+ *    onToggle: function(number): void,
+ *    onDelete: function(number): void
+ *  }} callbacks
+ * @returns {HTMLLiElement} Der vollstaendige Eintrag fuer die Todo-Liste
+ */
+export function createTodoListItemModern(todo, {onToggle, onDelete}){
+	// Container <li> und inneres <div>
+	/**
+	 * Erstellen des Listeneintrags, welcher angehaengt wird
+	 * Erstellen eines Containers, in welchen die Todo-Elemente eingefuegt werden
+	 */
+	const li = document.createElement("li");
+	const textDiv = document.createElement("div");
+	
+	/**
+	 * Jedem Todo wird eine ID hinzugefuegt
+	 */
+	li.dataset.id = todo?.id;
+	
+	/**
+	 * Erstellen des Titels fuer ein Todo
+	 */
+	const todoTitle = createTextElement("h3", (todo?.title ?? "No title"));
+	
+	/**
+	 * Statusanzeige eines Todos
+	 */
+	const todoCheckbox = document.createElement("input");
+	todoCheckbox.type = "checkbox";
+	todoCheckbox.dataset.id = todo?.id;
+	todoCheckbox.checked = todo?.isDone == 1;
+
+	/**
+	 * Klickbares Label fuer die Statusanzeige eines Todos
+	 */
+	const checkboxLabel = document.createElement("label");
+	checkboxLabel.appendChild(todoCheckbox);
+	checkboxLabel.appendChild(
+		document.createTextNode(todo?.isDone == 1 ? " Done" : " In progress")
+	);
+	
+	/**
+	 * Erstellungsdatum des Todos
+	 */
+	const todoIat = createTextElement("h4", (todo?.createdAt ?? "No date"));
+	
+	/**
+	 * Button zum Loeschen eines Todos
+	 */
+	const deleteButton = document.createElement("button");
+	deleteButton.textContent = "Delete";
+	deleteButton.dataset.id = todo?.id;
+	
+	/**
+	 * Alle Komponenten eines Todos im Container buendeln
+	 */
+	textDiv.appendChild(todoTitle);
+	textDiv.appendChild(checkboxLabel);
+	textDiv.appendChild(todoIat);
+	textDiv.appendChild(deleteButton);
+	
+	/**
+	 * Container mit gebuendelten Todo-Komponenten in die Todo-Liste einhaengen
+	 */
+	li.appendChild(textDiv);
+	
+	/**
+	 * Eventhandler fuer Todo-Statusanzeige
+	 */
+	if(todo?.id){
+		/**
+		 * Todo-Statuswechsel-Callback - Done oder In progress
+		 */
+		todoCheckbox.addEventListener("change", () => onToggle(todo.id));
+		/**
+		 * Todos-Loeschen-Callback
+		 */
+		deleteButton.addEventListener("click", () => onDelete(todo.id));
 	}
 	
 	return li;

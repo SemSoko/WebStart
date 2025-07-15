@@ -1,7 +1,7 @@
 // shared/api/...
 
 // Funktionale-Imports
-import {getTodos, addTodo, toggleTodoStatus, deleteTodo} from "./../shared/api/todo.js"
+import {getTodos, addTodo, addTodoModern, toggleTodoStatus, deleteTodo} from "./../shared/api/todo.js"
 import {getUserInfo} from "./../shared/api/user.js"
 
 // dashboard/dom/...
@@ -14,7 +14,7 @@ import {createTodoListItem, createEmptyTodoMessage} from "./dom/create.js"
 // Import von Renderern
 
 // Imports zur Listen-Aktualisierung
-import {renderTodoList, appendTodoItem} from "./render/todoRenderer.js"
+import {renderTodoList, appendTodoItem, appendTodoItemModern} from "./render/todoRenderer.js"
 import {removeTodoItem, updateTodoItem} from "./render/todoRenderer.js"
 
 // Import von Events
@@ -155,24 +155,31 @@ document.addEventListener("DOMContentLoaded", () => {
 			/**
 			 * API-Aufruf um neues Todos hinzuzufuegen.
 			 */
-			const response = await addTodo(title);
+			const response = await addTodoModern(title);
 			
 			if("error" in response){
 				console.error("Error: addUserTodo() - ", response?.responseText);
-				return;
+				return {
+					success: false,
+					message: response?.message || "Todo konnte nicht hinzugefuegt werden."
+				};
 			}else{
 				/**
 				 * Neues Todo in die Liste einhaengen und im DOM rendern.
 				 */
-				appendTodoItem(response.completeTodo, {
+				appendTodoItemModern(response.completeTodo, {
 					onToggle: toggleUserTodoStatus,
 					onDelete: deleteUserTodo
 				});
 				console.log("Updated todolist: ", response);
-				return response;
+				return {success: true};
 			}
 		}catch(err){
 			console.error("Error: addUserTodo() - ", err.message);
+			return {
+				success: false,
+				message: err.message
+			};
 		}
 	}
 	

@@ -56,6 +56,7 @@
 		 * @return void
 		 */
 		public function success(array $data = [], int $statusCode = 200): void{
+			header('Content-Type: application/json');
 			http_response_code($statusCode);
 			echo(json_encode([
 				'success' => true,
@@ -73,6 +74,7 @@
 		 * @return void
 		 */
 		public function error(string $message, int $statusCode = 400): void{
+			header('Content-Type: application/json');
 			http_response_code($statusCode);
 			echo(json_encode([
 				'success' => false,
@@ -93,6 +95,7 @@
 		 * @return void
 		 */
 		public function debug(string $message, array $details = [], int $statusCode = 500): void{
+			header('Content-Type: application/json');
 			http_response_code($statusCode);
 			echo(json_encode([
 				'success' => false,
@@ -114,6 +117,7 @@
 		 * @return void
 		 */
 		public function status(string $message = 'OK', bool $success = true, int $statusCode = 200): void{
+			header('Content-Type: application/json');
 			http_response_code($statusCode);
 			echo(json_encode([
 				'success' => $success,

@@ -1,4 +1,4 @@
-import {createTodoListItem, createEmptyTodoMessage} from "./../dom/create.js"
+import {createTodoListItem, createTodoListItemModern, createEmptyTodoMessage} from "./../dom/create.js"
 import {dashboardSelectors} from "./../dom/selectors.js"
 
 /**
@@ -61,6 +61,9 @@ export function renderTodoList(todos, handlers){
 }
 
 /**
+ * @deprecated Diese Funktion nutzt die alte Todo-Struktur.
+ * Verwende `appendTodoItemModern()` fuer neue API-Antworten.
+ *
  * Haengt ein einzelnes Todo-Element an die Todo-Liste an.
  *
  * @param {TodoItem} todo - Ein Todo-Objekt aus der API.
@@ -83,6 +86,36 @@ export function appendTodoItem(todo, handlers){
 	 * Todo erstellen und unten in der Liste einhaengen.
 	 */
 	const li = createTodoListItem(todo, handlers);
+	dashboardSelectors.todoRecordUl.appendChild(li);
+}
+
+/**
+ * Haengt ein einzelnes Todo-Element im neuen Format an die Todo-Liste an.
+ *
+ * Diese Funktion verwendet die modernisierte Todo-Struktur:
+ * {id, title, isDone, createdAt}
+ * und ruft intern `createTodoListItemModern()` auf.
+ *
+ * @param {TodoItem} todo - Ein Todo-Objekt aus der API.
+ * @param {Handlers} handlers - Objekt mit Callback-Funktionen.
+ */
+export function appendTodoItemModern(todo, handlers){
+	/**
+	 * Loeschen des Default-Todo-Titels.
+	 */
+	if(dashboardSelectors.todoRecordUl.firstChild?.dataset?.empty === "true"){
+		dashboardSelectors.todoRecordUl.innerHTML = "";
+	}
+	
+	/**
+	 * Ueberschrift der Todo-Liste aktualisieren.
+	 */
+	dashboardSelectors.ulHeaderH2.textContent = "Your ToDos";
+	
+	/**
+	 * Todo erstellen und unten in der Liste einhaengen.
+	 */
+	const li = createTodoListItemModern(todo, handlers);
 	dashboardSelectors.todoRecordUl.appendChild(li);
 }
 

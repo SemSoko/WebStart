@@ -28,6 +28,9 @@ export async function getTodos(){
 }
 
 /**
+ * @deprecated Verwendet die alte Backend-Antwortstruktur.
+ * Verwende `addTodoModern()` für die neue Struktur.
+ *
  * Einem Benutzer Todo hinzufuegen per API
  *
  * @returns {Promise<Object|ApiError>} API-Antwort im JSON-Format oder ein Objekt mit Fehlertext
@@ -43,6 +46,40 @@ export async function addTodo(title){
 	const token = getToken();
 	
 	return await apiRequest(endpoint, method, body, token);
+}
+
+/**
+ * Neues Todo per modularem Backend hinzufuegen (moderne Struktur)
+ *
+ * Wandelt Backend-Antwort in frontend-kompatibles Objekt um.
+ */
+export async function addTodoModern(title){
+	const endpoint = "/api/todo-new/";
+	const method = "POST";
+	const body = {title};
+	const token = getToken();
+	
+	const response = await apiRequest(endpoint, method, body, token);
+
+	if(!response || response.success !== true || !response.data){
+		return {
+			error: true,
+			message: response?.message || "Fehler beim Hinzufuegen",
+			debug: response?.debug || null
+		};
+	}
+	
+	const {todo_id, todo_title, todo_status, todo_iat} = response.data;
+
+	// Struktur anpassen fuer appendTodoItem(...)
+	return{
+		completeTodo: {
+			id: todo_id,
+			title: todo_title,
+			isDone: todo_status,
+			createdAt: todo_iat
+		}
+	};
 }
 
 /**
