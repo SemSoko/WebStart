@@ -2,9 +2,12 @@
 	namespace Shared\ServiceContainer;
 	
 	/**
-	 * Einheitliche Service-IDs fuer den DI-Container
+	 * Zentrale Konstantensammlung fuer Service-IDs im Dependency-Injection-Container.
 	 *
-	 * Vermeidet Tippfehler und bietet Autovervollstaendigung bei der Nutzung
+	 * Dient der typsicheren Registrierung und Abfrage von Services ohne Magic Strings.
+	 * Erhoeht Lesbarkeit, reduziert Tippfehler, verbessert Autovervollstaendigung.
+	 *
+	 * @package Shared\ServiceContainer
 	 */
 	final class ServiceIds{
 		public const RESPONSE				= 'response';
