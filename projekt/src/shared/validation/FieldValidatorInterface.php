@@ -1,22 +1,33 @@
 <?php
 	namespace Shared\Validation;
 	
+	/**
+	 * Schnittstelle fuer Validierungs-Services, die mit JSON-Eingaben arbeiten.
+	 *
+	 * Dient der Pruefung und Extraktion einzelner Felder aus einem JSON-Body.
+	 *
+	 * @package Shared\Validation
+	 */
 	interface FieldValidatorInterface{
 		/**
-		 * Prueft, ob bestimmtes Feld im JSON-Input gesetzt und nicht leer ist.
+		 * Prueft, ob bestimmtes Feld im JSON-Eingabeobjekt gesetzt und nicht leer ist.
 		 *
-		 * @param array $input JSON-Daten als assoziatives Array (z.B. aus json_decode)
-		 * @param string $field Der zu pruefende Feldname
-		 * @return bool true, wenn Feld vorhanden und nicht leer, sonst false
+		 * Typisch fuer Pflichtfeldpruefungen in POST-/Put-Requests.
+		 *
+		 * @param array $input JSON-Daten als Array (z.B.: aus json_decode()).
+		 * @param string $field Der zu pruefende Feldname.
+		 * @return bool true, wenn Feld vorhanden und nicht leer, sonst false.
 		 */
 		public function hasRequiredField(array $input, string $field): bool;
 		
 		/**
 		 * Gibt den bereinigten (getrimmten) Wert eines Feldes zurueck.
 		 *
-		 * @param array $input JSON-Daten als assoziatives Array
-		 * @param string $field Der abzurufende Feldname
-		 * @return string|null Der bereinigte Wert oder null, falls das Feld nicht existiert
+		 * Nuetzlich zur Weiterverarbeitung Validierung.
+		 *
+		 * @param array $input JSON-Daten als Array.
+		 * @param string $field Der abzurufende Feldname.
+		 * @return string|null Getrimmter Wert oder null, wenn das Feld fehlt.
 		 */
 		public function getValue(array $input, string $field): ?string;
 	}
