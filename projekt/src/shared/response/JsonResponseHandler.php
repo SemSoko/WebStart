@@ -1,9 +1,4 @@
 <?php
-	/*
-		namespace Shared\Response;: Diese Klasse gehört in das shared/response/-Modul unseres Projekts.
-		Das macht spätere use-Statements möglich wie:
-		use Shared\Response\Response;
-	*/
 	namespace Shared\Response;
 
 	require_once __DIR__ . '/ResponseHandlerInterface.php';
@@ -11,37 +6,41 @@
 	/**
      * Standardisierte API-Antwortstruktur fuer alle HTTP-Responses im Projekt.
 	 *
-	 * Erfolgreiche Antwort (Response::success()):
+	 * Erfolgreiche Antwort - success:
 	 * {
 	 *    "success" : true,
 	 *    "data": { ... }
 	 * }
 	 *
-	 * Validierungs- oder Clientfehler (Response::error()):
+	 * Validierungs- oder Clientfehler - error:
 	 * {
 	 *    "success": false,
 	 *    "message": "Fehlermeldung"
 	 * }
 	 *
-	 * Interner Fehler mit Debug-Daten (Response::debug()):
+	 * Interner Fehler mit Debug-Daten - debug:
 	 * {
 	 *    "success": false,
 	 *    "message": "Fehlermeldung",
 	 *    "debug": { ... }
 	 * }
 	 *
-	 * Systemstatus (Response::status()):
+	 * Systemstatus - status:
 	 * {
 	 *    "success": true,
 	 *    "status": "OK",
-	 *    "timestamp": "yyyy-mm-dd-T-hh-mm-ss"
+	 *    "timestamp": "yyyy-mm-ddTHH:MM:SSZZ"
 	 * }
 	 *
 	 * @package Shared\Response
 	 */	
 	class JsonResponseHandler implements ResponseHandlerInterface{
 		/**
-		 * Geschuetzte exit()-Funktion, damit sie im Test ueberschrieben werden kann.
+		 * Fuehrt das Beenden des Programms aus.
+		 *
+		 * Diese Methode is protected, um sie in Tests zu ueberschreiben.
+		 *
+		 * @return void
 		 */
 		protected function doExit(): void{
 			exit();
@@ -50,8 +49,8 @@
 		/**
 		 * Gibt eine erfolgreiche API-Antwort als JSON aus.
 		 * 
-		 * @param array $data Beliebige Nutzdaten (Payload)
-		 * @param int $statusCode HTTP-Statuscode (Standard: 200 OK)
+		 * @param array $data Beliebige Nutzdaten (Payload).
+		 * @param int $statusCode HTTP-Statuscode (Standard: 200).
 		 *
 		 * @return void
 		 */
@@ -69,7 +68,7 @@
 		 * Gibt eine Fehlermeldung als JSON aus.
 		 *
 		 * @param string $message Fehlernachricht fuer den Client.
-		 * @param int $statusCode HTTP-Fehlercode (Standard: 400 Bad Request)
+		 * @param int $statusCode HTTP-Fehlercode (Standard: 400).
 		 *
 		 * @return void
 		 */
@@ -84,13 +83,13 @@
 		}
 		
 		/**
-		 * Gibt eine detaillierte Fehlermeldung fuer Debug-Zwecke zurueck.
+		 * Gibt eine detaillierte Fehlermeldung fuer Debug-Zwecke aus.
 		 *
-		 * Nur in der Entwicklungsumgebung verwenden, nicht fuer den Produktivbetrieb gedacht!
+		 * Hinweis: Nur in der Entwicklungsumgebung verwenden!
 		 *
-		 * @param string $message Hauptfehlermeldung
-		 * @param array $details Zusaetzliche Informationen fuer Entwickler
-		 * @param int $statusCode HTTP-Statuscode (Standard: 400)
+		 * @param string $message Hauptfehlermeldung.
+		 * @param array $details Zusaetzliche Informationen fuer Entwickler.
+		 * @param int $statusCode HTTP-Fehlercode (Standard: 500).
 		 *
 		 * @return void
 		 */
@@ -106,13 +105,11 @@
 		}
 		
 		/**
-		 * Gibt eine einfache Statusantwort zur Pruefung der Erreichbarkeit zurueck.
+		 * Gibt eine einfache Statusantwort Verfuegbarkeitspruefungen aus.
 		 *
-		 * Kann z. B. fuer Health Checks oder Verfuegbarkeitspruefungen verwendet werden.
-		 *
-		 * @param string $message Statusinformation (Standard: "OK")
-		 * @param bool $success Gibt an, ob der Status als Erfolg gewertet wird
-		 * @param int $statusCode HTTP-Statuscode (Standard: 200)
+		 * @param string $message Statusmeldung (z.B.: "OK")
+		 * @param bool $success Gibt an, ob der Status als Erfolgreich gewertet wird.
+		 * @param int $statusCode HTTP-Statuscode (Standard: 200).
 		 *
 		 * @return void
 		 */
