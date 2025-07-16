@@ -4,19 +4,24 @@
 	require_once __DIR__ . '/FieldValidatorInterface.php';
 	
 	/**
-	 * Validiert JSON-Eingaben zur Laufzeit (z.B. Pflichtfelder).
-	 * Implementiert die zentrale Validierungs-Schnittstelle fuer DI.
+	 * Laufzeitvalidierung von JSON-Eingaben (z.B.: Pflichtfelder).
 	 *
-	 * Diese Klasse prueft, ob bestimmte Felder in einem JSON-Request vorhanden
-	 * sind und bestimmten Anforderungen genuegen (z.B. nicht leer).
+	 * Implementiert FieldValidatorInterface zur Integration in DI-Systeme.
+	 * Stellt Hilfsmethoden bereit, um typische Formulareingaben zu pruefen
+	 * und bereinigt auszulesen.
+	 *
+	 * @package Shared\Validation
 	 */
 	class JsonFieldValidator implements FieldValidatorInterface{
 		/*
-		 * Prueft, ob ein Pflichtfeld gesetzt und nicht leer ist.
+		 * Prueft, ob ein Pflichtfeld vorhanden und nicht leer ist.
 		 *
-		 * @param array $input Das JSON-Array (z.B. aus json_decode)
-		 * @param string $field Der Feldname (z.B. 'title')
-		 * @return bool true, wenn vorhanden und nicht leer, sonst false
+		 * Der Wert wird getrimmt - leere Strings oder reine Leerzeichen
+		 * zaehlen als "leer".
+		 *
+		 * @param array $input JSON-Eingabedaten (z.B. aus json_decode).
+		 * @param string $field Feldname, das geprueft werden soll (z.B.: 'title').
+		 * @return bool true, wenn das Feld existiert und nicht leer, sonst false.
 		 */
 		public function hasRequiredField(array $input, string $field): bool{
 			if(!isset($input[$field])){
@@ -27,11 +32,11 @@
 		}
 		
 		/**
-		 * Holt den Wert eines Feldes aus dem JSON.
+		 * Gibt den bereinigten (getrimmten) Wert eines Feldes zurueck.
 		 *
-		 * @param array $input
-		 * @param string $field
-		 * @return string|null
+		 * @param array $input JSON-Eingabedaten.
+		 * @param string $field Der abzurufende Feldname.
+		 * @return string|null Getrimmter Wert oder null, wenn das Feld nicht vorhanden ist.
 		 */
 		public function getValue(array $input, string $field): ?string{
 			if(!isset($input[$field])){
