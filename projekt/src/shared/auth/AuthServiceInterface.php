@@ -1,12 +1,19 @@
 <?php
 	namespace Shared\Auth;
 	
+	/**
+	 * Interface fuer Authentifizierungsdienste (z.B.: JWT, Session).
+	 *
+	 * Definiert eine Methode zur Extraktion der Benutzer-ID aus einem Authentifizierungstoken.
+	 *
+	 * @package Shared\Auth;
+	 */
 	interface AuthServiceInterface{
 		/**
-		 * Gibt die User-ID aus dem uebergebenen Token zurueck oder null bei Fehler.
+		 * Extrahiert die Benutzer-ID aus einem gueltigen Authentifizierungstoken.
 		 *
-		 * @param string $token
-		 * @return int Die Benutzer-ID des aktuell eingeloggten Users oder null
+		 * @param string $token Das zu analysierende Authentifizierungstoken.
+		 * @return int Benutzer-ID bei Erfolg, sonst null (z.B. bei Fehler oder ungueltigem Token).
 		 */
 		public function getUserId(string $token): ?int;
 	}
