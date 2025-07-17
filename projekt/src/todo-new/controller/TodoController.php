@@ -13,26 +13,59 @@
 	use TodoNew\Service\TodoServiceInterface;
 
 	/**
-	 * Controller fuer Todo-Endpunkte.
+	 * Controller fuer die Todo-API.
 	 *
-	 * Verantwortlich fuer das Entgegennehmen der HTTP-Anfrage und
-	 * Weitergabe an den Service.
+	 * Entgegnet HTTP-Anfragen und delegiert die Verarbeitung an die
+	 * Service-Schicht.
+	 *
+	 * Kuemmert sich um die Authentifizierung, Validierung und Auswahl
+	 * der passenden Antwort.
+	 *
+	 * @package TodoNew\Controller
 	 */
 	class TodoController{
+		/**
+		 * Middleware zur Authentifizierungspruefung.
+		 *
+		 * @var AuthMiddlewareInterface
+		 */
 		protected AuthMiddlewareInterface $auth;
+		
+		/**
+		 * Service zur Verwaltung der Geschaeftslogik rund um Todos.
+		 *
+		 * @var TodoServiceInterface
+		 */
 		protected TodoServiceInterface $service;
+		
+		/**
+		 * Middleware zur Validierung eingehender Nutzdaten.
+		 *
+		 * @var ValidationMiddlewareInterface
+		 */
 		protected ValidationMiddlewareInterface $validation;
+		
+		/**
+		 * Handler fuer strukturierte JSON-Antworten.
+		 *
+		 * @var ResponseHandlerInterface
+		 */
 		protected ResponseHandlerInterface $response;
 		
 		/**
-		 * Initialisiert den Controller mit einer Service-Instanz.
+		 * Initialisiert den Controller mit allen notwendigen Abhaengigkeiten.
 		 *
-		 * @param TodoServiceInterface $service Service-Interface
+		 * @param AuthMiddlewareInterface $auth Authentifizierungs-Middleware
+		 * @param TodoServiceInterface $service Geschaeftslogik fuer Todos
+		 * @param ValidationMiddlewareInterface $validation Validierungslogik fuer Eingaben
+		 * @param ResponseHandlerInterface $response Ausgabeformatrierung
 		 */
-		public function __construct(AuthMiddlewareInterface $auth,
-									TodoServiceInterface $service,
-									ValidationMiddlewareInterface $validation,
-									ResponseHandlerInterface $response){
+		public function __construct(
+			AuthMiddlewareInterface $auth,
+			TodoServiceInterface $service,
+			ValidationMiddlewareInterface $validation,
+			ResponseHandlerInterface $response
+		){
 			$this->auth = $auth;
 			$this->service = $service;
 			$this->validation = $validation;
@@ -42,70 +75,60 @@
 		/**
 		 * Fuegt ein neues Todo hinzu.
 		 *
-		 * Erwartet im HTTP-Body eine JSON-Struktur mit dem Feld "title".
-		 * Beispiel: { "title": "Einkaufen" }
+		 * Erwartet ein JSON-Objekt im HTTP-Body mit dem Feld "title", z.B.:
+		 * {
+		 *    "title": "Einkaufen"
+		 * }
 		 *
-		 * Die Methode verarbeitet die Anfrage, validiert Eingabedaten,
-		 * uebergibt den Titel an den Service und leitet das Ergebnis
-		 * an die passende Response-Methode weiter.
+		 * Ablauf:
+		 * - Authentifizierung ueber token_get_all
+		 * - Pflichtfeldpruefung fuer "title"
+		 * - Uebergabe an die Service-Schicht
+		 * - Fehlerdifferenzierung anhand der Quelle (`repository`, `service` oder unbekannt)
+		 * - Ausgabe einer passenden JSON-Antwort mit Statuscode
 		 *
-		 * Fehlerhafte oder unvollstaendige Eingaben werden direkt mit
-		 * Response::error() beantwortet.
-		 *
-		 * Abhaengig von der Quelle des Fehlers nutzt der Controller:
-		 * - Response::success() bei Erfolg
-		 * - Response::debug() bei Service-/Repository-Fehlern
-		 * - Response::error() bei sonstigen Fehler
-		 *
-		 * @return
-		 * void Gibt direkt eine JSON-Antwort an den Client aus und beendet
-		 * die Ausfuehrung.
+		 * @return void
+		 * Gibt direkt eine JSON-Antwort zurueck und beendet die Ausfuehrung.
 		 */
 		 public function add(){
-			/*
-			 * Zugriffsschutz sofort pruefen.
-			 * handle() nur in Methoden aufrufen, die Schutz brauchen.
-			 */
 			$userId = $this->auth->handle();
 			
 			try{
-				/*
-				* Eingabefeld 'title' pruefen
-				*/
 				$titleTodo = $this->validation->requireField('title');
 			}catch(\InvalidArgumentException $e){
 				$this->response->error($e->getMessage(), 400);
 				return;
 			}
 			
-			// Weitergabe an Service
 			$result = $this->service->addTodo($titleTodo, $userId);
 			
-			// Erfolg oder Fehler zurueckgeben
 			/**
-			 * @todo Bezeichnungen fuer das Feld: source in $result anpassen!!!
+			 * Erfolg oder Fehler zurueckgeben
+			 * @todo: Bezeichnungen fuer das Feld "source" in $result vereinheitlichen
+			 *
+			
+			/*
+			 * 1. Fehlerfall: success = false
 			 */
-			// Schritt Nr. 1
-			// Wurde success: false zurückgegeben?
-			// Dann ist etwas schiefgelaufen – also müssen wir nicht erfolgreich
-			// antworten, sondern Fehler behandeln.
 			if(isset($result['success']) && $result['success'] === false){
-				// Schritt Nr. 2
-				// Woher kommt der Fehler?
-				// Aus dem repository, dem service oder ist er nicht genau bekannt?
+				/*
+				 * 2. Fehlerquelle bestimmten (repository, service oder unbekannt)
+				 */
 				$source = $result['source'] ?? '';
 				
-				// Schritt Nr. 3
-				// Der Fehler kam aus der Datenbankschicht (z. B. INSERT fehlgeschlagen).
-				// Also geben wir detaillierte Debug-Infos zurück.
 				if($source === 'repository'){
+					/*
+					 * Fehler kommt aus der Datenbankschicht -> Debug-Antwort mit Details
+					 */
 					$this->response->debug('Repository-Fehler', $result);
-				// Der Fehler passierte in der Logikschicht, z. B. ein ungültiger Titel
-				// wurde trotzdem weitergegeben.
 				}elseif($source === 'service'){
+					/*
+					 * Fehler aus der Logikschicht -> ebenfalls Debug-Antwort
+					 */
 					$this->response->debug('Service-Fehler', $result);
-				// Es gibt keinen source, oder wir wissen nicht woher der Fehler
-				// kommt → also geben wir eine generische Fehlermeldung zurück.
+					/*
+					 * Fehlerquelle unbekannt oder nicht angegeben -> generische Fehlermeldung
+					 */
 				}else{
 					$this->response->error($result['error'] ?? 'Unbekannter Fehler', 500);
 				}
