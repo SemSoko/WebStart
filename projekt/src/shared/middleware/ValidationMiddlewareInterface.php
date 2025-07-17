@@ -2,15 +2,21 @@
 	namespace Shared\Middleware;
 	
 	/**
-	 * Inteface fuer Middleware, die Pflichtfelder aus einem JSON-Body validiert.
+	 * Schnittstelle fuer Middleware zur Validierung von Pflichtfeldern in JSON-Requests.
+	 *
+	 * Dient der zentralen Pruefung und Extraktion von Feldern direkt im Controller.
+	 *
+	 * @package Shared\Middleware
 	 */
 	interface ValidationMiddlewareInterface{
 		/**
-		 * Prueft, ob ein Pflichtfeld im JSON-Body vorhanden ist und gibt den
-		 * Wert zurueck.
+		 * Prueft, ob ein bestimmtes Feld im JSON-Body vorhanden und gueltig ist.
 		 *
-		 * @param string $fieldName Name des Pflichtfelds
-		 * @return string Wert des Feldes
+		 * Wenn das Feld fehlt oder leer ist, wird ein Fehler ausgeloest.
+		 * Implementierende Klassen entscheiden ueber die konkrete Fehlerbehandlung.
+		 *
+		 * @param string $fieldName Der Name des pruefenden Pflichtfeldes.
+		 * @return string Der bereinigte Wert des Feldes.
 		 */
 		public function requireField(string $fieldName): string;
 	}

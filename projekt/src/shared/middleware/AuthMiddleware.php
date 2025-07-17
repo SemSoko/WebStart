@@ -12,48 +12,75 @@
 	use Shared\Middleware\AuthMiddlewareInterface;
 	
 	/**
-	 * Middleware zur Authentifizierung geschuetzter Endpunkt.
+	 * Middleware zur Authentifizierung geschuetzter Aktionen.
 	 *
-	 * Diese Klasse verhindert den Zugriff auf bestimmte Routen,
-	 * wenn kein gueltiger JWT-Token vorliegt.
+	 * Diese Klasse wird innerhalb eines Controllers aufgerufen,
+	 * um sicherzustellen, dass ein gueltiger Bearer-Token uebergeben wurde.
 	 *
-	 * Bei Erfolg wird die User-ID zurueckgegeben.
-	 * Bei Fehler wird eine strukturierte Fehlermeldung gesendet und
-	 * die Ausfuehrung beendet.
+	 * Bei erfolgreicher Pruefung wird die Benutzer-ID aus dem Token zurueckgegeben.
+	 * Bei Fehlern wird die Ausfuehrung beendet.
 	 *
-	 * Beispiel-Rueckgabe bei Erfolg:
-	 * return 42
-	 *
-	 * Beispielantwort bei Fehler:
+	 * Beispiel bei Fehler (Entwicklermodus):
 	 * {
+	 *	  'success': false,
 	 *    'error': 'Authentifizierung fehlgeschlagen',
 	 *    'debug': { ... },
-	 *    'source': 'shared/auth/requireValidUserId'
+	 *    'source': 'middleware/AuthMiddleware'
 	 * }
 	 *
-	 * HTTP-Status: 401 Unauthorized
-	 *
-	 * @return
-	 * int Die Benutzer-ID aus dem Token bei erfolgreicher Authentifizierung.
+	 * @package Shared\Middleware
 	 */
 	class AuthMiddleware implements AuthMiddlewareInterface{
+		/**
+		 * Dienst zur Authentifizierung und Extraktion der Benutzer-ID.
+		 *
+		 * @var AuthServiceInterface
+		 */
 		private AuthServiceInterface $authService;
+		
+		/**
+		 * Dienst zur Ausgabe strukturierter JSON-Antworten.
+		 *
+		 * @var ResponseHandlerInterface
+		 */
 		private ResponseHandlerInterface $response;
+		
+		/**
+		 * Dienst zur Extraktion des Bearer-Tokens aus dem Authorization-Header.
+		 *
+		 * @var RequestTokenReaderInterface
+		 */
 		private RequestTokenReaderInterface $tokenReader;
 		
-		public function __construct(AuthServiceInterface $authService,
-									ResponseHandlerInterface $response,
-									RequestTokenReaderInterface $tokenReader){
+		/**
+		 * Initialisiert die Middleware mit den benoetigten Abhaengigkeiten.
+		 *
+		 * @param AuthServiceInterface $authService
+		 * Zum extrahieren der Benutzer-ID aus dem Token.
+		 *
+		 * @param ResponseHandlerInterface $response
+		 * Fuer strukturierte Fehlerausgaben.
+		 *
+		 * @param RequestTokenReaderInterface $tokenReader
+		 * Liest den Authorization-Header aus.
+		 */
+		public function __construct(
+			AuthServiceInterface $authService,
+			ResponseHandlerInterface $response,
+			RequestTokenReaderInterface $tokenReader
+		){
 			$this->authService = $authService;
 			$this->response = $response;
 			$this->tokenReader = $tokenReader;
 		}
 		
 		/**
-		 * Fuehrt die Authentifizierungspruefung durch.
-		 * Wenn kein gueltiger Token vorliegt, wird der Zugriff abgebrochen.
+		 * Fuehrt eine Authentifizierungspruefung durch und gibt die Benutzer-ID zurueck.
 		 *
-		 * @return void Gibt bei Fehler eine strukturierte Antwort und beendet das Script.
+		 * Gibt bei Fehler automatisch eine Fehlerantwort im JSON-Format aus und
+		 * beendet die Ausfuehrung.
+		 *
+		 * @return int Die extrahierte Benutzer-ID bei erfolgreicher Authentifizierung.
 		 */
 		public function handle(): int{
 			$token = $this->tokenReader->getBearerToken();
