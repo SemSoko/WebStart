@@ -1,33 +1,22 @@
 <?php
 	namespace TodoNew;
 	
-	// Db einbinden: Database
+	/*
+	 * Import aller notwendigen Klassen (Datenbank, Services, Middleware, etc.)
+	 */
 	require_once __DIR__ . '/../core/db.php';
-	// Repository einbinden
 	require_once __DIR__ . '/repository/TodoRepository.php';
-	// Service einbinden
 	require_once __DIR__ . '/service/TodoService.php';
-	// JwtHandlerNew einbinden
 	require_once __DIR__ . '/../shared/auth/JwtHandler-new.php';
-	// JwtAuthService einbinden
 	require_once __DIR__ . '/../shared/auth/JwtAuthService.php';
-	// AuthMiddleware einbinden
 	require_once __DIR__ . '/../shared/middleware/AuthMiddleware.php';
-	// DefaultInputProvider einbinden
 	require_once __DIR__ . '/../shared/http/DefaultInputProvider.php';
-	// RequestTokenReader einbinden
 	require_once __DIR__ . '/../shared/http/RequestTokenReader.php';
-	// JsonFieldValidator einbinden
 	require_once __DIR__ . '/../shared/validation/JsonFieldValidator.php';
-	// ValidationMiddleware einbinden
 	require_once __DIR__ . '/../shared/middleware/ValidationMiddleware.php';
-	// Controller einbinden
 	require_once __DIR__ . '/controller/TodoController.php';
-	// JsonResponseHandler einbinden
 	require_once __DIR__ . '/../shared/response/JsonResponseHandler.php';
-	// Container einbinden
 	require_once __DIR__ . '/../shared/service-container/Container.php';
-	// ServiceIDs einbinden
 	require_once __DIR__ . '/../shared/service-container/ServiceIds.php';
 	
 	use todoNew\Repository\TodoRepository;
@@ -42,113 +31,99 @@
 	use Shared\ServiceContainer\Container;
 	use Shared\Http\RequestTokenReader;
 	use Shared\Auth\JwtAuthService;
-	
 	use Shared\ServiceContainer\ServiceIds;
 	use \Database;
 	
+	/**
+	 * Modul-Setup fuer todo-new.
+	 *
+	 * Diese Klasse registriert alle benoetigten Komponenten.
+	 * (Datenbank, Services, Middleware, Controller) im DI-Container.
+	 *
+	 * Wird explizit vom Router aufgerufen: TodoModule::register($container)
+	 *
+	 * @package TodoNew
+	 */
 	class TodoModule{		
-		/*
-		 * Static ist ok weil:
-		 *	Du arbeitest mit:
-		 *	Expliziter Konfiguration
-		 *	Kompositionswurzeln (Composition Root = Container + Module)
-		 *	Testbarer, zustandsloser Architektur
-		 *	Kein Singleton, keine globale State-Objekte
+		/**
+		 * Registriert alle Services und Komponenten des Todo-Moduls
+		 * im Dependency-Injection-Container.
 		 *
-		 *	static hier bricht nicht Clean Code / SOLID, weil:
-		 *	Es ist keine Geschäftslogik.
-		 *
-		 *	Es ist keine Domain-Klasse, sondern Setup-Helfer.
-		 *
-		 *	Du nutzt TodoModule::register($container) explizit in deiner Bootstrap-Phase.
-		 *
-		 *	Du instanziierst deine eigentlichen Klassen über den Container (nicht über das Module!).
-		 *
-		 *	Stell dir TodoModule vor wie ein Bauplan, nicht wie ein laufendes Objekt.
-		 *	Das static bedeutet: „Ich brauche kein Objekt – ich sage nur, wie es zusammengebaut wird.“
-		 *
-		 *	Wenn du später auf Autowiring umsteigen willst (Reflection, Symfony-like),
-		 *	kannst du das jederzeit ersetzen – diese register()-Calls sind dann optional.
-		 *
-		 *	Fazit: static hier = ist testbar, ist klar, ist SOLID-konform
-		 *	Du verlierst keine Modularität oder Testbarkeit.
-		*/
+		 * @param Container $container Der zentrale Service-Container
+		 */
 		public static function register(Container $container): void{
-			// ResponseHandler
-			// 0.
+			/*
+			 * 0. Response-Handler (JSON-basierte HTTP-Antworten).
+			 */
 			$container->register(ServiceIds::RESPONSE, fn() => new JsonResponseHandler());
 			
-			// Database Connection
-			// 1. Datenbankverbindung (PDO)
-		    // - Wird benoetigt, um SQL-basierte Repositories zu initialisieren.
+			/*
+			 * 1. PDO-Datenbankverbindung (zentrale Grundlage fuer SQL-Repositories).
+			 */
 			$container->register(ServiceIds::PDO, fn() => Database::getConnection());
 			
-			// Repository
-			// 2. Repository-Schicht
-		    // - Verwaltet den Zugriff auf die persistierten Todos (CRUD).
-		    // - Erwartet ein PDO-Objekt fuer DB-Zugriffe.
+			/*
+			 * 2. Repository (verwaltet den DB-Zugriff fuer Todos).
+			 */
 			$container->register(ServiceIds::TODO_REPO, fn(Container $c) =>
 				new TodoRepository($c->get(ServiceIds::PDO))
 			);
 			
-			// Service
-			// 3. Service-Schicht (Business-Logik)
-		    // Kapselt fachliche Regeln (z.B. keine leeren Titel).
-		    // Arbeitet mit dem Repository zur Datenhaltung.
+			/*
+			 * 3. Service-Schicht (Geschaeftslogik rund um Todos).
+			 */
 			$container->register(ServiceIds::TODO_SERVICE, fn(Container $c) =>
 				new TodoService($c->get(ServiceIds::TODO_REPO))
 			);
 			
-			// RequestTokenReader
+			/*
+			 * 4. Token-Leser (extrahiert Token aus HTTP-Request-Header).
+			 */
 			$container->register(ServiceIds::REQUEST_TOKEN_READER, fn() => new RequestTokenReader);
 			
-			// JwtHandlerNew
-			// 4. Authentifizierungs-Service (Low-Level)
-		    // - Implementiert AuthServiceInterface.
-		    // - Stellt Methoden zur Token-Verarbeitung (z.B. JWT-Validierung) bereit.
+			/*
+			 * 5. Low-Level Auth (JWT-Verarbeitung).
+			 */
 			$container->register(ServiceIds::JWT_HANDLER, fn() => new JwtHandlerNew());
 			
-			// AuthService
+			/*
+			 * 6. AuthService (baut auf JWT-Handler auf, prueft Token-Gueltigkeit).
+			 */
 			$container->register(ServiceIds::AUTH_SERVICE, fn(Container $c) =>
 				new JwtAuthService($c->get(ServiceIds::JWT_HANDLER))
 			);
 			
-			// Middleware
-		    // 5. AuthMiddleware (High-Level)
-		    // - Schutz von Routen durch Pruefung eines gueltigen Tokens.
-		    // - Erwartet einen AuthService + ResponseHandler
+			/*
+			 * 7. Middleware: Zugriffsschutz ueber Token-Pruefung.
+			 */
 			$container->register(ServiceIds::AUTH_MIDDLEWARE, fn(Container $c) =>
 				new AuthMiddleware($c->get(ServiceIds::AUTH_SERVICE),
 									$c->get(ServiceIds::RESPONSE),
 									$c->get(ServiceIds::REQUEST_TOKEN_READER))
 			);
 			
-			// DefaultInputProvider
-			// 6.
+			/*
+			 * 8. Eingabeverarbeitung (liest JSON aus HTTP-Body).
+			 */
 			$container->register(ServiceIds::INPUT, fn() => new DefaultInputProvider());
 			
-			// FieldValidator
-		    // 7. Eingabevalidierung (Low-Level)
-		    // - Prueft JSON-Felder auf Vorhandensein und Gueltigkeit.
-		    // - Implementiert FieldValidatorInteface.
+			/*
+			 * 9. Feldvalidierung (prueft JSON-Felder auf Gueltigkeit).
+			 */
 			$container->register(ServiceIds::VALIDATOR, fn() => new JsonFieldValidator());
 			
-			// ValidationMiddleware
-		    // 8. ValidationMiddleware (High-Level)
-		    // - Fuehrt Pflichtfeldpruefungen aus.
-		    // - Verwendet FieldValidatorInterface + ResponseHandler zur Ausgabe
-		    //   von Fehler.
+			/*
+			 * 10. Middleware: Pflichtfeld-Validierung.
+			 */
 			$container->register(ServiceIds::VALIDATION_MIDDLEWARE, fn(Container $c) =>
 				new ValidationMiddleware($c->get(ServiceIds::VALIDATOR),
 										$c->get(ServiceIds::RESPONSE),
 										$c->get(ServiceIds::INPUT))
 			);
 			
-			// Controller
-		    // 9. Konstruktion des Controllers
-		    // - Entgegennahme aller uebergeordneten Komponenten.
-		    // - Der Controller selbst steuert die Ablaufkette und koordiniert
-		    //   Middleware, Service & Response.
+			/*
+			 * Controller fuer /api/todo-new
+			 */
 			$container->register(ServiceIds::TODO_CONTROLLER, fn(Container $c) =>
 				new TodoController(
 					$c->get(ServiceIds::AUTH_MIDDLEWARE),
