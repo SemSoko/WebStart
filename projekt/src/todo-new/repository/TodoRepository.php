@@ -7,55 +7,39 @@
 	use TodoNew\Repository\TodoRepositoryInterface;
 	
 	/**
-	 * Fuegt ein neues Todo fuer den angegebenen Benutzer hinzu.
-	 * Nutzt eine via Konstruktor injizierte PDO-Instanz (Dependency
-	 * Injection).
+	 * Repository fuer den Datenbankzugriff im Todo-Modul.
 	 *
-	 * Bei erfolgreichem INSERT:
-	 *   return true
+	 * Verwaltet das Speichern und Abrufen von Todos ueber PDO.
+	 * Nutzt Dependency Injection fuer die Datenbankverbindung.
 	 *
-	 * Bei SQL-Ausfuehrungsfehler ohne Exception:
-	 * return [
-	 *    'success' => false,
-	 *    'INSERT fehlgeschlagen',
-	 *    'debug' => [
-	 *       'errorInfo' => [...PDO Fehlerinfo...]
-	 *    ],
-	 *    'source' => 'todo-new/repository'
-	 * ]
-	 *
-	 * Bei PDO-Exception (z.B. Verbindungsfehler):
-	 * return [
-	 *    'success' => false,
-	 *    'error' => 'Fehler beim Hinzufuegen des Todos in die Datenbank.',
-	 *    'debug' => [
-	 *       'exception' => 'Fehlermeldung',
-	 *       'trace' => 'Stacktrace'
-	 *    ],
-	 *    'source' => 'repository'
-	 * ]
-	 *
-	 * @param int $userId Benutzer-ID
-	 * @param string $title Titel des Todos
-	 * @return bool|array true bei Erfolg, sonst strukturierter Fehler
+	 * @package TodoNew\Repository
 	 */
 	class TodoRepository implements TodoRepositoryInterface{
+		/**
+		 * @var \PDO Verbindung zur Datenbank.
+		 * Wird per Dependency Injection bereitgestellt.
+		 */
 		protected \PDO $pdo;
 		
 		/**
 		 * Initialisiert das Repository mit einer PDO-Verbindung.
 		 *
-		 * @param PDO $pdo Die zu verwendende PDO-Verbindung.
+		 * Die Verbindung wird ueber den Konstruktor injiziert,
+		 * um Testbarkeit und Entkopplung zu foerdern.
+		 *
+		 * @param PDO $pdo Die zu verwendende PDO-Instanz fuer Datenbankzugriffe.
 		 */
 		public function __construct(\PDO $pdo){
 			$this->pdo = $pdo;
 		}
+		
 		/**
 		 * Fuegt ein neues Todo fuer den angegebenen Benutzer hinzu.
 		 *
 		 * @param int $userId Benutzer-ID
 		 * @param string $title Titel des Todos
-		 * @return bool Erfolg des INSERT-Vorgangs
+		 * @return array Erfolgsstruktur mit todo_id oder strukturierter Fehler
+		 * @throws \InvalidArgumentException Bei leerem oder zu langem Titel
 		 */
 		public function insertTodo(int $userId, string $title): bool|array{
 			if(trim($title) === ''){
@@ -87,10 +71,6 @@
 				}
 				
 			}catch(\PDOException $e){
-				/*
-				 * Gibt ein strukturiertes Fehler-Array mit Debug-Infos
-				 * zurueck (fuer Controller sichtbar)
-				 */
 				return [
 					'success' => false,
 					'error' => 'Fehler beim Hinzufuegen des Todos in die Datenbank.',
@@ -103,6 +83,12 @@
 			}
 		}
 		
+		/**
+		 * Holt ein Todo anhand seiner ID aus der Datenbank.
+		 *
+		 * @param int $todoId Die ID des Todos
+		 * @return array Struktur mit Todo-Daten oder strukturierter Fehler
+		 */
 		public function getTodoById(int $todoId): array{
 			$stmt = $this->pdo->prepare("SELECT * from todos where id = ?");
 			$dbResult = $stmt->execute([$todoId]);
