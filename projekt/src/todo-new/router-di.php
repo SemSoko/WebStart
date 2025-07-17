@@ -1,52 +1,42 @@
 <?php
-	// Init einbinden
 	require_once __DIR__ . '/../../bootstrap/init.php';
 
-	// Container einbinden
+	/*
+	 * DI-Container und notwendige Konfigurationen einbinden
+	 */
 	require_once __DIR__ . '/../shared/service-container/Container.php';
-	// ServiceIDs einbinden
 	require_once __DIR__ . '/../shared/service-container/ServiceIds.php';
-	// TodoModule einbinden
 	require_once __DIR__ . '/TodoModule.php';
 	
 	use Shared\ServiceContainer\Container;
 	use Shared\ServiceContainer\ServiceIds;
 	use TodoNew\TodoModule;
 	
-	// Container fuer alle notwendigen Operationen
+	/*
+	 * Erstellt eine neue Instanz des DI-Containers
+	 */
 	$container = new Container();
+	
+	/*
+	 * Registriert alle Services und Controller des Todo-Moduls
+	 */
 	TodoModule::register($container);
 	
-	// HTTP-Methode (z. B. GET, POST, ...)
-	
-	// $_SERVER
-	// $_SERVER['REQUEST_URI'] /api/todo-new/router.php?title=Einkaufen
-	// parse_url(..., PHP_URL_PATH) /api/todo-new/router.php
-	// $_SERVER['HTTP_HOST'] example.de
-	// $_SERVER['HTTPS'] on oder leer
-	// $_SERVER['SERVER_PROTOCOL'] HTTP/1.1
+	/*
+	 * Ermittelt die HTTP-Methode der Anfrage (z.B.: GET, POST)
+	 */
 	$method = $_SERVER['REQUEST_METHOD'];
 	
-	// Pfad extrahieren
-	// Was ist $_SERVER['REQUEST_URI']?
-	// Das ist der komplette Pfad, den der Browser beim Aufruf der Seite mitgibt.
-	// Beispiel:
-	// POST /api/todo-new/router.php?title=Einkaufen
-	// Dann ist:
-	// $_SERVER['REQUEST_URI'] = "/api/todo-new/router.php?title=Einkaufen"
-	
-	// Was macht parse_url(..., PHP_URL_PATH)?
-	// parse_url() nimmt eine URL und gibt dir nur den Pfad zurück, also ohne Parameter.
-	// Beispiel:
-	// $requestUri = parse_url('/api/todo-new/router.php?title=Einkaufen', PHP_URL_PATH);
-	// Ergebnis:
-	// $requestUri = "/api/todo-new/router.php"
-	// So kannst du genau den Teil vergleichen, der in deinem Routing-Array steht.
+	/*
+	 * Extrahiert den Pfad aus der vollstaendigen Request-URI
+	 */
 	$requestUri = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-	// Um es spaeter besser nachvollziehen zu koennen.
-	// echo('<br>'.$requestUri.'<br>');
-	
-	// Routing-Tabelle definieren
+
+	/*
+	 * Routing-Konfiguration: Welche URI fuehrt zu welcher Controller-Methode?
+	 * Diese Zuordnung ist statisch. Dynamische Pfade koennen spaeter ergaenzt werden.
+	 */
+
 	/**
 	 * @todo
 	 * Dynamische Pfade (z. B. /api/todo-new/{id}) und Middleware (z. B. Auth)) ergaenzen
@@ -54,7 +44,9 @@
 	$routes = [
 		'GET' => [
 			'/api/todo-new' => [TodoController::class, 'getAll'],
-			// Zukunft: 'api/todo-new/{id}' => [TodoController::class, 'getById']
+			/*
+			 * Sonderroute fuer Status-Check
+			 */
 			'/api/todo.php/status' => '__status__'
 		],
 		'POST' => [
@@ -68,58 +60,58 @@
 		]
 	];
 	
-	// Route suchen
+	/*
+	 * Versucht, eine passende Route basierend auf Methode und Pfad zu finden.
+	 */
 	$matchedRoute = $routes[$method][$requestUri] ?? null;
 	
-	// 404 ist ein Internet-Standard für: Nicht gefunden
-	/**
-	 * Gibt eine standardisierte Fehlermeldung aus, wenn keine passende Route
-	 * gefunden wurde.
-	 *
-	 * Beispielantwort:
-	 * {
-	 *    'error': 'Route not found'
-	 * }
-	 *
-	 * HTTP-Status: 404 Not Found
+	/*
+	 * Falls keine passende Route existiert: Fehlermeldung mit Status 404.
 	 */
 	if(!$matchedRoute){
 		$response = $container->get(ServiceIds::RESPONSE);
 		$response->error('Route not found', 404);
 	}
 	
-	// Sonderfall: Status-Pruefung
+	/*
+	 * Sonderfall: Status-Rueckmeldung, um die Erreichbarkeit zu pruefen.
+	 */
 	if($matchedRoute === '__status__'){
 		$response = $container->get(ServiceIds::RESPONSE);
 		$response->status('Todo-Modul erreichbar');
 		exit();
 	}
-	
-	// Controller aufrufen
-	// Stell dir $matchedRoute vor wie eine kleine Kiste mit zwei Dingen:
-	// Jetzt holst du das raus und sagst:
-	// $controllerClass = 'TodoController'; und $methodName = 'add';
-	//[$controllerClass, $methodName] = $matchedRoute;
-	// $controller = new $controllerClass();
-	// Das heißt: $controller = new TodoController();
-	// Du erstellst eine Instanz der Klasse. So kannst du Funktionen der Klasse benutzen.
-	// $controller = new $controllerClass();
-	// Das ist wie sagen: $controller->add();
-	// Du rufst die Methode auf, die du aus dem Routing bekommen hast.
-	// $controller->$methodName();
-	// Wenn das Routing sagt "POST /api/todo-new -> TodoController::add",
-	// dann wird genau diese Methode automatisch aufgerufen.
-	
+
+	/*
+	 * Zerlegt die Route in Klasse und Methodenname
+	 */
 	[$controllerClass, $methodName] = $matchedRoute;
 	
+	/*
+	 * Entscheidet anhand der Controller-Klasse, welche
+	 * konkrete Instanz aus dem Container geladen werden soll.
+	 */
 	switch($controllerClass){
+		/*
+		 * Entscheidet, welcher Controller fuer die aktuelle Route
+		 * verwendet werden soll.
+		 */
 		case TodoController::class:
+			/*
+			 * Holt den TodoController aus dem DI-Container.
+			 */
 			$controller = $container->get(ServiceIds::TODO_CONTROLLER);
 			break;
 		
+		/*
+		 * Sicherheitsmechanismus fuer nicht registrierte Controller-Klassen.
+		 */
 		default:
 			$response = $container->get(ServiceIds::RESPONSE);
 			$response->error('Unbekannter Controller', 500);
 	}
 	
+	/*
+	 * Fuehrt die dem Pfad zugewiesene Methode des Controllers aus.
+	 */
 	$controller->$methodName();
