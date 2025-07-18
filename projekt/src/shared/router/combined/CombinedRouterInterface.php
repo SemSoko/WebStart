@@ -1,34 +1,29 @@
 <?php
-	namespace Shared\Router;
+	namespace Shared\Router\Combined;
 	
-	require_once __DIR__ . '/RouterInterface.php';
+	require_once __DIR__ . '/../RouterInterface.php';
 	
 	use Shared\Router\RouterInterface;
 	
 	/**
-	 * Definiert die Schnittstelle fuer zentrale Router, die mehrere
-	 * Modul-Router buendeln.
+	 * Kombiniert mehrere Modulrouter zu einem gemeinsamen Einstiegspunkt.
+	 * Jeder Router verabeitet seine eigenen Pfade isoliert.
 	 */
 	interface CombinedRouterInterface{
 		/**
-		 * Mountet einen Modul-Router unter einem bestimmten Basis-Pfad.
+		 * Fuehrt Routing-Logik aus, indem alle registrierten
+		 * Modulrouter durchlaufen werden.
 		 *
-		 * Beispiel:
-		 * $combinedRouter->mount('/api/todo', $todoRouter);
-		 *
-		 * @param string $basePath
-		 * Pfad-Praefix, unter dem der Modul-Router erreichbar sein soll
-		 * @param RouterInterface $router
-		 * Der Modul-Router, der gebuendelt werden soll
-		 */
-		public function mount(string $basePath, RouterInterface $router): void;
-		
-		/**
-		 * Fuehrt das Dispatching basierend auf HTTP-Methode und URI ueber
-		 * alle eingebundenen Router aus.
-		 *
-		 * @param string $method HTTP-Methode der eingehenden Anfrage
-		 * @param string $uri URI der eingehenden Anfrage
+		 * @param string $method Die HTTP-Methode (z.B.: GET, POST)
+		 * @param string $uri Die angefragte URI (z.B.: /api/todo-new)
 		 */
 		public function dispatch(string $method, string $uri): void;
+		
+		/**
+		 * Fuegt einen Modulrouter hinzu.
+		 *
+		 * @param string $moduleKey Eindeutiger Bezeichner fuer das Modul.
+		 * @param RouterInterface $router Der zu registrierende Modulrouter.
+		 */
+		public function registerRouter(string $moduleKey, RouterInterface $router): void;
 	}
