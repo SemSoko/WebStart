@@ -127,6 +127,9 @@ WebStart/
 │    │    │    │    ├─── JsonResponseHandler.php              # Konkrete Implementierung des ResponseHandlerInterface (liefert standardisierte JSON-Antworten)
 │    │    │    │    ├─── Response.php                         # Legacy-Responseklasse – wird durch JsonResponseHandler ersetzt (zur Entfernung markiert nach Refactoring)
 │    │    │    │    └─── ResponseHandlerInterface.php         # Schnittstelle für Response-Handler (definiert Struktur einheitlicher API-Antworten)
+│    │    │    ├─── router/                                   # Schnittstellen und zentrale Komponenten fuer modulares Routing
+│    │    │    │    ├─── CombinedRouterInterface.php          # Schnittstelle fuer zentrale Router zur Buendelung mehrerer Modul-Router
+│    │    │    │    └─── RouterInterface.php                  # Einheitliches Interface fuer alle Modul-Router
 │    │    │    ├─── auth/                                     # Zentrale Authentifizierungsstelle
 │    │    │    │    ├─── JwtHandler-new.php                   # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - ALT, vor DI-Refactor, loeschen, sobald refactor abgeschlossen ist
 │    │    │    │    ├─── JwtHandler.php                       # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - Aktuell, nach DI-Refactor
