@@ -4,7 +4,7 @@
 	require_once __DIR__ . '/../shared/router/RouterInterface.php';
 	require_once __DIR__ . '/../shared/service-container/Container.php';
 	require_once __DIR__ . '/../shared/service-container/ServiceIds.php';
-	require_once __DIR__ . 'TodoModule.php';
+	require_once __DIR__ . '/TodoModule.php';
 	
 	use Shared\Router\RouterInterface;
 	use Shared\ServiceContainer\Container;
