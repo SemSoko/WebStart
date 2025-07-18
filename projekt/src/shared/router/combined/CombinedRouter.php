@@ -21,7 +21,7 @@
 		 * Registriert einen Modulrouter unter einem eindeutigen Schluessel.
 		 */
 		public function registerRouter(string $modulKey, RouterInterface $router): void{
-			$this->router[$modulKey] = $router;
+			$this->routers[$modulKey] = $router;
 		}
 		
 		/**
