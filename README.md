@@ -111,7 +111,7 @@ WebStart/
 │    ├─── src/
 │    │    ├─── todo-new/                                      # Modulares Backend-Modul
 │    │    │    ├─── router.php                                # Legacy-Router (nicht OOP, wird entfernt nach vollstaendiger Migration)
-│    │    │    ├─── router-di.php                             # Zwischenloseung mit DI, ersetzt durch TodoRouter (Entfernung nach Umstellung aller Endpunkte)
+│    │    │    ├─── router-di.php                             # Übergangsrouter mit DI, ersetzt durch todo-new-Entrypoint
 │    │    │    ├─── TodoModule.php                            # Registert alle relevanten Klassen in den Container
 │    │    │    ├─── TodoRouter.php                            # Modul-Router fuer todo-new (implementiert RouterInterface)
 │    │    │    ├─── controller/                               # Verantwortlich fuer Anfragen und Antworten
@@ -123,6 +123,9 @@ WebStart/
 │    │    │         ├─── TodoRepository.php                   # Konkrete Datenzugriffslogik für Todos (PDO-Insert)
 │    │    │         └─── TodoRepositoryInterface.php          # Vertrag für TodoRepository (für Austauschbarkeit & Tests)
 │    │    │
+│    │    ├─── entrypoints/                                   # Einstiegspunkte für externe Aufrufe
+│    │    │    └─── todo-new.php                              # Einstiegspunkt mit CombinedRouter für das todo-new Modul
+│    │    │
 │    │    ├─── shared/                                        # Technische, modulunabhaengige Hilfen
 │    │    │    ├─── response/                                 # Einheitliche API-Antwortstruktur(en)
 │    │    │    │    ├─── JsonResponseHandler.php              # Konkrete Implementierung des ResponseHandlerInterface (liefert standardisierte JSON-Antworten)
@@ -130,8 +133,8 @@ WebStart/
 │    │    │    │    └─── ResponseHandlerInterface.php         # Schnittstelle für Response-Handler (definiert Struktur einheitlicher API-Antworten)
 │    │    │    ├─── router/                                   # Gemeinsame Komponenten & Schnittstellen für Routing (Modul + zentral)
 │    │    │    │    ├─── combined/                            # Zentrale Router, die mehrere Modulrouter bündeln
-│    │    │    │    │    ├─── CombinedRouter.php              # Schnittstelle fuer zentrale Router zur Buendelung mehrerer Modul-Router
-│    │    │    │    │    └─── CombinedRouterInterface.php     # Einheitliches Interface fuer alle Modul-Router
+│    │    │    │    │    ├─── CombinedRouter.php              # Konkrete Implementierung zur Bündelung mehrerer Modul-Router
+│    │    │    │    │    └─── CombinedRouterInterface.php     # Schnittstelle für kombinierte Router (zentrale Router)
 │    │    │    │    └─── RouterInterface.php                  # Konkrete Implementierung für das Bündeln mehrerer Modulrouter
 │    │    │    ├─── auth/                                     # Zentrale Authentifizierungsstelle
 │    │    │    │    ├─── JwtHandler-new.php                   # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - ALT, vor DI-Refactor, loeschen, sobald refactor abgeschlossen ist
