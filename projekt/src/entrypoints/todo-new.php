@@ -41,10 +41,15 @@
 	
 	/*
 	 * 6. CombinedRouter aufbauen & registrieren
-	 * Kann man hier nicht ServiceIds nutzen oder neue Datei anegen fuer Consts-Vars-Module
+	 */
+	
+	/**
+	 * @todo Auslagerung der Router-Key-Konstanten in zentrale Datei (z. B. TodoConstants)
+	 * Ziel: Wiederverwendbarkeit, Tippfehler vermeiden, klare Referenzierung.
+	 * Beispiel: TodoConstants::ROUTER_KEY statt hartcodiertem 'todo-new'
 	 */
 	$combinedRouter = new CombinedRouter();
-	$combinedRouter->registerRouter('todo-new', $todoRouter);
+	$combinedRouter->registerRouter('todo-new', $router);
 	
 	/*
 	 * 7. Dispatch ausfuehren
