@@ -47,8 +47,11 @@
 		 * registrierten Routen in $this->routes gespeichert.
 		 * → Sie verfliegen nicht sofort — sie sind kein Factory-Ergebnis oder
 		 * "temporär".
+		 * Muss public bleiben, da im RouterInterface öffentlich definiert.
+		 * Wird aber ausschließlich intern im Konstruktor genutzt.
+		 * → Externer Aufruf sollte vermieden werden.
 		 */
-		protected function add(string $method, string $path, array|string $handler): void{
+		public function add(string $method, string $path, array|string $handler): void{
 			$this->routes[$method][$path] = $handler;
 		}
 		
