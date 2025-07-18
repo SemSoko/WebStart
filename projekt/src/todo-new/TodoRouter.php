@@ -15,6 +15,15 @@
 		private array $routes = [];
 		private Container $container;
 		
+		/*
+		 * Routing-Konfiguration: Welche URI fuehrt zu welcher Controller-Methode?
+		 * Diese Zuordnung ist statisch. Dynamische Pfade koennen spaeter ergaenzt werden.
+		 */
+
+		/**
+		 * @todo
+		 * Dynamische Pfade (z. B. /api/todo-new/{id}) und Middleware (z. B. Auth)) ergaenzen
+		 */
 		public function __construct(Container $container){
 			$this->container = $container;
 			
@@ -32,7 +41,14 @@
 			$this->add('GET', '/api/todo.php/status', '__status__');
 		}
 		
-		public function add(string $method, string $path, array|string $handler): void{
+		/*
+		 * add() speichert die Routen dauerhaft während der Laufzeit
+		 * Solange das TodoRouter-Objekt existiert, bleiben die
+		 * registrierten Routen in $this->routes gespeichert.
+		 * → Sie verfliegen nicht sofort — sie sind kein Factory-Ergebnis oder
+		 * "temporär".
+		 */
+		protected function add(string $method, string $path, array|string $handler): void{
 			$this->routes[$method][$path] = $handler;
 		}
 		
