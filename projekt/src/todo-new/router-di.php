@@ -1,8 +1,10 @@
 <?php
-	/*
-	 * Einstiegspunkt für das todo-new Modul
+	/**
+	 * @deprecated
+	 * Veralteter Einstiegspunkt für todo-new Modul.
+	 * Wurde ersetzt durch `entrypoint/todo-new.php`, bleibt bis zur vollständigen
+	 * Umstellung bestehen.
 	 */
-
 	require_once __DIR__ . '/../../bootstrap/init.php';
 	require_once __DIR__ . '/TodoRouter.php';
 	
