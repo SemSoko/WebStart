@@ -4,7 +4,7 @@
 	require_once __DIR__ . '/../shared/router/RouterInterface.php';
 	require_once __DIR__ . '/../shared/service-container/Container.php';
 	require_once __DIR__ . '/../shared/service-container/ServiceIds.php';
-	require_once __DIR__ . 'TodoModule.php';
+	require_once __DIR__ . '/TodoModule.php';
 	
 	use Shared\Router\RouterInterface;
 	use Shared\ServiceContainer\Container;
@@ -47,8 +47,11 @@
 		 * registrierten Routen in $this->routes gespeichert.
 		 * → Sie verfliegen nicht sofort — sie sind kein Factory-Ergebnis oder
 		 * "temporär".
+		 * Muss public bleiben, da im RouterInterface öffentlich definiert.
+		 * Wird aber ausschließlich intern im Konstruktor genutzt.
+		 * → Externer Aufruf sollte vermieden werden.
 		 */
-		protected function add(string $method, string $path, array|string $handler): void{
+		public function add(string $method, string $path, array|string $handler): void{
 			$this->routes[$method][$path] = $handler;
 		}
 		
