@@ -110,9 +110,10 @@ WebStart/
 │    │
 │    ├─── src/
 │    │    ├─── todo-new/                                      # Modulares Backend-Modul
-│    │    │    ├─── router.php                                # Leitet HTTP-Anfragen an Controller
-│    │    │    ├─── router-di.php                             # Neuer, DI-basierter Router (alte Logik bleibt in router.php)
+│    │    │    ├─── router.php                                # Legacy-Router (nicht OOP, wird entfernt nach vollstaendiger Migration)
+│    │    │    ├─── router-di.php                             # Zwischenloseung mit DI, ersetzt durch TodoRouter (Entfernung nach Umstellung aller Endpunkte)
 │    │    │    ├─── TodoModule.php                            # Registert alle relevanten Klassen in den Container
+│    │    │    ├─── TodoRouter.php                            # Modul-Router fuer todo-new (implementiert RouterInterface)
 │    │    │    ├─── controller/                               # Verantwortlich fuer Anfragen und Antworten
 │    │    │    │    └─── TodoController.php                   # Steuert die Verarbeitung eingehender HTTP-Anfragen für Todos
 │    │    │    ├─── service/                                  # Enthaelt Geschaeftslogik
