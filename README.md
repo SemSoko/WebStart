@@ -141,6 +141,8 @@ WebStart/
 │    │    │    │    ├─── JwtHandler.php                       # Low-Level JWT-Helferklasse (Signierung, Validierung, Parsing) - Aktuell, nach DI-Refactor
 │    │    │    │    ├─── AuthServiceInterface.php             # Vertrag für Authentifizierungsdienste (z. B. JWT, Session, Test)
 │    │    │	   │    └─── JwtAuthService.php                   # Konkrete JWT-basierte Authentifizierung (Implementiert Interface)
+│    │    │    ├─── exception/                                # Zentrale Fehlerklassen für projektspezifische Ausnahmen
+│    │    │	   │    └─── BaseException.php                    # Abstrakte Basisklasse für eigene Exception-Hierarchie mit HTTP-Statuscodes
 │    │    │    ├─── http/                                     # Infrastruktur-Helfer (z. B. Header-Parser, Tokenextraktion) rund um HTTP-Anfragen
 │    │    │    │    ├─── DefaultInputProvider.php             # Konkrete, testbare Implementierung des InputProviderInterface (verwendet intern InputHelper)
 │    │    │    │    ├─── InputHelper.php                      # Legacy: Statische Klasse für einmaliges Einlesen & Caching des JSON-Request-Bodys (Wird ersetzt durch: InputProviderInterface, entsprechend spaeter aus dem Projekt loeschen)
