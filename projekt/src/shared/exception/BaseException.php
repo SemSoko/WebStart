@@ -9,5 +9,5 @@
 		 * @return int
 		 * Der HTTP-Statuscode (z.B. 404 fuer NotFound, 400 fuer Validation, ...).
 		 */
-		abstract public function getStatusCode(): int;
+		public function getStatusCode(): int;
 	}
